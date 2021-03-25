@@ -1,7 +1,17 @@
 import 'package:flutter/material.dart';
 
 class InputGasValue extends StatelessWidget {
-  FocusNode _focusNode = FocusNode();
+  // For focusing next TextField
+  final FocusNode _focusNode = FocusNode();
+
+  final TextEditingController newIntValueTextController;
+  final TextEditingController newDecimalValueTextController;
+
+  InputGasValue({
+    Key key,
+    @required this.newIntValueTextController,
+    @required this.newDecimalValueTextController,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -12,14 +22,14 @@ class InputGasValue extends StatelessWidget {
           width: 50,
           child: TextField(
             textDirection: TextDirection.rtl,
-            // TODO add controller
+            controller: newIntValueTextController,
             style: TextStyle(
               fontSize: 17,
             ),
             onEditingComplete: (() => _focusNode.requestFocus()),
             decoration: InputDecoration(
               hintText: "00000",
-              contentPadding:  EdgeInsets.symmetric(vertical: -2),
+              contentPadding: EdgeInsets.symmetric(vertical: -2),
               isDense: true,
               counterText: "",
               border: InputBorder.none,
@@ -40,14 +50,14 @@ class InputGasValue extends StatelessWidget {
             width: 32,
             child: TextField(
               textDirection: TextDirection.rtl,
-              // TODO add controller
+              controller: newDecimalValueTextController,
               style: TextStyle(
                 fontSize: 17,
               ),
               focusNode: _focusNode,
               decoration: InputDecoration(
                 hintText: "000",
-                contentPadding:  EdgeInsets.symmetric(vertical: -2),
+                contentPadding: EdgeInsets.symmetric(vertical: -2),
                 isDense: true,
                 counterText: "",
                 border: InputBorder.none,

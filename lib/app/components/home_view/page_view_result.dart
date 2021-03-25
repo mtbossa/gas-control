@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:gas_mvc/app/models/gas_model.dart';
 
 class PageViewResult extends StatelessWidget {
   final ValueChanged<int> onChanged;
+  final Gas gas;
 
-  const PageViewResult({Key key, @required this.onChanged}) : super(key: key);
+  const PageViewResult({
+    Key key,
+    @required this.onChanged,
+    @required this.gas,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

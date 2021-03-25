@@ -1,9 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_masked_text/flutter_masked_text.dart';
+import 'package:gas_mvc/app/models/gas_model.dart';
 
 import 'input_gas_new_value.dart';
 import 'input_gas_price.dart';
 
 class ContainerValues extends StatelessWidget {
+  final TextEditingController newIntValueTextController;
+  final TextEditingController newDecimalValueTextController;
+  final MoneyMaskedTextController gasPriceTextController;
+  final Gas gas;
+
+  const ContainerValues(
+      {Key key,
+      @required this.newIntValueTextController,
+      @required this.newDecimalValueTextController,
+      @required this.gasPriceTextController,
+      @required this.gas})
+      : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -28,14 +43,7 @@ class ContainerValues extends StatelessWidget {
                   ),
                 ),
               ),
-              Text(
-                // TODO must be final GasModel.newAtualGasValue
-                "12345,678 m³",
-                style: TextStyle(
-                  color: Colors.green[900],
-                  fontSize: 17,
-                ),
-              ),
+              checkEmpty(),
             ],
           ),
           Divider(
@@ -60,7 +68,10 @@ class ContainerValues extends StatelessWidget {
                   ),
                 ),
               ),
-              InputGasValue(),
+              InputGasValue(
+                newDecimalValueTextController: newDecimalValueTextController,
+                newIntValueTextController: newIntValueTextController,
+              ),
             ],
           ),
           Divider(
@@ -73,7 +84,7 @@ class ContainerValues extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Padding(
-                padding:const EdgeInsets.only(
+                padding: const EdgeInsets.only(
                   right: 8.0,
                   left: 8.0,
                   bottom: 8.0,
@@ -85,11 +96,34 @@ class ContainerValues extends StatelessWidget {
                   ),
                 ),
               ),
-              InputGasPrice(),
+              InputGasPrice(
+                gasPriceController: gasPriceTextController,
+              ),
             ],
           ),
         ],
       ),
     );
+  }
+
+  Text checkEmpty() {
+    if (gas.atualGasValue == 0.0 || gas.atualGasValue == null) {
+      return Text(
+        "0.0 m³",
+        style: TextStyle(
+          color: Colors.green[900],
+          fontSize: 17,
+        ),
+      );
+    } else {
+      return Text(
+        // Displays the most recent added gas value
+        "${gas.newAtualGasValue} m³",
+        style: TextStyle(
+          color: Colors.green[900],
+          fontSize: 17,
+        ),
+      );
+    }
   }
 }

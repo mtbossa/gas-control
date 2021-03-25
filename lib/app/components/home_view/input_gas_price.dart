@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 
 class InputGasPrice extends StatelessWidget {
-  MoneyMaskedTextController gasPriceController = MoneyMaskedTextController();
+  final MoneyMaskedTextController gasPriceController;
+
+  const InputGasPrice({
+    Key key,
+    @required this.gasPriceController,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +34,7 @@ class InputGasPrice extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
               decoration: InputDecoration(
-                contentPadding:  EdgeInsets.symmetric(vertical: -2),
+                contentPadding: EdgeInsets.symmetric(vertical: -2),
                 isDense: true,
                 counterText: "",
                 border: InputBorder.none,

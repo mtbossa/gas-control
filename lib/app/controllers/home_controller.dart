@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
-import 'package:gas_mvc/app/models/gas_model.dart';
 
 class HomeController {
   TextEditingController newIntValueTextController;
@@ -12,9 +11,9 @@ class HomeController {
       @required this.newDecimalValueTextController,
       @required this.gasPriceTextController});
 
-  GasModel gasModel = GasModel();
+  double newTotalGasValue = 0;
 
-  void calculateKg() {
+  double calculateKg() {
     String newIntValueText = newIntValueTextController.text;
     String newDecimalValueText = newDecimalValueTextController.text;
 
@@ -28,8 +27,6 @@ class HomeController {
     /*
      * The total value of the newValue. Ex.: 12,456 (m³)
      */
-    double newTotalValue = newIntDoubleValue + newDecimalDoubleValue;
-
-    double returnValueKg;
+    return newTotalGasValue = newIntDoubleValue + newDecimalDoubleValue;
   }
 }
