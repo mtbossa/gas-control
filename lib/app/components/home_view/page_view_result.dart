@@ -5,13 +5,12 @@ class PageViewResult extends StatelessWidget {
 
   const PageViewResult({Key key, @required this.onChanged}) : super(key: key);
 
-
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 10.0),
+      padding: const EdgeInsets.only(top: 8.0),
       child: Container(
-        width: 100,
+        width: MediaQuery.of(context).size.width,
         height: 70,
         child: PageView(
           onPageChanged: onChanged,
@@ -31,13 +30,20 @@ class PageViewResult extends StatelessWidget {
                   ),
                   Text(
                     "20,3", // TODO quantidade gasta
-                    style: TextStyle(fontSize: 25, color: Colors.green),
+                    style: TextStyle(
+                      fontSize: 25,
+                      color: Colors.green,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 7.0),
                     child: Text(
                       "kg/gás",
-                      style: TextStyle(fontSize: 25, color: Colors.green),
+                      style: TextStyle(
+                        fontSize: 25,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ],
@@ -48,13 +54,20 @@ class PageViewResult extends StatelessWidget {
                 children: [
                   Text(
                     "130,00", // TODO valor gasto
-                    style: TextStyle(fontSize: 25, color: Colors.green),
+                    style: TextStyle(
+                      fontSize: 25,
+                      color: Colors.green,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
                       "R\$",
-                      style: TextStyle(fontSize: 25, color: Colors.green),
+                      style: TextStyle(
+                        fontSize: 25,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
                 ],

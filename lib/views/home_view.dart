@@ -66,7 +66,7 @@ class _HomeViewState extends State<HomeView> {
                       },
                     ),
                     SizedBox(
-                      height: 13,
+                      height: 16,
                     ),
                     DotsResult(
                       currentIndex: _currentIndex,
