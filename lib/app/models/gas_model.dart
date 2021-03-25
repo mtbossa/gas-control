@@ -35,8 +35,8 @@ class GasModel {
    */
   final double gasKgValue;
 
-  GasModel(
-    this.newAtualGasValue, {
+  GasModel({
+    this.newAtualGasValue, 
     this.gasPrice,
     this.atualGasValue,
     this.newGasValue,

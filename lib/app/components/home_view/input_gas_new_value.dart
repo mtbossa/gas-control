@@ -11,6 +11,7 @@ class InputGasValue extends StatelessWidget {
         Container(
           width: 50,
           child: TextField(
+            textDirection: TextDirection.rtl,
             // TODO add controller
             style: TextStyle(
               fontSize: 17,
@@ -38,6 +39,7 @@ class InputGasValue extends StatelessWidget {
           child: Container(
             width: 32,
             child: TextField(
+              textDirection: TextDirection.rtl,
               // TODO add controller
               style: TextStyle(
                 fontSize: 17,

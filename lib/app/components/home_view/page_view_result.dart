@@ -8,7 +8,7 @@ class PageViewResult extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 8.0),
+      padding: const EdgeInsets.only(top: 0.0),
       child: Container(
         width: MediaQuery.of(context).size.width,
         height: 70,
