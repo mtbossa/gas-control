@@ -10,34 +10,34 @@ class Gas {
    * even after calculating, so the person can reset to last 
    * value
    */
-  final double atualGasValue;
+  double atualGasValue;
     /*
    * This will be the input value. 
    */
-  final double newGasValue;
+  double newGasValue;
   /*
    * This value will be the same as newGasValue after
    * pressing the "CALCULAR" button, as it will become
    * the atualGasValue.
    * 
    */
-  final double newAtualGasValue;
+  double newAtualGasValue;
     /*
    * The price that the person pays for each
    * kg of gas.
    * Ex.: R$ 6,92
    * 
    */
-  final double gasPrice;
+  double gasPrice;
   /*
    * This is the value from:
    * (newGasValue - atualGasValue) * conversionValueCubicMetersToKg
    */
-  final double gasKgValue;
+  double gasKgValue;
   /*
    * The amount of money spent on gas 
    */
-  final double gasMoneyValue;
+  double gasMoneyValue;
 
   Gas({
     this.atualGasValue,

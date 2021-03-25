@@ -34,14 +34,7 @@ class PageViewResult extends StatelessWidget {
                   SizedBox(
                     height: 5,
                   ),
-                  Text(
-                    "20,3", // TODO quantidade gasta
-                    style: TextStyle(
-                      fontSize: 25,
-                      color: Colors.green,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  checkKg(),
                   Padding(
                     padding: const EdgeInsets.only(top: 7.0),
                     child: Text(
@@ -58,14 +51,7 @@ class PageViewResult extends StatelessWidget {
             Container(
               child: Column(
                 children: [
-                  Text(
-                    "130,00", // TODO valor gasto
-                    style: TextStyle(
-                      fontSize: 25,
-                      color: Colors.green,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
+                  checkMoney(),
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
@@ -83,5 +69,49 @@ class PageViewResult extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Text checkKg() {
+    if (gas.gasKgValue == 0.0 || gas.gasKgValue == null) {
+      return Text(
+        "0.0",
+        style: TextStyle(
+          fontSize: 25,
+          color: Colors.green,
+          fontWeight: FontWeight.bold,
+        ),
+      );
+    } else {
+      return Text(
+        "${gas.gasKgValue.toStringAsFixed(3)}",
+        style: TextStyle(
+          fontSize: 25,
+          color: Colors.green,
+          fontWeight: FontWeight.bold,
+        ),
+      );
+    }
+  }
+
+  Text checkMoney() {
+    if (gas.gasMoneyValue == 0.0 || gas.gasKgValue == null) {
+      return Text(
+        "0.0",
+        style: TextStyle(
+          fontSize: 25,
+          color: Colors.green,
+          fontWeight: FontWeight.bold,
+        ),
+      );
+    } else {
+      return Text(
+        "${gas.gasMoneyValue.toStringAsFixed(2)}",
+        style: TextStyle(
+          fontSize: 25,
+          color: Colors.green,
+          fontWeight: FontWeight.bold,
+        ),
+      );
+    }
   }
 }

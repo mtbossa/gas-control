@@ -14,6 +14,13 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   int _currentIndex; // Current index of result view
+
+  // The first controller
+  TextEditingController newFirstIntValueTextController =
+      TextEditingController(text: "0");
+  // The first decimal controller
+  TextEditingController newFirstDecimalValueTextController =
+      TextEditingController(text: "000");
   TextEditingController newIntValueTextController =
       TextEditingController(text: "0");
   TextEditingController newDecimalValueTextController =
@@ -22,6 +29,8 @@ class _HomeViewState extends State<HomeView> {
       MoneyMaskedTextController();
 
   Gas gas = Gas();
+
+  double newAtualGasValue;
 
   @override
   void initState() {
@@ -79,8 +88,13 @@ class _HomeViewState extends State<HomeView> {
                         ),
                         ElevatedButton(
                           onPressed: () {
+                            setState(() {
+                              calculate();
+                            });
                             print(
-                                "${newIntValueTextController.text}"); // Calcular e mostrar
+                                "newIntValueTextController.text: ${newIntValueTextController.text}");
+                            print(
+                                "gas.newAtualGasValue: ${gas.newAtualGasValue}"); // Calcular e mostrar
                           },
                           child: Text("CALCULAR"),
                           style: ButtonStyle(
@@ -140,9 +154,9 @@ class _HomeViewState extends State<HomeView> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 InputGasValue(
-                    newIntValueTextController: newIntValueTextController,
+                    newIntValueTextController: newFirstIntValueTextController,
                     newDecimalValueTextController:
-                        newDecimalValueTextController),
+                        newFirstDecimalValueTextController),
               ],
             ),
           ),
@@ -152,7 +166,12 @@ class _HomeViewState extends State<HomeView> {
               child: Text("CANCELAR"),
             ),
             ElevatedButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pop();
+                setState(() {
+                  createFirstValue();
+                });
+              },
               child: Text(
                 "OK",
               ),
@@ -161,6 +180,18 @@ class _HomeViewState extends State<HomeView> {
         );
       },
     );
+  }
+
+  // Function that creates the first input Value
+  void createFirstValue() {
+    String newIntValueText = newFirstIntValueTextController.text;
+    String newDecimalValueText = newFirstDecimalValueTextController.text;
+
+    double newIntDoubleValue = double.tryParse(newIntValueText) ?? 0.0;
+    double newDecimalDoubleValue =
+        ((double.tryParse(newDecimalValueText) ?? 0.0) / 1000);
+    gas.newAtualGasValue = newIntDoubleValue + newDecimalDoubleValue;
+    gas.atualGasValue = gas.newAtualGasValue;
   }
 
   // Revert last added value
@@ -181,6 +212,9 @@ class _HomeViewState extends State<HomeView> {
   void calculate() {
     String newIntValueText = newIntValueTextController.text;
     String newDecimalValueText = newDecimalValueTextController.text;
+    String gasPriceText = gasPriceTextController.text;
+
+    double gasPriceDoubleValue = double.parse(gasPriceText.replaceAll(new RegExp(r'[,.]'), '')) / 100;
 
     /*
      * Transform the text in double
@@ -192,5 +226,20 @@ class _HomeViewState extends State<HomeView> {
      */
     double newDecimalDoubleValue =
         ((double.tryParse(newDecimalValueText) ?? 0.0) / 1000);
+    gas.atualGasValue = gas.newAtualGasValue;
+
+    gas.newAtualGasValue = newIntDoubleValue + newDecimalDoubleValue;
+
+    gas.gasKgValue = (gas.newAtualGasValue - gas.atualGasValue) *
+        gas.conversionValueCubicMetersToKg;
+
+    gas.gasPrice = gasPriceDoubleValue;
+    gas.gasMoneyValue = gas.gasKgValue * gas.gasPrice;
+
+    print("gasPriceText: $gasPriceText");
+    print("gasPriceDoubleValue: $gasPriceDoubleValue");
+    print("gas.gasPrice: ${gas.gasPrice}");
+    print("gas.gasKgValue: ${gas.gasKgValue}");
+    print("gas.gasMoneyValue: ${gas.gasMoneyValue}");
   }
 }

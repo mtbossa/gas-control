@@ -39,7 +39,7 @@ class InputGasValue extends StatelessWidget {
           ),
         ),
         Text(
-          ",",
+          ".",
           style: TextStyle(
             fontSize: 17,
           ),
