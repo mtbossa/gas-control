@@ -17,11 +17,28 @@ class PageViewResult extends StatelessWidget {
       padding: const EdgeInsets.only(top: 0.0),
       child: Container(
         width: MediaQuery.of(context).size.width,
-        height: 70,
+        height: 80,
         child: PageView(
           onPageChanged: onChanged,
           physics: BouncingScrollPhysics(),
           children: [
+            Container(
+              child: Column(
+                children: [
+                  checkCubicMeters(),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: Text(
+                      "m³",
+                      style: TextStyle(
+                        fontSize: 25,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
             Container(
               // decoration: BoxDecoration(
               //   color: Colors.white,
@@ -69,6 +86,28 @@ class PageViewResult extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Text checkCubicMeters() {
+    if (gas.gasCubicMetersValue == 0.0 || gas.gasCubicMetersValue == null) {
+      return Text(
+        "0.0",
+        style: TextStyle(
+          fontSize: 25,
+          color: Colors.green,
+          fontWeight: FontWeight.bold,
+        ),
+      );
+    } else {
+      return Text(
+        "${gas.gasCubicMetersValue.toStringAsFixed(2)}",
+        style: TextStyle(
+          fontSize: 25,
+          color: Colors.green,
+          fontWeight: FontWeight.bold,
+        ),
+      );
+    }
   }
 
   Text checkKg() {

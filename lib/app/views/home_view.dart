@@ -140,7 +140,7 @@ class _HomeViewState extends State<HomeView> {
   }
 
   // AlertDialog for adding newAtualGasValue
-  addNewGasValue(BuildContext context) {
+  addNewGasValueDialog(BuildContext context) {
     return showDialog(
       context: context,
       builder: (context) {
@@ -149,7 +149,7 @@ class _HomeViewState extends State<HomeView> {
             "Valor atual no medidor",
           ),
           content: Container(
-            height: 20,
+            height: 28,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -194,17 +194,68 @@ class _HomeViewState extends State<HomeView> {
     gas.atualGasValue = gas.newAtualGasValue;
   }
 
+  // AlertDialog for adding newAtualGasValue
+  zeroAllValuesDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            "Zerar valores",
+          ),
+          content: Container(
+            height: 40,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text("Tem certeza que deseja "),
+                Text("zerar todos os valores?"),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {},
+              child: Text("CANCELAR"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                setState(() {
+                  zeroValues();
+                });
+              },
+              child: Text(
+                "OK",
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // Function that zero's all content inside Gas object
+  void zeroValues() {
+    gas.newAtualGasValue = 0;
+    gas.atualGasValue = 0;
+    gas.newGasValue = 0;
+    gas.gasKgValue = 0;
+    gas.gasMoneyValue = 0;
+    gas.gasCubicMetersValue = 0;
+  }
+
   // Revert last added value
   void revertLastValue() {}
 
   // Function that does something depeding on choice
   void choiceAction(String choice) {
     if (choice == Constants.adicionarLeitura) {
-      addNewGasValue(context);
+      addNewGasValueDialog(context);
     } else if (choice == Constants.voltarLeitura) {
       revertLastValue();
     } else if (choice == Constants.zerarValores) {
-      print("zerarValores");
+      zeroAllValuesDialog(context);
     }
   }
 
@@ -214,7 +265,8 @@ class _HomeViewState extends State<HomeView> {
     String newDecimalValueText = newDecimalValueTextController.text;
     String gasPriceText = gasPriceTextController.text;
 
-    double gasPriceDoubleValue = double.parse(gasPriceText.replaceAll(new RegExp(r'[,.]'), '')) / 100;
+    double gasPriceDoubleValue =
+        double.parse(gasPriceText.replaceAll(new RegExp(r'[,.]'), '')) / 100;
 
     /*
      * Transform the text in double
@@ -229,6 +281,9 @@ class _HomeViewState extends State<HomeView> {
     gas.atualGasValue = gas.newAtualGasValue;
 
     gas.newAtualGasValue = newIntDoubleValue + newDecimalDoubleValue;
+
+    gas.gasCubicMetersValue =
+        gas.newAtualGasValue - gas.atualGasValue;
 
     gas.gasKgValue = (gas.newAtualGasValue - gas.atualGasValue) *
         gas.conversionValueCubicMetersToKg;

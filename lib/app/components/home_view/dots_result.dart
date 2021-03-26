@@ -30,6 +30,18 @@ class DotsResult extends StatelessWidget {
             shape: BoxShape.circle,
           ),
         ),
+        SizedBox(
+          width: 6,
+        ),
+        AnimatedContainer(
+          duration: Duration(milliseconds: 200),
+          height: 7,
+          width: 7,
+          decoration: BoxDecoration(
+            color: getColor(2),
+            shape: BoxShape.circle,
+          ),
+        ),
       ],
     );
   }

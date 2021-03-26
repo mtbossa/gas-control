@@ -11,6 +11,7 @@ class AppWidget extends StatelessWidget {
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.grey[600],
         primaryColor: Colors.grey[800],
+        fontFamily: "Montserrat",
       ),
       debugShowCheckedModeBanner: false,
       title: "Gastos com gás",

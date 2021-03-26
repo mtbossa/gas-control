@@ -11,7 +11,7 @@ class Gas {
    * value
    */
   double atualGasValue;
-    /*
+  /*
    * This will be the input value. 
    */
   double newGasValue;
@@ -22,7 +22,7 @@ class Gas {
    * 
    */
   double newAtualGasValue;
-    /*
+  /*
    * The price that the person pays for each
    * kg of gas.
    * Ex.: R$ 6,92
@@ -39,12 +39,15 @@ class Gas {
    */
   double gasMoneyValue;
 
+  double gasCubicMetersValue;
+
   Gas({
     this.atualGasValue,
     this.newGasValue,
-    this.newAtualGasValue, 
-    this.gasPrice, 
+    this.newAtualGasValue,
+    this.gasPrice,
     this.gasKgValue,
     this.gasMoneyValue,
+    this.gasCubicMetersValue,
   });
 }
