@@ -15,12 +15,6 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   int _currentIndex; // Current index of result view
 
-  // The first controller
-  TextEditingController newFirstIntValueTextController =
-      TextEditingController(text: "0");
-  // The first decimal controller
-  TextEditingController newFirstDecimalValueTextController =
-      TextEditingController(text: "000");
   TextEditingController newIntValueTextController =
       TextEditingController(text: "0");
   TextEditingController newDecimalValueTextController =
@@ -90,6 +84,10 @@ class _HomeViewState extends State<HomeView> {
                           onPressed: () {
                             setState(() {
                               calculate();
+                              newIntValueTextController =
+                                  TextEditingController(text: "0");
+                              newDecimalValueTextController =
+                                  TextEditingController(text: "000");
                             });
                             print(
                                 "newIntValueTextController.text: ${newIntValueTextController.text}");
@@ -154,9 +152,9 @@ class _HomeViewState extends State<HomeView> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 InputGasValue(
-                    newIntValueTextController: newFirstIntValueTextController,
+                    newIntValueTextController: newIntValueTextController,
                     newDecimalValueTextController:
-                        newFirstDecimalValueTextController),
+                        newDecimalValueTextController),
               ],
             ),
           ),
@@ -170,6 +168,9 @@ class _HomeViewState extends State<HomeView> {
                 Navigator.of(context).pop();
                 setState(() {
                   createFirstValue();
+                  newIntValueTextController = TextEditingController(text: "0");
+                  newDecimalValueTextController =
+                      TextEditingController(text: "000");
                 });
               },
               child: Text(
@@ -184,8 +185,8 @@ class _HomeViewState extends State<HomeView> {
 
   // Function that creates the first input Value
   void createFirstValue() {
-    String newIntValueText = newFirstIntValueTextController.text;
-    String newDecimalValueText = newFirstDecimalValueTextController.text;
+    String newIntValueText = newIntValueTextController.text;
+    String newDecimalValueText = newDecimalValueTextController.text;
 
     double newIntDoubleValue = double.tryParse(newIntValueText) ?? 0.0;
     double newDecimalDoubleValue =
@@ -223,6 +224,7 @@ class _HomeViewState extends State<HomeView> {
                 Navigator.of(context).pop();
                 setState(() {
                   zeroValues();
+                  gasPriceTextController = MoneyMaskedTextController();
                 });
               },
               child: Text(
@@ -282,8 +284,7 @@ class _HomeViewState extends State<HomeView> {
 
     gas.newAtualGasValue = newIntDoubleValue + newDecimalDoubleValue;
 
-    gas.gasCubicMetersValue =
-        gas.newAtualGasValue - gas.atualGasValue;
+    gas.gasCubicMetersValue = gas.newAtualGasValue - gas.atualGasValue;
 
     gas.gasKgValue = (gas.newAtualGasValue - gas.atualGasValue) *
         gas.conversionValueCubicMetersToKg;
