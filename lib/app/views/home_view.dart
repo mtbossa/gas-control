@@ -8,9 +8,6 @@ import 'package:gas_mvc/app/constants/constants.dart';
 import 'package:gas_mvc/app/models/gas_model.dart';
 
 class HomeView extends StatefulWidget {
-  Leitura leituraAtual = Leitura();
-  List<Leitura> leiturasArray = [];
-
   @override
   _HomeViewState createState() => _HomeViewState();
 }
@@ -18,32 +15,26 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   int _currentIndex; // Current index of result view
 
-  // The first controller
-  TextEditingController newFirstIntValueTextController =
-      TextEditingController(text: "0");
-  // The first decimal controller
-  TextEditingController newFirstDecimalValueTextController =
-      TextEditingController(text: "000");
   TextEditingController newIntValueTextController =
       TextEditingController(text: "0");
   TextEditingController newDecimalValueTextController =
       TextEditingController(text: "000");
   MoneyMaskedTextController gasPriceTextController =
       MoneyMaskedTextController();
-  Leitura leituraZero = Leitura(
-    cubicMeterDifference: 0.0,
-    cubicMeterValue: 0.0,
-    gasPrice: 0.0,
-    kgValue: 0.0,
-    moneyValue: 0.0,
-  );
+  List<Leitura> listLeituras = [];
 
   @override
   void initState() {
     super.initState();
-    widget.leiturasArray.add(leituraZero);        
+    Leitura leitura = Leitura(
+      cubicMeterDifference: 0.0,
+      cubicMeterValue: 0.0,
+      gasPrice: 0.0,
+      kgValue: 0.0,
+      moneyValue: 0.0,
+    );
+    listLeituras.insert(0, leitura);
     _currentIndex = 0;
-    print("${widget.leiturasArray.length}");
   }
 
   @override
@@ -89,7 +80,7 @@ class _HomeViewState extends State<HomeView> {
                           newDecimalValueTextController:
                               newDecimalValueTextController,
                           gasPriceTextController: gasPriceTextController,
-                          leiturasArray: widget.leiturasArray,
+                          leiturasArray: listLeituras,
                         ),
                         SizedBox(
                           height: 15,
@@ -98,7 +89,8 @@ class _HomeViewState extends State<HomeView> {
                           onPressed: () {
                             setState(() {
                               calculate();
-                              widget.leiturasArray.add(widget.leituraAtual);
+                              newIntValueTextController = TextEditingController(text: "0");
+                              newDecimalValueTextController = TextEditingController(text: "000");
                             }); // Calcular e mostrar
                           },
                           child: Text("CALCULAR"),
@@ -123,7 +115,7 @@ class _HomeViewState extends State<HomeView> {
                   ),
                 ),
                 PageViewResult(
-                  arrayLeituras: widget.leiturasArray,
+                  arrayLeituras: listLeituras,
                   onChanged: (index) {
                     setState(() {
                       _currentIndex = index;
@@ -159,9 +151,9 @@ class _HomeViewState extends State<HomeView> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 InputGasValue(
-                    newIntValueTextController: newFirstIntValueTextController,
+                    newIntValueTextController: newIntValueTextController,
                     newDecimalValueTextController:
-                        newFirstDecimalValueTextController),
+                        newDecimalValueTextController),
               ],
             ),
           ),
@@ -175,7 +167,8 @@ class _HomeViewState extends State<HomeView> {
                 Navigator.of(context).pop();
                 setState(() {
                   createFirstValue();
-                  widget.leiturasArray.add(widget.leituraAtual);
+                  newIntValueTextController = TextEditingController(text: "0");
+                  newDecimalValueTextController = TextEditingController(text: "000");
                 });
               },
               child: Text(
@@ -190,15 +183,23 @@ class _HomeViewState extends State<HomeView> {
 
   // Function that creates the first input Value
   void createFirstValue() {
-    String newIntValueText = newFirstIntValueTextController.text;
-    String newDecimalValueText = newFirstDecimalValueTextController.text;
+    String newIntValueText = newIntValueTextController.text;
+    String newDecimalValueText = newDecimalValueTextController.text;
 
     double newIntDoubleValue = double.tryParse(newIntValueText) ?? 0.0;
     double newDecimalDoubleValue =
         ((double.tryParse(newDecimalValueText) ?? 0.0) / 1000);
 
-    widget.leituraAtual.cubicMeterValue =
-        newIntDoubleValue + newDecimalDoubleValue;
+    Leitura leitura = Leitura(
+      cubicMeterValue: newIntDoubleValue + newDecimalDoubleValue,
+      cubicMeterDifference: 0.0,
+      date: DateTime.now(),
+      gasPrice: 0.0,
+      kgValue: 0.0,
+      moneyValue: 0.0,
+    );
+
+    listLeituras.add(leitura);
   }
 
   // AlertDialog for adding newAtualGasValue
@@ -244,7 +245,7 @@ class _HomeViewState extends State<HomeView> {
 
   // Function that zero's all content inside Gas object
   void zeroValues() {
-    widget.leiturasArray.clear();
+    listLeituras.clear();
   }
 
   // Revert last added value
@@ -281,26 +282,28 @@ class _HomeViewState extends State<HomeView> {
     double newDecimalDoubleValue =
         ((double.tryParse(newDecimalValueText) ?? 0.0) / 1000);
 
-    widget.leituraAtual.cubicMeterValue =
-        newIntDoubleValue + newDecimalDoubleValue;
+    double cubicMeterValue = newIntDoubleValue + newDecimalDoubleValue;
 
-    widget.leituraAtual.cubicMeterDifference =
-        widget.leituraAtual.cubicMeterValue -
-            widget.leiturasArray.last.cubicMeterValue;
+    double cubicMeterDifference =
+        cubicMeterValue - listLeituras.last.cubicMeterValue;
 
-    widget.leituraAtual.kgValue =
-        widget.leituraAtual.cubicMeterDifference * 2.5;
+    double kgValue = cubicMeterDifference * 2.5;
 
-    widget.leituraAtual.gasPrice = gasPriceDoubleValue;
-    widget.leituraAtual.moneyValue =
-        widget.leituraAtual.kgValue * widget.leituraAtual.gasPrice;
+    double gasPrice = gasPriceDoubleValue;
+    double moneyValue = kgValue * gasPrice;
 
-    print(
-        "widget.leituraAtual.cubicMeterValue: ${widget.leituraAtual.cubicMeterValue}");
-    print(
-        "widget.leituraAtual.cubicMeterDifference: ${widget.leituraAtual.cubicMeterDifference}");
-    print("widget.leituraAtual.kgValue: ${widget.leituraAtual.kgValue}");
-    print("widget.leituraAtual.gasPrice: ${widget.leituraAtual.gasPrice}");
-    print("widget.leituraAtual.moneyValue: ${widget.leituraAtual.moneyValue}");
+    Leitura leitura = Leitura(
+      cubicMeterValue: cubicMeterValue,
+      cubicMeterDifference: cubicMeterDifference,
+      kgValue: kgValue,
+      gasPrice: gasPrice,
+      moneyValue: moneyValue,
+    );
+
+    listLeituras.add(leitura);
+
+    print("lenght: ${listLeituras.length}");
+    print("cubicMeterDifference: ${listLeituras.last.cubicMeterDifference}");
+    print("cubicMeterValue: ${listLeituras.last.cubicMeterValue}");
   }
 }

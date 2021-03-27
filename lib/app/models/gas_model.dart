@@ -1,25 +1,31 @@
 class Leitura {
-  double cubicMeterDifference = 0;
-
-  double cubicMeterValue = 0;
+  /*
+   * Result of last add cubicMeterValue - the previously one
+   */
+  double cubicMeterDifference;
+  /*
+   * Last added cubicMeterValue;
+   */
+  double cubicMeterValue;
   /*
    * This is the value from:
    * (newGasValue - atualGasValue) * conversionValueCubicMetersToKg
    */
-  double kgValue = 0;
+  double kgValue;
   /*
    * The price that the person pays for each
    * kg of gas.
    * Ex.: R$ 6,92
-   * 
    */
-  double gasPrice = 0;
+  double gasPrice;
   /*
    * The amount of money spent on gas.
    * gasPrice * kgValue;
    */
-  double moneyValue = 0;
-  // TODO implement this
+  double moneyValue;
+  /*
+   * Date when CALCULATE is pressed.
+   */
   DateTime date;
 
   Leitura({
@@ -30,4 +36,5 @@ class Leitura {
     this.moneyValue,
     this.date,
   });
+
 }
