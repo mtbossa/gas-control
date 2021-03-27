@@ -3,12 +3,12 @@ import 'package:gas_mvc/app/models/gas_model.dart';
 
 class PageViewResult extends StatelessWidget {
   final ValueChanged<int> onChanged;
-  final Gas gas;
+  final List<Leitura> arrayLeituras;
 
   const PageViewResult({
     Key key,
     @required this.onChanged,
-    @required this.gas,
+    @required this.arrayLeituras,
   }) : super(key: key);
 
   @override
@@ -89,7 +89,9 @@ class PageViewResult extends StatelessWidget {
   }
 
   Text checkCubicMeters() {
-    if (gas.gasCubicMetersValue == 0.0 || gas.gasCubicMetersValue == null) {
+    if (arrayLeituras.last.cubicMeterValue == 0.0 ||
+        arrayLeituras.last.cubicMeterValue == null ||
+        arrayLeituras.last.cubicMeterDifference == 0.0) {
       return Text(
         "0.0",
         style: TextStyle(
@@ -100,7 +102,7 @@ class PageViewResult extends StatelessWidget {
       );
     } else {
       return Text(
-        "${gas.gasCubicMetersValue.toStringAsFixed(2)}",
+        "${arrayLeituras.last.cubicMeterValue.toStringAsFixed(2)}",
         style: TextStyle(
           fontSize: 25,
           color: Colors.green,
@@ -111,7 +113,8 @@ class PageViewResult extends StatelessWidget {
   }
 
   Text checkKg() {
-    if (gas.gasKgValue == 0.0 || gas.gasKgValue == null) {
+    if (arrayLeituras.last.kgValue == 0.0 ||
+        arrayLeituras.last.kgValue == null) {
       return Text(
         "0.0",
         style: TextStyle(
@@ -122,7 +125,7 @@ class PageViewResult extends StatelessWidget {
       );
     } else {
       return Text(
-        "${gas.gasKgValue.toStringAsFixed(3)}",
+        "${arrayLeituras.last.kgValue.toStringAsFixed(3)}",
         style: TextStyle(
           fontSize: 25,
           color: Colors.green,
@@ -133,7 +136,8 @@ class PageViewResult extends StatelessWidget {
   }
 
   Text checkMoney() {
-    if (gas.gasMoneyValue == 0.0 || gas.gasKgValue == null) {
+    if (arrayLeituras.last.moneyValue == 0.0 ||
+        arrayLeituras.last.moneyValue == null) {
       return Text(
         "0.0",
         style: TextStyle(
@@ -144,7 +148,7 @@ class PageViewResult extends StatelessWidget {
       );
     } else {
       return Text(
-        "${gas.gasMoneyValue.toStringAsFixed(2)}",
+        "${arrayLeituras.last.moneyValue.toStringAsFixed(2)}",
         style: TextStyle(
           fontSize: 25,
           color: Colors.green,

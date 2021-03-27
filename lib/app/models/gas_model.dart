@@ -1,53 +1,40 @@
-class Gas {
+class Leitura {
   /*
-   * Value for converting the difference between the 
-   * newGasValue and atualGasValue.
-   * Formula: (newGasValue - atualGasValue) * conversionValueCubicMetersToKg.
+   * Result of last add cubicMeterValue - the previously one
    */
-  final double conversionValueCubicMetersToKg = 2.5;
+  double cubicMeterDifference;
   /*
-   * The last value read from the gas meter,
-   * even after calculating, so the person can reset to last 
-   * value
+   * Last added cubicMeterValue;
    */
-  double atualGasValue;
-  /*
-   * This will be the input value. 
-   */
-  double newGasValue;
-  /*
-   * This value will be the same as newGasValue after
-   * pressing the "CALCULAR" button, as it will become
-   * the atualGasValue.
-   * 
-   */
-  double newAtualGasValue;
-  /*
-   * The price that the person pays for each
-   * kg of gas.
-   * Ex.: R$ 6,92
-   * 
-   */
-  double gasPrice;
+  double cubicMeterValue;
   /*
    * This is the value from:
    * (newGasValue - atualGasValue) * conversionValueCubicMetersToKg
    */
-  double gasKgValue;
+  double kgValue;
   /*
-   * The amount of money spent on gas 
+   * The price that the person pays for each
+   * kg of gas.
+   * Ex.: R$ 6,92
    */
-  double gasMoneyValue;
+  double gasPrice;
+  /*
+   * The amount of money spent on gas.
+   * gasPrice * kgValue;
+   */
+  double moneyValue;
+  /*
+   * Date when CALCULATE is pressed.
+   */
+  DateTime date;
 
-  double gasCubicMetersValue;
-
-  Gas({
-    this.atualGasValue,
-    this.newGasValue,
-    this.newAtualGasValue,
+  Leitura({
+    this.cubicMeterDifference,
+    this.cubicMeterValue,
+    this.kgValue,
     this.gasPrice,
-    this.gasKgValue,
-    this.gasMoneyValue,
-    this.gasCubicMetersValue,
+    this.moneyValue,
+    this.date,
   });
+
 }

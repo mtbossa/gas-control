@@ -9,14 +9,14 @@ class ContainerValues extends StatelessWidget {
   final TextEditingController newIntValueTextController;
   final TextEditingController newDecimalValueTextController;
   final MoneyMaskedTextController gasPriceTextController;
-  final Gas gas;
+  final List<Leitura> leiturasArray;
 
   const ContainerValues(
       {Key key,
       @required this.newIntValueTextController,
       @required this.newDecimalValueTextController,
       @required this.gasPriceTextController,
-      @required this.gas})
+      @required this.leiturasArray})
       : super(key: key);
 
   @override
@@ -107,7 +107,7 @@ class ContainerValues extends StatelessWidget {
   }
 
   Text checkEmpty() {
-    if (gas.atualGasValue == 0.0 || gas.atualGasValue == null) {
+    if (leiturasArray.last.cubicMeterValue == 0.0 || leiturasArray.last.cubicMeterValue == null) {
       return Text(
         "0.0 m³",
         style: TextStyle(
@@ -118,7 +118,7 @@ class ContainerValues extends StatelessWidget {
     } else {
       return Text(
         // Displays the most recent added gas value
-        "${gas.newAtualGasValue} m³",
+        "${leiturasArray.last.cubicMeterValue} m³",
         style: TextStyle(
           color: Colors.green[900],
           fontSize: 17,

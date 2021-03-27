@@ -39,7 +39,7 @@ class InputGasPrice extends StatelessWidget {
                 counterText: "",
                 border: InputBorder.none,
               ),
-              controller: gasPriceController, // TODO adjust controller (later)
+              controller: gasPriceController,
               keyboardType: TextInputType.number,
             ),
           ),
