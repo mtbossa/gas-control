@@ -8,6 +8,9 @@ import 'package:gas_mvc/app/constants/constants.dart';
 import 'package:gas_mvc/app/models/gas_model.dart';
 
 class HomeView extends StatefulWidget {
+  Leitura leituraAtual = Leitura();
+  List<Leitura> leiturasArray = [];
+
   @override
   _HomeViewState createState() => _HomeViewState();
 }
@@ -27,15 +30,20 @@ class _HomeViewState extends State<HomeView> {
       TextEditingController(text: "000");
   MoneyMaskedTextController gasPriceTextController =
       MoneyMaskedTextController();
-
-  Gas gas = Gas();
-
-  double newAtualGasValue;
+  Leitura leituraZero = Leitura(
+    cubicMeterDifference: 0.0,
+    cubicMeterValue: 0.0,
+    gasPrice: 0.0,
+    kgValue: 0.0,
+    moneyValue: 0.0,
+  );
 
   @override
   void initState() {
     super.initState();
+    widget.leiturasArray.add(leituraZero);        
     _currentIndex = 0;
+    print("${widget.leiturasArray.length}");
   }
 
   @override
@@ -81,7 +89,7 @@ class _HomeViewState extends State<HomeView> {
                           newDecimalValueTextController:
                               newDecimalValueTextController,
                           gasPriceTextController: gasPriceTextController,
-                          gas: gas,
+                          leiturasArray: widget.leiturasArray,
                         ),
                         SizedBox(
                           height: 15,
@@ -90,11 +98,8 @@ class _HomeViewState extends State<HomeView> {
                           onPressed: () {
                             setState(() {
                               calculate();
-                            });
-                            print(
-                                "newIntValueTextController.text: ${newIntValueTextController.text}");
-                            print(
-                                "gas.newAtualGasValue: ${gas.newAtualGasValue}"); // Calcular e mostrar
+                              widget.leiturasArray.add(widget.leituraAtual);
+                            }); // Calcular e mostrar
                           },
                           child: Text("CALCULAR"),
                           style: ButtonStyle(
@@ -118,7 +123,7 @@ class _HomeViewState extends State<HomeView> {
                   ),
                 ),
                 PageViewResult(
-                  gas: gas,
+                  arrayLeituras: widget.leiturasArray,
                   onChanged: (index) {
                     setState(() {
                       _currentIndex = index;
@@ -170,6 +175,7 @@ class _HomeViewState extends State<HomeView> {
                 Navigator.of(context).pop();
                 setState(() {
                   createFirstValue();
+                  widget.leiturasArray.add(widget.leituraAtual);
                 });
               },
               child: Text(
@@ -190,8 +196,9 @@ class _HomeViewState extends State<HomeView> {
     double newIntDoubleValue = double.tryParse(newIntValueText) ?? 0.0;
     double newDecimalDoubleValue =
         ((double.tryParse(newDecimalValueText) ?? 0.0) / 1000);
-    gas.newAtualGasValue = newIntDoubleValue + newDecimalDoubleValue;
-    gas.atualGasValue = gas.newAtualGasValue;
+
+    widget.leituraAtual.cubicMeterValue =
+        newIntDoubleValue + newDecimalDoubleValue;
   }
 
   // AlertDialog for adding newAtualGasValue
@@ -237,12 +244,7 @@ class _HomeViewState extends State<HomeView> {
 
   // Function that zero's all content inside Gas object
   void zeroValues() {
-    gas.newAtualGasValue = 0;
-    gas.atualGasValue = 0;
-    gas.newGasValue = 0;
-    gas.gasKgValue = 0;
-    gas.gasMoneyValue = 0;
-    gas.gasCubicMetersValue = 0;
+    widget.leiturasArray.clear();
   }
 
   // Revert last added value
@@ -278,23 +280,27 @@ class _HomeViewState extends State<HomeView> {
      */
     double newDecimalDoubleValue =
         ((double.tryParse(newDecimalValueText) ?? 0.0) / 1000);
-    gas.atualGasValue = gas.newAtualGasValue;
 
-    gas.newAtualGasValue = newIntDoubleValue + newDecimalDoubleValue;
+    widget.leituraAtual.cubicMeterValue =
+        newIntDoubleValue + newDecimalDoubleValue;
 
-    gas.gasCubicMetersValue =
-        gas.newAtualGasValue - gas.atualGasValue;
+    widget.leituraAtual.cubicMeterDifference =
+        widget.leituraAtual.cubicMeterValue -
+            widget.leiturasArray.last.cubicMeterValue;
 
-    gas.gasKgValue = (gas.newAtualGasValue - gas.atualGasValue) *
-        gas.conversionValueCubicMetersToKg;
+    widget.leituraAtual.kgValue =
+        widget.leituraAtual.cubicMeterDifference * 2.5;
 
-    gas.gasPrice = gasPriceDoubleValue;
-    gas.gasMoneyValue = gas.gasKgValue * gas.gasPrice;
+    widget.leituraAtual.gasPrice = gasPriceDoubleValue;
+    widget.leituraAtual.moneyValue =
+        widget.leituraAtual.kgValue * widget.leituraAtual.gasPrice;
 
-    print("gasPriceText: $gasPriceText");
-    print("gasPriceDoubleValue: $gasPriceDoubleValue");
-    print("gas.gasPrice: ${gas.gasPrice}");
-    print("gas.gasKgValue: ${gas.gasKgValue}");
-    print("gas.gasMoneyValue: ${gas.gasMoneyValue}");
+    print(
+        "widget.leituraAtual.cubicMeterValue: ${widget.leituraAtual.cubicMeterValue}");
+    print(
+        "widget.leituraAtual.cubicMeterDifference: ${widget.leituraAtual.cubicMeterDifference}");
+    print("widget.leituraAtual.kgValue: ${widget.leituraAtual.kgValue}");
+    print("widget.leituraAtual.gasPrice: ${widget.leituraAtual.gasPrice}");
+    print("widget.leituraAtual.moneyValue: ${widget.leituraAtual.moneyValue}");
   }
 }
