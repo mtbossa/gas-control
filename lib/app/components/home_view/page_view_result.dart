@@ -1,11 +1,17 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:gas_mvc/app/models/gas_model.dart';
+import 'package:intl/intl.dart';
 
 class PageViewResult extends StatelessWidget {
   final ValueChanged<int> onChanged;
   final List<Leitura> arrayLeituras;
+  final _fCubicMeter = NumberFormat("####0.000", Platform.localeName);
+  final _fKgMoney = NumberFormat("####0.00", Platform.localeName);
+  
 
-  const PageViewResult({
+  PageViewResult({
     Key key,
     @required this.onChanged,
     @required this.arrayLeituras,
@@ -88,13 +94,12 @@ class PageViewResult extends StatelessWidget {
     );
   }
 
-  Text checkCubicMeters() {
-    // TODO print with ','
+  Text checkCubicMeters() {    
     if (arrayLeituras.last.cubicMeterValue == 0.0 ||
         arrayLeituras.last.cubicMeterValue == null ||
         arrayLeituras.last.cubicMeterDifference == 0.0) {
       return Text(
-        "0.000",
+        "${_fCubicMeter.format(0.000)}",
         style: TextStyle(
           fontSize: 25,
           color: Colors.green,
@@ -103,7 +108,7 @@ class PageViewResult extends StatelessWidget {
       );
     } else {
       return Text(
-        "${arrayLeituras.last.cubicMeterValue.toStringAsFixed(2)}",
+        "${_fCubicMeter.format(arrayLeituras.last.cubicMeterValue)}",
         style: TextStyle(
           fontSize: 25,
           color: Colors.green,
@@ -113,11 +118,11 @@ class PageViewResult extends StatelessWidget {
     }
   }
 
-  Text checkKg() {
+  Text checkKg() {    
     if (arrayLeituras.last.kgValue == 0.0 ||
         arrayLeituras.last.kgValue == null) {
       return Text(
-        "0.00",
+        "${_fKgMoney.format(0.00)}",
         style: TextStyle(
           fontSize: 25,
           color: Colors.green,
@@ -126,7 +131,7 @@ class PageViewResult extends StatelessWidget {
       );
     } else {
       return Text(
-        "${arrayLeituras.last.kgValue.toStringAsFixed(3)}",
+        "${_fKgMoney.format(arrayLeituras.last.kgValue)}",
         style: TextStyle(
           fontSize: 25,
           color: Colors.green,
@@ -136,11 +141,11 @@ class PageViewResult extends StatelessWidget {
     }
   }
 
-  Text checkMoney() {
+  Text checkMoney() {   
     if (arrayLeituras.last.moneyValue == 0.0 ||
         arrayLeituras.last.moneyValue == null) {
       return Text(
-        "0.00",
+        "${_fKgMoney.format(0.00)}",
         style: TextStyle(
           fontSize: 25,
           color: Colors.green,
@@ -149,7 +154,7 @@ class PageViewResult extends StatelessWidget {
       );
     } else {
       return Text(
-        "${arrayLeituras.last.moneyValue.toStringAsFixed(2)}",
+        "${_fKgMoney.format(arrayLeituras.last.moneyValue)}",
         style: TextStyle(
           fontSize: 25,
           color: Colors.green,

@@ -20,7 +20,7 @@ class _HomeViewState extends State<HomeView> {
   MoneyMaskedTextController gasPriceTextController =
       MoneyMaskedTextController();
   bool _firstTime = true;
-  List<Leitura> listLeituras = [];
+  List<Leitura> listLeituras = [];  
 
   @override
   void initState() {
@@ -82,7 +82,7 @@ class _HomeViewState extends State<HomeView> {
                           newDecimalValueTextController:
                               newDecimalValueTextController,
                           gasPriceTextController: gasPriceTextController,
-                          leiturasArray: listLeituras,
+                          leiturasArray: listLeituras,                                            
                         ),
                         SizedBox(
                           height: 15,

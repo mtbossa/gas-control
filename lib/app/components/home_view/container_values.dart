@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:gas_mvc/app/models/gas_model.dart';
+import 'package:intl/intl.dart';
+import 'dart:io';
 
 import 'input_gas_new_value.dart';
 import 'input_gas_price.dart';
@@ -9,15 +11,17 @@ class ContainerValues extends StatelessWidget {
   final TextEditingController newIntValueTextController;
   final TextEditingController newDecimalValueTextController;
   final MoneyMaskedTextController gasPriceTextController;
-  final List<Leitura> leiturasArray;
+  final List<Leitura> leiturasArray; 
+  final _fCubicMeter = NumberFormat("####0.000", Platform.localeName);
+  
 
-  const ContainerValues(
-      {Key key,
-      @required this.newIntValueTextController,
-      @required this.newDecimalValueTextController,
-      @required this.gasPriceTextController,
-      @required this.leiturasArray})
-      : super(key: key);
+  ContainerValues({
+    Key key,
+    @required this.newIntValueTextController,
+    @required this.newDecimalValueTextController,
+    @required this.gasPriceTextController,
+    @required this.leiturasArray,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -106,11 +110,12 @@ class ContainerValues extends StatelessWidget {
     );
   }
 
-  Text checkEmpty() {
-    // TODO print with ","
-    if (leiturasArray.last.cubicMeterValue == 0.0 || leiturasArray.last.cubicMeterValue == null) {
+  Text checkEmpty() {    
+    print("${_fCubicMeter.format(leiturasArray.last.cubicMeterValue)}");
+    if (leiturasArray.last.cubicMeterValue == 0.0 ||
+        leiturasArray.last.cubicMeterValue == null) {
       return Text(
-        "0.000 m³",
+        "${_fCubicMeter.format(0.000)} m³",
         style: TextStyle(
           color: Colors.green[900],
           fontSize: 17,
@@ -119,7 +124,7 @@ class ContainerValues extends StatelessWidget {
     } else {
       return Text(
         // Displays the most recent added gas value
-        "${leiturasArray.last.cubicMeterValue.toStringAsFixed(3)} m³",
+        "${_fCubicMeter.format(leiturasArray.last.cubicMeterValue)} m³",
         style: TextStyle(
           color: Colors.green[900],
           fontSize: 17,

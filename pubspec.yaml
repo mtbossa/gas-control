@@ -25,6 +25,8 @@ dependencies:
     sdk: flutter
   # Money controller
   flutter_masked_text: ^0.8.0
+  # Intl
+  intl: ^0.17.0
 
 
   # The following adds the Cupertino Icons font to your application.
