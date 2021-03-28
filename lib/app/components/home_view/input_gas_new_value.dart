@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 class InputGasValue extends StatelessWidget {
@@ -6,6 +8,7 @@ class InputGasValue extends StatelessWidget {
 
   final TextEditingController newIntValueTextController;
   final TextEditingController newDecimalValueTextController;
+  final defaultLocale = Platform.localeName;
 
   InputGasValue({
     Key key,
@@ -41,12 +44,7 @@ class InputGasValue extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.only(left: 1.0),
-          child: Text(
-            ".",
-            style: TextStyle(
-              fontSize: 17,
-            ),
-          ),
+          child: dotOrComma(),
         ),
         Padding(
           padding: const EdgeInsets.only(left: 1.0),
@@ -83,5 +81,24 @@ class InputGasValue extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  Text dotOrComma() {
+    print("defaultLocale: $defaultLocale");
+    if (defaultLocale == "pt_BR") {
+      return Text(
+        ",",
+        style: TextStyle(
+          fontSize: 17,
+        ),
+      );
+    } else {
+      return Text(
+        ".",
+        style: TextStyle(
+          fontSize: 17,
+        ),
+      );
+    }
   }
 }
