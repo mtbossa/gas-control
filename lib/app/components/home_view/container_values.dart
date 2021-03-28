@@ -107,9 +107,10 @@ class ContainerValues extends StatelessWidget {
   }
 
   Text checkEmpty() {
+    // TODO print with ","
     if (leiturasArray.last.cubicMeterValue == 0.0 || leiturasArray.last.cubicMeterValue == null) {
       return Text(
-        "0.0 m³",
+        "0.000 m³",
         style: TextStyle(
           color: Colors.green[900],
           fontSize: 17,
@@ -118,7 +119,7 @@ class ContainerValues extends StatelessWidget {
     } else {
       return Text(
         // Displays the most recent added gas value
-        "${leiturasArray.last.cubicMeterValue} m³",
+        "${leiturasArray.last.cubicMeterValue.toStringAsFixed(3)} m³",
         style: TextStyle(
           color: Colors.green[900],
           fontSize: 17,

@@ -15,25 +15,27 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   int _currentIndex; // Current index of result view
 
-  TextEditingController newIntValueTextController =
-      TextEditingController(text: "0");
-  TextEditingController newDecimalValueTextController =
-      TextEditingController(text: "000");
+  TextEditingController newIntValueTextController = TextEditingController();
+  TextEditingController newDecimalValueTextController = TextEditingController();
   MoneyMaskedTextController gasPriceTextController =
       MoneyMaskedTextController();
+  bool _firstTime = true;
   List<Leitura> listLeituras = [];
 
   @override
   void initState() {
     super.initState();
-    Leitura leitura = Leitura(
-      cubicMeterDifference: 0.0,
-      cubicMeterValue: 0.0,
-      gasPrice: 0.0,
-      kgValue: 0.0,
-      moneyValue: 0.0,
-    );
-    listLeituras.insert(0, leitura);
+    if (_firstTime) {
+      Leitura _leitura = Leitura(
+        cubicMeterDifference: 0.0,
+        cubicMeterValue: 0.0,
+        gasPrice: 0.0,
+        kgValue: 0.0,
+        moneyValue: 0.0,
+      );
+      listLeituras.insert(0, _leitura);
+      _firstTime = !_firstTime;
+    }
     _currentIndex = 0;
   }
 
@@ -88,9 +90,11 @@ class _HomeViewState extends State<HomeView> {
                         ElevatedButton(
                           onPressed: () {
                             setState(() {
-                              calculate();
-                              newIntValueTextController = TextEditingController(text: "0");
-                              newDecimalValueTextController = TextEditingController(text: "000");
+                              _calculate();
+                              newIntValueTextController =
+                                  TextEditingController();
+                              newDecimalValueTextController =
+                                  TextEditingController();
                             }); // Calcular e mostrar
                           },
                           child: Text("CALCULAR"),
@@ -137,7 +141,7 @@ class _HomeViewState extends State<HomeView> {
   }
 
   // AlertDialog for adding newAtualGasValue
-  addNewGasValueDialog(BuildContext context) {
+  _addNewGasValueDialog(BuildContext context) {
     return showDialog(
       context: context,
       builder: (context) {
@@ -146,7 +150,7 @@ class _HomeViewState extends State<HomeView> {
             "Valor atual no medidor",
           ),
           content: Container(
-            height: 28,
+            height: 38,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -154,21 +158,29 @@ class _HomeViewState extends State<HomeView> {
                     newIntValueTextController: newIntValueTextController,
                     newDecimalValueTextController:
                         newDecimalValueTextController),
+                Divider(
+                  color: Theme.of(context).primaryColor,
+                  thickness: 2,
+                  indent: 20,
+                  endIndent: 20,
+                ),
               ],
             ),
           ),
           actions: [
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
               child: Text("CANCELAR"),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop();
                 setState(() {
-                  createFirstValue();
-                  newIntValueTextController = TextEditingController(text: "0");
-                  newDecimalValueTextController = TextEditingController(text: "000");
+                  _createFirstValue();
+                  newIntValueTextController = TextEditingController();
+                  newDecimalValueTextController = TextEditingController();
                 });
               },
               child: Text(
@@ -182,7 +194,7 @@ class _HomeViewState extends State<HomeView> {
   }
 
   // Function that creates the first input Value
-  void createFirstValue() {
+  void _createFirstValue() {
     String newIntValueText = newIntValueTextController.text;
     String newDecimalValueText = newDecimalValueTextController.text;
 
@@ -203,7 +215,7 @@ class _HomeViewState extends State<HomeView> {
   }
 
   // AlertDialog for adding newAtualGasValue
-  zeroAllValuesDialog(BuildContext context) {
+  _zeroAllValuesDialog(BuildContext context) {
     return showDialog(
       context: context,
       builder: (context) {
@@ -223,14 +235,16 @@ class _HomeViewState extends State<HomeView> {
           ),
           actions: [
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
               child: Text("CANCELAR"),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.of(context).pop();
                 setState(() {
-                  zeroValues();
+                  _zeroValues();
                   gasPriceTextController = MoneyMaskedTextController();
                 });
               },
@@ -245,26 +259,34 @@ class _HomeViewState extends State<HomeView> {
   }
 
   // Function that zero's all content inside Gas object
-  void zeroValues() {
+  void _zeroValues() {
     listLeituras.clear();
+    Leitura _leitura = Leitura(
+      cubicMeterDifference: 0.0,
+      cubicMeterValue: 0.0,
+      gasPrice: 0.0,
+      kgValue: 0.0,
+      moneyValue: 0.0,
+    );
+    listLeituras.insert(0, _leitura);
   }
 
   // Revert last added value
-  void revertLastValue() {}
+  void _revertLastValue() {}
 
   // Function that does something depeding on choice
   void choiceAction(String choice) {
     if (choice == Constants.adicionarLeitura) {
-      addNewGasValueDialog(context);
+      _addNewGasValueDialog(context);
     } else if (choice == Constants.voltarLeitura) {
-      revertLastValue();
+      _revertLastValue();
     } else if (choice == Constants.zerarValores) {
-      zeroAllValuesDialog(context);
+      _zeroAllValuesDialog(context);
     }
   }
 
   // Function that calculates and displays the values
-  void calculate() {
+  void _calculate() {
     String newIntValueText = newIntValueTextController.text;
     String newDecimalValueText = newDecimalValueTextController.text;
     String gasPriceText = gasPriceTextController.text;
@@ -301,7 +323,7 @@ class _HomeViewState extends State<HomeView> {
       moneyValue: moneyValue,
     );
 
-    listLeituras.add(leitura);
+    listLeituras.add(leitura); // TODO can't add if new value is 0.0
 
     print("lenght: ${listLeituras.length}");
     print("cubicMeterDifference: ${listLeituras.last.cubicMeterDifference}");

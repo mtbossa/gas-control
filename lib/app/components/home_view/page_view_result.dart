@@ -89,11 +89,12 @@ class PageViewResult extends StatelessWidget {
   }
 
   Text checkCubicMeters() {
+    // TODO print with ','
     if (arrayLeituras.last.cubicMeterValue == 0.0 ||
         arrayLeituras.last.cubicMeterValue == null ||
         arrayLeituras.last.cubicMeterDifference == 0.0) {
       return Text(
-        "0.0",
+        "0.000",
         style: TextStyle(
           fontSize: 25,
           color: Colors.green,
@@ -116,7 +117,7 @@ class PageViewResult extends StatelessWidget {
     if (arrayLeituras.last.kgValue == 0.0 ||
         arrayLeituras.last.kgValue == null) {
       return Text(
-        "0.0",
+        "0.00",
         style: TextStyle(
           fontSize: 25,
           color: Colors.green,
@@ -139,7 +140,7 @@ class PageViewResult extends StatelessWidget {
     if (arrayLeituras.last.moneyValue == 0.0 ||
         arrayLeituras.last.moneyValue == null) {
       return Text(
-        "0.0",
+        "0.00",
         style: TextStyle(
           fontSize: 25,
           color: Colors.green,

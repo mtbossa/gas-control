@@ -19,7 +19,7 @@ class InputGasValue extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          width: 50,
+          width: 70,
           child: TextField(
             textDirection: TextDirection.rtl,
             controller: newIntValueTextController,
@@ -29,6 +29,7 @@ class InputGasValue extends StatelessWidget {
             onEditingComplete: (() => _focusNode.requestFocus()),
             decoration: InputDecoration(
               hintText: "00000",
+              hintTextDirection: TextDirection.rtl,
               contentPadding: EdgeInsets.symmetric(vertical: -2),
               isDense: true,
               counterText: "",
@@ -38,10 +39,13 @@ class InputGasValue extends StatelessWidget {
             keyboardType: TextInputType.number,
           ),
         ),
-        Text(
-          ".",
-          style: TextStyle(
-            fontSize: 17,
+        Padding(
+          padding: const EdgeInsets.only(left: 1.0),
+          child: Text(
+            ".",
+            style: TextStyle(
+              fontSize: 17,
+            ),
           ),
         ),
         Padding(
@@ -57,7 +61,8 @@ class InputGasValue extends StatelessWidget {
               focusNode: _focusNode,
               decoration: InputDecoration(
                 hintText: "000",
-                contentPadding: EdgeInsets.symmetric(vertical: -2),
+                hintTextDirection: TextDirection.ltr,
+                contentPadding: EdgeInsets.only(top: -2, bottom: -2),
                 isDense: true,
                 counterText: "",
                 border: InputBorder.none,
