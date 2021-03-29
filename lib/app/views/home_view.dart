@@ -54,7 +54,15 @@ class _HomeViewState extends State<HomeView> {
             child: PopupMenuButton(
               onSelected: choiceAction,
               itemBuilder: (context) {
-                return Constants.choices.map((String choice) {
+                if(listLeituras.length <= 1)
+                 return Constants.firstChoice.map((String choice) {
+                  return PopupMenuItem(
+                    value: choice,
+                    child: Text(choice),
+                  );
+                }).toList();
+                else
+                return Constants.secondChoices.map((String choice) {
                   return PopupMenuItem(
                     value: choice,
                     child: Text(choice),
