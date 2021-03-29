@@ -15,12 +15,17 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   int _currentIndex; // Current index of result view
 
+  TextEditingController newFirstIntValueTextController =
+      TextEditingController();
+  TextEditingController newFirstDecimalValueTextController =
+      TextEditingController();
+
   TextEditingController newIntValueTextController = TextEditingController();
   TextEditingController newDecimalValueTextController = TextEditingController();
   MoneyMaskedTextController gasPriceTextController =
       MoneyMaskedTextController();
   bool _firstTime = true;
-  List<Leitura> listLeituras = [];  
+  List<Leitura> listLeituras = [];
 
   @override
   void initState() {
@@ -82,7 +87,7 @@ class _HomeViewState extends State<HomeView> {
                           newDecimalValueTextController:
                               newDecimalValueTextController,
                           gasPriceTextController: gasPriceTextController,
-                          leiturasArray: listLeituras,                                            
+                          leiturasArray: listLeituras,
                         ),
                         SizedBox(
                           height: 15,
@@ -91,11 +96,7 @@ class _HomeViewState extends State<HomeView> {
                           onPressed: () {
                             setState(() {
                               _calculate();
-                              newIntValueTextController =
-                                  TextEditingController();
-                              newDecimalValueTextController =
-                                  TextEditingController();
-                            }); // Calcular e mostrar
+                            });
                           },
                           child: Text("CALCULAR"),
                           style: ButtonStyle(
@@ -155,9 +156,9 @@ class _HomeViewState extends State<HomeView> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 InputGasValue(
-                    newIntValueTextController: newIntValueTextController,
+                    newIntValueTextController: newFirstIntValueTextController,
                     newDecimalValueTextController:
-                        newDecimalValueTextController),
+                        newFirstDecimalValueTextController),
                 Divider(
                   color: Theme.of(context).primaryColor,
                   thickness: 2,
@@ -169,23 +170,26 @@ class _HomeViewState extends State<HomeView> {
           ),
           actions: [
             TextButton(
+              child: Text(
+                "CANCELAR",
+              ),
               onPressed: () {
                 Navigator.of(context).pop();
+                newFirstIntValueTextController = TextEditingController();
+                newFirstDecimalValueTextController = TextEditingController();
               },
-              child: Text("CANCELAR"),
             ),
             ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                setState(() {
-                  _createFirstValue();
-                  newIntValueTextController = TextEditingController();
-                  newDecimalValueTextController = TextEditingController();
-                });
-              },
               child: Text(
                 "OK",
               ),
+              onPressed: () {
+                // TODO If value <= 0, snackbar, but dont close window
+                Navigator.of(context).pop();
+                setState(() {
+                  _createFirstValue();
+                });
+              },
             ),
           ],
         );
@@ -195,23 +199,32 @@ class _HomeViewState extends State<HomeView> {
 
   // Function that creates the first input Value
   void _createFirstValue() {
-    String newIntValueText = newIntValueTextController.text;
-    String newDecimalValueText = newDecimalValueTextController.text;
+    String newIntValueText = newFirstIntValueTextController.text;
+    String newDecimalValueText = newFirstDecimalValueTextController.text;
 
     double newIntDoubleValue = double.tryParse(newIntValueText) ?? 0.0;
     double newDecimalDoubleValue =
         ((double.tryParse(newDecimalValueText) ?? 0.0) / 1000);
 
-    Leitura leitura = Leitura(
-      cubicMeterValue: newIntDoubleValue + newDecimalDoubleValue,
-      cubicMeterDifference: 0.0,
-      date: DateTime.now(),
-      gasPrice: 0.0,
-      kgValue: 0.0,
-      moneyValue: 0.0,
-    );
+    double cubicMeterValue = newIntDoubleValue + newDecimalDoubleValue;
 
-    listLeituras.add(leitura);
+    if (cubicMeterValue > 0.0) {
+      Leitura leitura = Leitura(
+        cubicMeterValue: cubicMeterValue,
+        cubicMeterDifference: 0.0,
+        date: DateTime.now(),
+        gasPrice: 0.0,
+        kgValue: 0.0,
+        moneyValue: 0.0,
+      );
+      listLeituras.add(leitura);
+      print("Log Added: ${listLeituras.length}");
+      print("Log Date: ${listLeituras.last.date}");
+    } else {
+      // TODO create snackbar saying that the value must be greater than 0. Stay in alert dialog
+    }
+    // Clear TextFields
+    _clearTextFields();
   }
 
   // AlertDialog for adding newAtualGasValue
@@ -228,7 +241,7 @@ class _HomeViewState extends State<HomeView> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text("Tem certeza que deseja "),
+                Text("Tem certeza que deseja"),
                 Text("zerar todos os valores?"),
               ],
             ),
@@ -245,7 +258,6 @@ class _HomeViewState extends State<HomeView> {
                 Navigator.of(context).pop();
                 setState(() {
                   _zeroValues();
-                  gasPriceTextController = MoneyMaskedTextController();
                 });
               },
               child: Text(
@@ -267,19 +279,76 @@ class _HomeViewState extends State<HomeView> {
       gasPrice: 0.0,
       kgValue: 0.0,
       moneyValue: 0.0,
+      date: DateTime.now(),
     );
+
     listLeituras.insert(0, _leitura);
+
+    // Clear TextFields
+    _clearTextFields();
+    _clearPriceField();
   }
 
   // Revert last added value
-  void _revertLastValue() {}
+  _revertLastValueDialog(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            "Voltar leitura",
+          ),
+          content: Container(
+            height: 40,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text("Tem certeza que deseja"),
+                Text("voltar uma leitura?"),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              child: Text(
+                "CANCELAR",
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            ElevatedButton(
+              child: Text(
+                "OK",
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+                setState(() {
+                  _revertLastValue();
+                });
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // Function that returns the last value
+  _revertLastValue() {
+    // Cant't remove the first instance of the array, that's the one with zeros;
+    if (listLeituras.length > 1) {
+      listLeituras.removeLast();
+    }
+    _clearTextFields();
+  }
 
   // Function that does something depeding on choice
   void choiceAction(String choice) {
     if (choice == Constants.adicionarLeitura) {
       _addNewGasValueDialog(context);
     } else if (choice == Constants.voltarLeitura) {
-      _revertLastValue();
+      _revertLastValueDialog(context);
     } else if (choice == Constants.zerarValores) {
       _zeroAllValuesDialog(context);
     }
@@ -313,20 +382,39 @@ class _HomeViewState extends State<HomeView> {
     double kgValue = cubicMeterDifference * 2.5;
 
     double gasPrice = gasPriceDoubleValue;
-    double moneyValue = kgValue * gasPrice;
 
-    Leitura leitura = Leitura(
-      cubicMeterValue: cubicMeterValue,
-      cubicMeterDifference: cubicMeterDifference,
-      kgValue: kgValue,
-      gasPrice: gasPrice,
-      moneyValue: moneyValue,
-    );
+    double moneyValue;
 
-    listLeituras.add(leitura); // TODO can't add if new value is 0.0
+    if (gasPrice > 0.0) {
+      moneyValue = kgValue * gasPrice;
+    } else {
+      moneyValue = 0.0;
+    }
 
-    print("lenght: ${listLeituras.length}");
-    print("cubicMeterDifference: ${listLeituras.last.cubicMeterDifference}");
-    print("cubicMeterValue: ${listLeituras.last.cubicMeterValue}");
+    if (cubicMeterValue > 0 && cubicMeterDifference > 0) {
+      Leitura leitura = Leitura(
+        cubicMeterValue: cubicMeterValue,
+        cubicMeterDifference: cubicMeterDifference,
+        kgValue: kgValue,
+        gasPrice: gasPrice,
+        moneyValue: moneyValue,
+        date: DateTime.now(),
+      );
+      listLeituras.add(leitura);
+      print("Log Added: ${listLeituras.length}");
+      print("Log Date: ${listLeituras.last.date}");
+    }
+    _clearTextFields();
+  }
+
+  void _clearTextFields() {
+    newFirstIntValueTextController = TextEditingController();
+    newFirstDecimalValueTextController = TextEditingController();
+    newIntValueTextController = TextEditingController();
+    newDecimalValueTextController = TextEditingController();
+  }
+
+  void _clearPriceField() {
+    gasPriceTextController = MoneyMaskedTextController();
   }
 }

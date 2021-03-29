@@ -7,8 +7,8 @@ import 'package:intl/intl.dart';
 class PageViewResult extends StatelessWidget {
   final ValueChanged<int> onChanged;
   final List<Leitura> arrayLeituras;
-  final _fCubicMeter = NumberFormat("####0.000", Platform.localeName);
-  final _fKgMoney = NumberFormat("####0.00", Platform.localeName);
+  final _fCubicMeterKg = NumberFormat("####0.000", Platform.localeName);
+  final _fMoney = NumberFormat("####0.00", Platform.localeName);
   
 
   PageViewResult({
@@ -99,7 +99,7 @@ class PageViewResult extends StatelessWidget {
         arrayLeituras.last.cubicMeterValue == null ||
         arrayLeituras.last.cubicMeterDifference == 0.0) {
       return Text(
-        "${_fCubicMeter.format(0.000)}",
+        "${_fCubicMeterKg.format(0.000)}",
         style: TextStyle(
           fontSize: 25,
           color: Colors.green,
@@ -108,7 +108,7 @@ class PageViewResult extends StatelessWidget {
       );
     } else {
       return Text(
-        "${_fCubicMeter.format(arrayLeituras.last.cubicMeterValue)}",
+        "${_fCubicMeterKg.format(arrayLeituras.last.cubicMeterDifference)}",
         style: TextStyle(
           fontSize: 25,
           color: Colors.green,
@@ -122,7 +122,7 @@ class PageViewResult extends StatelessWidget {
     if (arrayLeituras.last.kgValue == 0.0 ||
         arrayLeituras.last.kgValue == null) {
       return Text(
-        "${_fKgMoney.format(0.00)}",
+        "${_fCubicMeterKg.format(0.00)}",
         style: TextStyle(
           fontSize: 25,
           color: Colors.green,
@@ -131,7 +131,7 @@ class PageViewResult extends StatelessWidget {
       );
     } else {
       return Text(
-        "${_fKgMoney.format(arrayLeituras.last.kgValue)}",
+        "${_fCubicMeterKg.format(arrayLeituras.last.kgValue)}",
         style: TextStyle(
           fontSize: 25,
           color: Colors.green,
@@ -145,7 +145,7 @@ class PageViewResult extends StatelessWidget {
     if (arrayLeituras.last.moneyValue == 0.0 ||
         arrayLeituras.last.moneyValue == null) {
       return Text(
-        "${_fKgMoney.format(0.00)}",
+        "${_fMoney.format(0.00)}",
         style: TextStyle(
           fontSize: 25,
           color: Colors.green,
@@ -154,7 +154,7 @@ class PageViewResult extends StatelessWidget {
       );
     } else {
       return Text(
-        "${_fKgMoney.format(arrayLeituras.last.moneyValue)}",
+        "${_fMoney.format(arrayLeituras.last.moneyValue)}",
         style: TextStyle(
           fontSize: 25,
           color: Colors.green,
