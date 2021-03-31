@@ -1,4 +1,5 @@
 class Leitura {
+  int id;
   /*
    * Result of last add cubicMeterValue - the previously one
    */
@@ -37,4 +38,26 @@ class Leitura {
     this.date,
   });
 
+  Map<String, dynamic> toMap() {
+    var map = <String, dynamic>{
+      'id': id,
+      'cubicMeterDifference': cubicMeterDifference,
+      'cubicMeterValue': cubicMeterValue,
+      'kgValue': kgValue,
+      'gasPrice': gasPrice,
+      'moneyValue': moneyValue,
+      'date': date,
+    };
+    return map;
+  }
+
+  Leitura.fromMap(Map<String, dynamic> map) {
+    id = map['id'];
+    cubicMeterDifference = map['cubicMeterDifference'];
+    cubicMeterValue = map['cubicMeterValue'];
+    kgValue = map['kgValue'];
+    gasPrice = map['gasPrice'];
+    moneyValue = map['moneyValue'];
+    date = map['date'];
+  }
 }
