@@ -110,8 +110,7 @@ class ContainerValues extends StatelessWidget {
     );
   }
 
-  Text checkEmpty() {    
-    print("${_fCubicMeter.format(leiturasArray.last.cubicMeterValue)}");
+  Text checkEmpty() {        
     if (leiturasArray.last.cubicMeterValue == 0.0 ||
         leiturasArray.last.cubicMeterValue == null) {
       return Text(

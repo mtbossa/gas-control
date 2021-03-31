@@ -84,7 +84,6 @@ class InputGasValue extends StatelessWidget {
   }
 
   Text dotOrComma() {
-    print("defaultLocale: $defaultLocale");
     if (defaultLocale == "pt_BR") {
       return Text(
         ",",
