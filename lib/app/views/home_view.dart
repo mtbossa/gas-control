@@ -220,14 +220,13 @@ class _HomeViewState extends State<HomeView> {
       Leitura leitura = Leitura(
         cubicMeterValue: cubicMeterValue,
         cubicMeterDifference: 0.0,
-        date: DateTime.now(),
         gasPrice: 0.0,
         kgValue: 0.0,
         moneyValue: 0.0,
       );
       listLeituras.add(leitura);
       print("Log Added: ${listLeituras.length}");
-      print("Log Date: ${listLeituras.last.date}");
+      // print("Log Date: ${listLeituras.last.date}");
     } else {
       // TODO create snackbar saying that the value must be greater than 0. Stay in alert dialog
     }
@@ -287,7 +286,6 @@ class _HomeViewState extends State<HomeView> {
       gasPrice: 0.0,
       kgValue: 0.0,
       moneyValue: 0.0,
-      date: DateTime.now(),
     );
 
     listLeituras.insert(0, _leitura);
@@ -406,11 +404,10 @@ class _HomeViewState extends State<HomeView> {
         kgValue: kgValue,
         gasPrice: gasPrice,
         moneyValue: moneyValue,
-        date: DateTime.now(),
       );
       listLeituras.add(leitura);
       print("Log Added: ${listLeituras.length}");
-      print("Log Date: ${listLeituras.last.date}");
+      // print("Log Date: ${listLeituras.last.date}");
     }
     _clearTextFields();
   }

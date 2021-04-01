@@ -27,7 +27,6 @@ class Leitura {
   /*
    * Date when CALCULATE is pressed.
    */
-  DateTime date;
 
   Leitura({
     this.cubicMeterDifference,
@@ -35,7 +34,6 @@ class Leitura {
     this.kgValue,
     this.gasPrice,
     this.moneyValue,
-    this.date,
   });
 
   Map<String, dynamic> toMap() {
@@ -46,7 +44,6 @@ class Leitura {
       'kgValue': kgValue,
       'gasPrice': gasPrice,
       'moneyValue': moneyValue,
-      'date': date,
     };
     return map;
   }
@@ -58,6 +55,10 @@ class Leitura {
     kgValue = map['kgValue'];
     gasPrice = map['gasPrice'];
     moneyValue = map['moneyValue'];
-    date = map['date'];
+  }
+
+  @override
+  String toString() {
+    return "Leitura => (id: $id, cubicMeterDifference: $cubicMeterDifference, cubicMeterValue: $cubicMeterValue, kgValue: $kgValue, gasPrice: $gasPrice, moneyValue: $moneyValue)";
   }
 }
