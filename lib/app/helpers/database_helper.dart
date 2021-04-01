@@ -91,4 +91,45 @@ class DatabaseHelper {
       return null;
     }
   }
+
+  Future<int> updateLeitura(Leitura leitura) async {
+    var db = await this.database;
+
+    var resultado = await db.update(
+      leituraTable,
+      leitura.toMap(),
+      where: "$colId = ?",
+      whereArgs: [leitura.id],
+    );
+
+    return resultado;
+  }
+
+  Future<int> deleteLeitura(int id) async {
+    var db = await this.database;
+
+    int resultado = await db.delete(
+      leituraTable,
+      where: "$colId = ?",
+      whereArgs: [id],
+    );
+
+    return resultado;
+  }
+
+  // Gets the number of leitura objects  in the database
+  Future<int> getCount() async {
+    Database db = await this.database;
+
+    List<Map<String, dynamic>> x =
+        await db.rawQuery("SELECT COUNT (*) from $leituraTable");
+    int resultado = Sqflite.firstIntValue(x);
+
+    return resultado;
+  }
+
+  Future close() async {
+    Database db = await this.database;
+    db.close();
+  }
 }
