@@ -34,9 +34,8 @@ class DatabaseHelper {
      */
     if (_databaseHelper == null) {
       _databaseHelper = DatabaseHelper._createInstance();
-    } else {
-      return _databaseHelper;
-    }
+    } 
+    return _databaseHelper;
   }
   Future<Database> get database async {
     if (_database == null) {
@@ -97,9 +96,8 @@ class DatabaseHelper {
     Database db = await this.database;
     var result = await db.query(leituraTable);
 
-    List<Leitura> list = result.isNotEmpty
-        ? result.map((c) => Leitura.fromMap(c)).toList()
-        : [];
+    List<Leitura> list =
+        result.isNotEmpty ? result.map((c) => Leitura.fromMap(c)).toList() : [];
 
     return list;
   }

@@ -5,6 +5,7 @@ import 'package:gas_mvc/app/components/home_view/dots_result.dart';
 import 'package:gas_mvc/app/components/home_view/input_gas_new_value.dart';
 import 'package:gas_mvc/app/components/home_view/page_view_result.dart';
 import 'package:gas_mvc/app/constants/constants.dart';
+import 'package:gas_mvc/app/helpers/database_helper.dart';
 import 'package:gas_mvc/app/models/gas_model.dart';
 
 class HomeView extends StatefulWidget {
@@ -15,6 +16,12 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   int _currentIndex; // Current index of result view
 
+  // Variable to work with database
+  DatabaseHelper db = DatabaseHelper();
+
+  // List of Leitura
+  List<Leitura> listLeituras = [];
+
   TextEditingController newFirstIntValueTextController =
       TextEditingController();
   TextEditingController newFirstDecimalValueTextController =
@@ -24,12 +31,19 @@ class _HomeViewState extends State<HomeView> {
   TextEditingController newDecimalValueTextController = TextEditingController();
   MoneyMaskedTextController gasPriceTextController =
       MoneyMaskedTextController();
-  List<Leitura> listLeituras = [];
 
   @override
   void initState() {
     super.initState();
     _currentIndex = 0;
+    /* value is just a name for the variable that will hold
+     * the returned value, could be any other name.
+     */ 
+    db.getAllLeituras().then((value) {
+      setState(() {
+        listLeituras = value;
+      });
+    });
   }
 
   @override

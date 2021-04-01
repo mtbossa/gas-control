@@ -31,6 +31,7 @@ class Leitura {
   // store Date in the database: https://stackoverflow.com/questions/57165310/create-a-datetime-column-in-sqlite-flutter-database
 
   Leitura({
+    this.id,
     this.cubicMeterDifference,
     this.cubicMeterValue,
     this.kgValue,
