@@ -24,23 +24,11 @@ class _HomeViewState extends State<HomeView> {
   TextEditingController newDecimalValueTextController = TextEditingController();
   MoneyMaskedTextController gasPriceTextController =
       MoneyMaskedTextController();
-  bool _firstTime = true;
   List<Leitura> listLeituras = [];
 
   @override
   void initState() {
     super.initState();
-    if (_firstTime) {
-      Leitura _leitura = Leitura(
-        cubicMeterDifference: 0.0,
-        cubicMeterValue: 0.0,
-        gasPrice: 0.0,
-        kgValue: 0.0,
-        moneyValue: 0.0,
-      );
-      listLeituras.insert(0, _leitura);
-      _firstTime = !_firstTime;
-    }
     _currentIndex = 0;
   }
 
@@ -54,20 +42,20 @@ class _HomeViewState extends State<HomeView> {
             child: PopupMenuButton(
               onSelected: choiceAction,
               itemBuilder: (context) {
-                if(listLeituras.length <= 1)
-                 return Constants.firstChoice.map((String choice) {
-                  return PopupMenuItem(
-                    value: choice,
-                    child: Text(choice),
-                  );
-                }).toList();
+                if (listLeituras.length <= 1)
+                  return Constants.firstChoice.map((String choice) {
+                    return PopupMenuItem(
+                      value: choice,
+                      child: Text(choice),
+                    );
+                  }).toList();
                 else
-                return Constants.secondChoices.map((String choice) {
-                  return PopupMenuItem(
-                    value: choice,
-                    child: Text(choice),
-                  );
-                }).toList();
+                  return Constants.secondChoices.map((String choice) {
+                    return PopupMenuItem(
+                      value: choice,
+                      child: Text(choice),
+                    );
+                  }).toList();
               },
               child: Icon(
                 Icons.more_vert,
@@ -95,16 +83,18 @@ class _HomeViewState extends State<HomeView> {
                           newDecimalValueTextController:
                               newDecimalValueTextController,
                           gasPriceTextController: gasPriceTextController,
-                          leiturasArray: listLeituras,
+                          listLeituras: listLeituras,
                         ),
                         SizedBox(
                           height: 15,
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            setState(() {
-                              _calculate();
-                            });
+                            if (listLeituras.isNotEmpty) {
+                              setState(() {
+                                _calculate();
+                              });
+                            }
                           },
                           child: Text("CALCULAR"),
                           style: ButtonStyle(
@@ -128,7 +118,7 @@ class _HomeViewState extends State<HomeView> {
                   ),
                 ),
                 PageViewResult(
-                  arrayLeituras: listLeituras,
+                  listLeituras: listLeituras,
                   onChanged: (index) {
                     setState(() {
                       _currentIndex = index;
@@ -410,6 +400,7 @@ class _HomeViewState extends State<HomeView> {
       // print("Log Date: ${listLeituras.last.date}");
     }
     _clearTextFields();
+    print(listLeituras.length);
   }
 
   void _clearTextFields() {

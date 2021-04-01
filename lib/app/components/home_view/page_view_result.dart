@@ -6,15 +6,14 @@ import 'package:intl/intl.dart';
 
 class PageViewResult extends StatelessWidget {
   final ValueChanged<int> onChanged;
-  final List<Leitura> arrayLeituras;
+  final List<Leitura> listLeituras;
   final _fCubicMeterKg = NumberFormat("####0.000", Platform.localeName);
   final _fMoney = NumberFormat("####0.00", Platform.localeName);
-  
 
   PageViewResult({
     Key key,
     @required this.onChanged,
-    @required this.arrayLeituras,
+    @required this.listLeituras,
   }) : super(key: key);
 
   @override
@@ -94,10 +93,11 @@ class PageViewResult extends StatelessWidget {
     );
   }
 
-  Text checkCubicMeters() {    
-    if (arrayLeituras.last.cubicMeterValue == 0.0 ||
-        arrayLeituras.last.cubicMeterValue == null ||
-        arrayLeituras.last.cubicMeterDifference == 0.0) {
+  Text checkCubicMeters() {
+    if (listLeituras.isEmpty ||
+        listLeituras.last.cubicMeterValue == 0.0 ||
+        listLeituras.last.cubicMeterValue == null ||
+        listLeituras.last.cubicMeterDifference == 0.0) {
       return Text(
         "${_fCubicMeterKg.format(0.000)}",
         style: TextStyle(
@@ -108,7 +108,7 @@ class PageViewResult extends StatelessWidget {
       );
     } else {
       return Text(
-        "${_fCubicMeterKg.format(arrayLeituras.last.cubicMeterDifference)}",
+        "${_fCubicMeterKg.format(listLeituras.last.cubicMeterDifference)}",
         style: TextStyle(
           fontSize: 25,
           color: Colors.green,
@@ -118,9 +118,10 @@ class PageViewResult extends StatelessWidget {
     }
   }
 
-  Text checkKg() {    
-    if (arrayLeituras.last.kgValue == 0.0 ||
-        arrayLeituras.last.kgValue == null) {
+  Text checkKg() {
+    if (listLeituras.isEmpty ||
+        listLeituras.last.kgValue == 0.0 ||
+        listLeituras.last.kgValue == null) {
       return Text(
         "${_fCubicMeterKg.format(0.00)}",
         style: TextStyle(
@@ -131,7 +132,7 @@ class PageViewResult extends StatelessWidget {
       );
     } else {
       return Text(
-        "${_fCubicMeterKg.format(arrayLeituras.last.kgValue)}",
+        "${_fCubicMeterKg.format(listLeituras.last.kgValue)}",
         style: TextStyle(
           fontSize: 25,
           color: Colors.green,
@@ -141,9 +142,10 @@ class PageViewResult extends StatelessWidget {
     }
   }
 
-  Text checkMoney() {   
-    if (arrayLeituras.last.moneyValue == 0.0 ||
-        arrayLeituras.last.moneyValue == null) {
+  Text checkMoney() {
+    if (listLeituras.isEmpty ||
+        listLeituras.last.moneyValue == 0.0 ||
+        listLeituras.last.moneyValue == null) {
       return Text(
         "${_fMoney.format(0.00)}",
         style: TextStyle(
@@ -154,7 +156,7 @@ class PageViewResult extends StatelessWidget {
       );
     } else {
       return Text(
-        "${_fMoney.format(arrayLeituras.last.moneyValue)}",
+        "${_fMoney.format(listLeituras.last.moneyValue)}",
         style: TextStyle(
           fontSize: 25,
           color: Colors.green,

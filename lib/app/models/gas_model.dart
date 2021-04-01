@@ -27,6 +27,8 @@ class Leitura {
   /*
    * Date when CALCULATE is pressed.
    */
+  // TODO create date variable, need to see how to
+  // store Date in the database: https://stackoverflow.com/questions/57165310/create-a-datetime-column-in-sqlite-flutter-database
 
   Leitura({
     this.cubicMeterDifference,
