@@ -65,8 +65,9 @@ class _HomeViewState extends State<HomeView> {
         ],
         backgroundColor: Theme.of(context).primaryColor,
         title: Text(
-          "Controle gás",
+          "CONTROLE GÁS",
         ),
+        centerTitle: true,
       ),
       body: ListView(
         children: [

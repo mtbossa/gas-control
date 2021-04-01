@@ -65,13 +65,13 @@ class DatabaseHelper {
   // Adds Leitura object into the database
   Future<int> insertLeitura(Leitura leitura) async {
     Database db = await this.database;
-    var resultado = await db.insert(leituraTable, leitura.toMap());
+    var result = await db.insert(leituraTable, leitura.toMap());
 
-    return resultado;
+    return result;
   }
 
   // Returns one Leitura for it's ID
-  Future<Leitura> getLeitura(int id) async {
+  Future<Leitura> getOneLeitura(int id) async {
     Database db = await this.database;
     List<Map> maps = await db.query(leituraTable,
         columns: [
@@ -92,29 +92,41 @@ class DatabaseHelper {
     }
   }
 
+  // Returns all Leituras
+  Future<List<Leitura>> getAllLeituras() async {
+    Database db = await this.database;
+    var result = await db.query(leituraTable);
+
+    List<Leitura> list = result.isNotEmpty
+        ? result.map((c) => Leitura.fromMap(c)).toList()
+        : [];
+
+    return list;
+  }
+
   Future<int> updateLeitura(Leitura leitura) async {
     var db = await this.database;
 
-    var resultado = await db.update(
+    var result = await db.update(
       leituraTable,
       leitura.toMap(),
       where: "$colId = ?",
       whereArgs: [leitura.id],
     );
 
-    return resultado;
+    return result;
   }
 
   Future<int> deleteLeitura(int id) async {
     var db = await this.database;
 
-    int resultado = await db.delete(
+    int result = await db.delete(
       leituraTable,
       where: "$colId = ?",
       whereArgs: [id],
     );
 
-    return resultado;
+    return result;
   }
 
   // Gets the number of leitura objects  in the database
@@ -123,9 +135,9 @@ class DatabaseHelper {
 
     List<Map<String, dynamic>> x =
         await db.rawQuery("SELECT COUNT (*) from $leituraTable");
-    int resultado = Sqflite.firstIntValue(x);
+    int result = Sqflite.firstIntValue(x);
 
-    return resultado;
+    return result;
   }
 
   Future close() async {
