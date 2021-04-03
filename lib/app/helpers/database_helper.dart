@@ -127,6 +127,29 @@ class DatabaseHelper {
     return result;
   }
 
+  // Delete all rows in the colomun
+  Future deleteAll() async {
+    Database db = await this.database;
+
+    db.delete(
+      leituraTable,
+      where: null,
+    );
+  }
+
+  // Deletes the last value
+  Future<int> deleteLastLeitura() async {
+    var db = await this.database;
+
+    int result = await db.delete(
+      leituraTable,
+      where: "$colId = (SELECT MAX($colId) FROM $leituraTable)",
+    );
+
+    return result;
+  }
+ 
+
   // Gets the number of leitura objects  in the database
   Future<int> getCount() async {
     Database db = await this.database;
@@ -141,15 +164,5 @@ class DatabaseHelper {
   Future close() async {
     Database db = await this.database;
     db.close();
-  }
-
-  // Delete all rows in the colomun
-  Future deleteAll() async {
-    Database db = await this.database;
-
-    db.delete(
-      leituraTable,
-      where: null,
-    );
-  }
+  }  
 }

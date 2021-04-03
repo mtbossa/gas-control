@@ -37,7 +37,7 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     super.initState();
     _currentIndex = 0;
-    _exibeAllContatos();
+    _exhibitAllContatos();
   }
 
   @override
@@ -194,6 +194,7 @@ class _HomeViewState extends State<HomeView> {
                 // TODO If value <= 0, snackbar, but dont close window
                 Navigator.of(context).pop();
                 setState(() {
+                  // TODO try to add first value than check options
                   _createFirstValue();
                 });
               },
@@ -226,7 +227,7 @@ class _HomeViewState extends State<HomeView> {
       db.insertLeitura(leitura);
       print("Leitura: $leitura");
       print("listLeituras.length: ${listLeituras.length}");
-      _exibeAllContatos();
+      _exhibitAllContatos();
       // print("Log Date: ${listLeituras.last.date}");
     } else {
       // TODO create snackbar saying that the value must be greater than 0. Stay in alert dialog
@@ -283,7 +284,7 @@ class _HomeViewState extends State<HomeView> {
     listLeituras.clear();
     print(listLeituras);
     db.deleteAll();
-    _exibeAllContatos();
+    _exhibitAllContatos();
 
     // Clear TextFields
     _clearTextFields();
@@ -337,10 +338,8 @@ class _HomeViewState extends State<HomeView> {
 
   // Function that returns the last value
   _revertLastValue() {
-    // Cant't remove the first instance of the array, that's the one with zeros;
-    if (listLeituras.length > 1) {
-      listLeituras.removeLast();
-    }
+    db.deleteLastLeitura();
+    _exhibitAllContatos();
     _clearTextFields();
   }
 
@@ -402,7 +401,7 @@ class _HomeViewState extends State<HomeView> {
       );
       db.insertLeitura(leitura);
       print("listLeituras.length: ${listLeituras.length}");
-      _exibeAllContatos();
+      _exhibitAllContatos();
     }
     _clearTextFields();
   }
@@ -421,7 +420,7 @@ class _HomeViewState extends State<HomeView> {
   /* value is just a name for the variable that will hold
    * the returned value, could be any other name.
    */
-  void _exibeAllContatos() {
+  void _exhibitAllContatos() {
     db.getAllLeituras().then((value) {
       setState(() {
         listLeituras = value;
