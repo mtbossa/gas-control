@@ -22,28 +22,22 @@ class _HomeViewState extends State<HomeView> {
   // List of Leitura
   List<Leitura> listLeituras = [];
 
-  TextEditingController newFirstIntValueTextController =
+  TextEditingController _newFirstIntValueTextController =
       TextEditingController();
-  TextEditingController newFirstDecimalValueTextController =
+  TextEditingController _newFirstDecimalValueTextController =
       TextEditingController();
 
-  TextEditingController newIntValueTextController = TextEditingController();
-  TextEditingController newDecimalValueTextController = TextEditingController();
-  MoneyMaskedTextController gasPriceTextController =
+  TextEditingController _newIntValueTextController = TextEditingController();
+  TextEditingController _newDecimalValueTextController =
+      TextEditingController();
+  MoneyMaskedTextController _gasPriceTextController =
       MoneyMaskedTextController();
 
   @override
   void initState() {
     super.initState();
     _currentIndex = 0;
-    /* value is just a name for the variable that will hold
-     * the returned value, could be any other name.
-     */ 
-    db.getAllLeituras().then((value) {
-      setState(() {
-        listLeituras = value;
-      });
-    });
+    _exibeAllContatos();
   }
 
   @override
@@ -56,7 +50,7 @@ class _HomeViewState extends State<HomeView> {
             child: PopupMenuButton(
               onSelected: choiceAction,
               itemBuilder: (context) {
-                if (listLeituras.length <= 1)
+                if (listLeituras.length <= 0)
                   return Constants.firstChoice.map((String choice) {
                     return PopupMenuItem(
                       value: choice,
@@ -94,10 +88,10 @@ class _HomeViewState extends State<HomeView> {
                     child: Column(
                       children: [
                         ContainerValues(
-                          newIntValueTextController: newIntValueTextController,
+                          newIntValueTextController: _newIntValueTextController,
                           newDecimalValueTextController:
-                              newDecimalValueTextController,
-                          gasPriceTextController: gasPriceTextController,
+                              _newDecimalValueTextController,
+                          gasPriceTextController: _gasPriceTextController,
                           listLeituras: listLeituras,
                         ),
                         SizedBox(
@@ -169,9 +163,9 @@ class _HomeViewState extends State<HomeView> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 InputGasValue(
-                    newIntValueTextController: newFirstIntValueTextController,
+                    newIntValueTextController: _newFirstIntValueTextController,
                     newDecimalValueTextController:
-                        newFirstDecimalValueTextController),
+                        _newFirstDecimalValueTextController),
                 Divider(
                   color: Theme.of(context).primaryColor,
                   thickness: 2,
@@ -188,8 +182,8 @@ class _HomeViewState extends State<HomeView> {
               ),
               onPressed: () {
                 Navigator.of(context).pop();
-                newFirstIntValueTextController = TextEditingController();
-                newFirstDecimalValueTextController = TextEditingController();
+                _newFirstIntValueTextController = TextEditingController();
+                _newFirstDecimalValueTextController = TextEditingController();
               },
             ),
             ElevatedButton(
@@ -212,8 +206,8 @@ class _HomeViewState extends State<HomeView> {
 
   // Function that creates the first input Value
   void _createFirstValue() {
-    String newIntValueText = newFirstIntValueTextController.text;
-    String newDecimalValueText = newFirstDecimalValueTextController.text;
+    String newIntValueText = _newFirstIntValueTextController.text;
+    String newDecimalValueText = _newFirstDecimalValueTextController.text;
 
     double newIntDoubleValue = double.tryParse(newIntValueText) ?? 0.0;
     double newDecimalDoubleValue =
@@ -229,8 +223,10 @@ class _HomeViewState extends State<HomeView> {
         kgValue: 0.0,
         moneyValue: 0.0,
       );
-      listLeituras.add(leitura);
-      print("Log Added: ${listLeituras.length}");
+      db.insertLeitura(leitura);
+      print("Leitura: $leitura");
+      print("listLeituras.length: ${listLeituras.length}");
+      _exibeAllContatos();
       // print("Log Date: ${listLeituras.last.date}");
     } else {
       // TODO create snackbar saying that the value must be greater than 0. Stay in alert dialog
@@ -285,15 +281,9 @@ class _HomeViewState extends State<HomeView> {
   // Function that zero's all content inside Gas object
   void _zeroValues() {
     listLeituras.clear();
-    Leitura _leitura = Leitura(
-      cubicMeterDifference: 0.0,
-      cubicMeterValue: 0.0,
-      gasPrice: 0.0,
-      kgValue: 0.0,
-      moneyValue: 0.0,
-    );
-
-    listLeituras.insert(0, _leitura);
+    print(listLeituras);
+    db.deleteAll();
+    _exibeAllContatos();
 
     // Clear TextFields
     _clearTextFields();
@@ -367,9 +357,9 @@ class _HomeViewState extends State<HomeView> {
 
   // Function that calculates and displays the values
   void _calculate() {
-    String newIntValueText = newIntValueTextController.text;
-    String newDecimalValueText = newDecimalValueTextController.text;
-    String gasPriceText = gasPriceTextController.text;
+    String newIntValueText = _newIntValueTextController.text;
+    String newDecimalValueText = _newDecimalValueTextController.text;
+    String gasPriceText = _gasPriceTextController.text;
 
     double gasPriceDoubleValue =
         double.parse(gasPriceText.replaceAll(new RegExp(r'[,.]'), '')) / 100;
@@ -410,22 +400,33 @@ class _HomeViewState extends State<HomeView> {
         gasPrice: gasPrice,
         moneyValue: moneyValue,
       );
-      listLeituras.add(leitura);
-      print("Log Added: ${listLeituras.length}");
-      // print("Log Date: ${listLeituras.last.date}");
+      db.insertLeitura(leitura);
+      print("listLeituras.length: ${listLeituras.length}");
+      _exibeAllContatos();
     }
     _clearTextFields();
-    print(listLeituras.length);
   }
 
   void _clearTextFields() {
-    newFirstIntValueTextController = TextEditingController();
-    newFirstDecimalValueTextController = TextEditingController();
-    newIntValueTextController = TextEditingController();
-    newDecimalValueTextController = TextEditingController();
+    _newFirstIntValueTextController = TextEditingController();
+    _newFirstDecimalValueTextController = TextEditingController();
+    _newIntValueTextController = TextEditingController();
+    _newDecimalValueTextController = TextEditingController();
   }
 
   void _clearPriceField() {
-    gasPriceTextController = MoneyMaskedTextController();
+    _gasPriceTextController = MoneyMaskedTextController();
+  }
+
+  /* value is just a name for the variable that will hold
+   * the returned value, could be any other name.
+   */
+  void _exibeAllContatos() {
+    db.getAllLeituras().then((value) {
+      setState(() {
+        listLeituras = value;
+        print("Inside _exibeAllContatos: $value");
+      });
+    });
   }
 }

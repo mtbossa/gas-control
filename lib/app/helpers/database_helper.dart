@@ -34,7 +34,7 @@ class DatabaseHelper {
      */
     if (_databaseHelper == null) {
       _databaseHelper = DatabaseHelper._createInstance();
-    } 
+    }
     return _databaseHelper;
   }
   Future<Database> get database async {
@@ -58,7 +58,7 @@ class DatabaseHelper {
 
   void _createDb(Database db, int newVersion) async {
     await db.execute(
-        "CREATE TABLE $leituraTable ($colId INTEGER PRIMARY KEY AUTOINCREMENT, $colCubicMeterDifference REAL, $colCubicMeterValue REAL, $colKgValue REAL, $colGasPrice REAL, $colMoneyValue REAL)");
+        "CREATE TABLE $leituraTable ($colId INTEGER PRIMARY KEY, $colCubicMeterDifference REAL, $colCubicMeterValue REAL, $colKgValue REAL, $colGasPrice REAL, $colMoneyValue REAL)");
   }
 
   // Adds Leitura object into the database
@@ -141,5 +141,15 @@ class DatabaseHelper {
   Future close() async {
     Database db = await this.database;
     db.close();
+  }
+
+  // Delete all rows in the colomun
+  Future deleteAll() async {
+    Database db = await this.database;
+
+    db.delete(
+      leituraTable,
+      where: null,
+    );
   }
 }
