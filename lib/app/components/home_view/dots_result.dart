@@ -48,6 +48,6 @@ class DotsResult extends StatelessWidget {
 
   // Method for choosing dot color
   Color getColor(int index) {
-    return index == currentIndex ? Colors.white : Colors.white38;
+    return index == currentIndex ? Colors.grey[700] : Colors.grey.withOpacity(0.4);
   }
 }

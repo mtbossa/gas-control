@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
+import 'package:gas_mvc/app/components/home_view/container_input.dart';
 import 'package:gas_mvc/app/components/home_view/container_values.dart';
-import 'package:gas_mvc/app/components/home_view/dots_result.dart';
-import 'package:gas_mvc/app/components/home_view/input_gas_new_value.dart';
-import 'package:gas_mvc/app/components/home_view/page_view_result.dart';
+import 'package:gas_mvc/app/components/home_view/input_gas_value(unused).dart';
 import 'package:gas_mvc/app/constants/constants.dart';
 import 'package:gas_mvc/app/helpers/database_helper.dart';
 import 'package:gas_mvc/app/models/gas_model.dart';
@@ -32,6 +31,15 @@ class _HomeViewState extends State<HomeView> {
       TextEditingController();
   MoneyMaskedTextController _gasPriceTextController =
       MoneyMaskedTextController();
+      
+  final textStyleTitle = TextStyle(
+    fontSize: 15,   
+  );
+
+  final textStyleValue = TextStyle(    
+    fontSize: 25,
+    fontWeight: FontWeight.w600,
+  );
 
   @override
   void initState() {
@@ -44,6 +52,7 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        elevation: 0,
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 10.0),
@@ -73,7 +82,10 @@ class _HomeViewState extends State<HomeView> {
         ],
         backgroundColor: Theme.of(context).primaryColor,
         title: Text(
-          "CONTROLE GÁS",
+          "CONTROLE",
+          style: TextStyle(
+            color: Colors.grey[700],
+          ),
         ),
         centerTitle: true,
       ),
@@ -82,63 +94,48 @@ class _HomeViewState extends State<HomeView> {
           SafeArea(
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Container(
-                    child: Column(
-                      children: [
-                        ContainerValues(
-                          newIntValueTextController: _newIntValueTextController,
-                          newDecimalValueTextController:
-                              _newDecimalValueTextController,
-                          gasPriceTextController: _gasPriceTextController,
-                          listLeituras: listLeituras,
+                Container(
+                  child: Column(
+                    children: [
+                      ContainerValues(
+                        listLeituras: listLeituras,
+                        onChanged: (index) {
+                          setState(() {
+                            _currentIndex = index;
+                          });
+                        },
+                        currentIndex: _currentIndex,
+                      ),
+                      SizedBox(
+                        height: 15,
+                      ),
+                      ContainerInput(
+                        newDecimalValueTextController:
+                            _newDecimalValueTextController,
+                        newIntValueTextController: _newIntValueTextController,
+                        gasPriceTextController: _gasPriceTextController,
+                        listLeituras: listLeituras,
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      FloatingActionButton(
+                        backgroundColor: Theme.of(context).primaryColor,
+                        onPressed: () {
+                          if (listLeituras.isNotEmpty) {
+                            setState(() {
+                              _calculate();
+                            });
+                          }
+                        },
+                        child: Icon(
+                          Icons.add,
+                          size: 20,
+                          color: Colors.grey[700],
                         ),
-                        SizedBox(
-                          height: 15,
-                        ),
-                        ElevatedButton(
-                          onPressed: () {
-                            if (listLeituras.isNotEmpty) {
-                              setState(() {
-                                _calculate();
-                              });
-                            }
-                          },
-                          child: Text("CALCULAR"),
-                          style: ButtonStyle(
-                            backgroundColor: MaterialStateProperty.all<Color>(
-                              Theme.of(context).primaryColor,
-                            ),
-                          ),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        Text(
-                          "RESULTADOS",
-                          style: TextStyle(
-                            fontSize: 17,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                ),
-                PageViewResult(
-                  listLeituras: listLeituras,
-                  onChanged: (index) {
-                    setState(() {
-                      _currentIndex = index;
-                    });
-                  },
-                ),
-                SizedBox(
-                  height: 16,
-                ),
-                DotsResult(
-                  currentIndex: _currentIndex,
                 ),
               ],
             ),
@@ -194,7 +191,6 @@ class _HomeViewState extends State<HomeView> {
                 // TODO If value <= 0, snackbar, but dont close window
                 Navigator.of(context).pop();
                 setState(() {
-                  // TODO try to add first value than check options
                   _createFirstValue();
                 });
               },
@@ -403,6 +399,7 @@ class _HomeViewState extends State<HomeView> {
       print("listLeituras.length: ${listLeituras.length}");
       _exhibitAllContatos();
     }
+    // TODO create snackbar saying that the value must be greater than previous.
     _clearTextFields();
   }
 

@@ -1,133 +1,160 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_masked_text/flutter_masked_text.dart';
+import 'package:gas_mvc/app/components/home_view/page_view_result.dart';
 import 'package:gas_mvc/app/models/gas_model.dart';
 import 'package:intl/intl.dart';
 import 'dart:io';
 
-import 'input_gas_new_value.dart';
-import 'input_gas_price.dart';
+import 'dots_result.dart';
 
 class ContainerValues extends StatelessWidget {
-  final TextEditingController newIntValueTextController;
-  final TextEditingController newDecimalValueTextController;
-  final MoneyMaskedTextController gasPriceTextController;
+  final ValueChanged<int> onChanged;
+  final int currentIndex;
   final List<Leitura> listLeituras;
   final _fCubicMeter = NumberFormat("####0.000", Platform.localeName);
 
+  final textStyleTitle = TextStyle(
+    fontSize: 15,
+    color: Colors.grey[700],
+  );
+
+  final textStyleValue = TextStyle(
+    color: Colors.grey[700],
+    fontSize: 25,
+    fontWeight: FontWeight.w600,
+  );
+
   ContainerValues({
     Key key,
-    @required this.newIntValueTextController,
-    @required this.newDecimalValueTextController,
-    @required this.gasPriceTextController,
     @required this.listLeituras,
+    @required this.onChanged,
+    @required this.currentIndex,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.all(
-          Radius.circular(12),
-        ),
+    return Material(
+      shadowColor: Colors.black.withOpacity(0.8),
+      borderRadius: BorderRadius.only(
+        bottomLeft: Radius.circular(30),
+        bottomRight: Radius.circular(30),
       ),
-      width: MediaQuery.of(context).size.width,
-      child: Column(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+      elevation: 2,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).primaryColor,
+          borderRadius: BorderRadius.only(
+            bottomLeft: Radius.circular(30),
+            bottomRight: Radius.circular(30),
+          ),
+        ),
+        width: MediaQuery.of(context).size.width,
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  "Leitura atual",
-                  style: TextStyle(
-                    fontSize: 17,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  // Leitura atual
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Leitura Anterior",
+                        style: textStyleTitle,
+                      ),
+                      checkEmptyAnterior(),
+                    ],
                   ),
-                ),
-              ),
-              checkEmpty(),
-            ],
-          ),
-          Divider(
-            color: Theme.of(context).primaryColor,
-            thickness: 2,
-            indent: 20,
-            endIndent: 20,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  right: 8.0,
-                  left: 8.0,
-                  bottom: 8.0,
-                ),
-                child: Text(
-                  "Nova leitura",
-                  style: TextStyle(
-                    fontSize: 17,
+                  // Leitura anterior
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Leitura Atual",
+                        style: textStyleTitle,
+                      ),
+                      checkEmptyAtual(),
+                    ],
                   ),
-                ),
+                ],
               ),
-              InputGasValue(
-                newDecimalValueTextController: newDecimalValueTextController,
-                newIntValueTextController: newIntValueTextController,
+              SizedBox(
+                height: 20,
               ),
-            ],
-          ),
-          Divider(
-            color: Theme.of(context).primaryColor,
-            thickness: 2,
-            indent: 20,
-            endIndent: 20,
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(
-                  right: 8.0,
-                  left: 8.0,
-                  bottom: 8.0,
-                ),
-                child: Text(
-                  "Preço kg/gás",
-                  style: TextStyle(
-                    fontSize: 17,
+              Column(
+                children: [
+                  Text(
+                    "RESULTADOS",
+                    style: textStyleTitle,
                   ),
-                ),
-              ),
-              InputGasPrice(
-                gasPriceController: gasPriceTextController,
+                  PageViewResult(
+                    listLeituras: listLeituras,
+                    onChanged: onChanged,
+                  ),
+                  DotsResult(
+                    currentIndex: currentIndex,
+                  ),
+                ],
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }
 
-  Text checkEmpty() {
-    if (listLeituras.isEmpty ||
-        listLeituras.last.cubicMeterValue == 0.0 ||
-        listLeituras.last.cubicMeterValue == null) {
-      return Text(
-        "${_fCubicMeter.format(0.000)} m³",
-        style: TextStyle(
-          color: Colors.green[900],
-          fontSize: 17,
-        ),
-      );
+  Text checkEmptyAnterior() {
+    var secondToLastElement;
+
+    if (listLeituras.length >= 2) {
+      secondToLastElement = listLeituras[listLeituras.length - 2];
+
+      if (listLeituras.isEmpty ||
+          secondToLastElement.cubicMeterValue == 0.0 ||
+          secondToLastElement.cubicMeterValue == null) {
+        return Text(
+          "${_fCubicMeter.format(0.000)} m³",
+          style: textStyleValue,
+        );
+      } else {
+        return Text(
+          // Displays the most recent added gas value
+          "${_fCubicMeter.format(secondToLastElement.cubicMeterValue)} m³",
+          style: textStyleValue,
+        );
+      }
     } else {
       return Text(
-        // Displays the most recent added gas value
-        "${_fCubicMeter.format(listLeituras.last.cubicMeterValue)} m³",
-        style: TextStyle(
-          color: Colors.green[900],
-          fontSize: 17,
-        ),
+        "${_fCubicMeter.format(0.000)} m³",
+        style: textStyleValue,
+      );
+    }
+  }
+
+  Text checkEmptyAtual() {
+    var lastElement;
+
+    if (listLeituras.isNotEmpty) {
+      lastElement = listLeituras.last;
+      if (lastElement.cubicMeterValue == 0.0 ||
+          lastElement.cubicMeterValue == null) {
+        return Text(
+          "${_fCubicMeter.format(0.000)} m³",
+          style: textStyleValue,
+        );
+      } else {
+        return Text(
+          // Displays the most recent added gas value
+          "${_fCubicMeter.format(lastElement.cubicMeterValue)} m³",
+          style: textStyleValue,
+        );
+      }
+    } else {
+      return Text(
+        "${_fCubicMeter.format(0.000)} m³",
+        style: textStyleValue,
       );
     }
   }

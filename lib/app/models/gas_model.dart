@@ -8,7 +8,7 @@ class Leitura {
    * Last added cubicMeterValue;
    */
   double cubicMeterValue;
-  /*
+    /*
    * This is the value from:
    * (newGasValue - atualGasValue) * conversionValueCubicMetersToKg
    */

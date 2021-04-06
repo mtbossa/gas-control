@@ -10,6 +10,17 @@ class PageViewResult extends StatelessWidget {
   final _fCubicMeterKg = NumberFormat("####0.000", Platform.localeName);
   final _fMoney = NumberFormat("####0.00", Platform.localeName);
 
+  final textStyleTitle = TextStyle(
+    fontSize: 15,
+    color: Colors.grey[700],
+  );
+
+  final textStyleValue = TextStyle(
+    color: Colors.grey[700],
+    fontSize: 25,
+    fontWeight: FontWeight.w600,
+  );
+
   PageViewResult({
     Key key,
     @required this.onChanged,
@@ -19,7 +30,7 @@ class PageViewResult extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 0.0),
+      padding: const EdgeInsets.only(top: 10.0),
       child: Container(
         width: MediaQuery.of(context).size.width,
         height: 80,
@@ -35,36 +46,21 @@ class PageViewResult extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
                       "m³",
-                      style: TextStyle(
-                        fontSize: 25,
-                        color: Colors.white,
-                      ),
+                      style: textStyleValue,
                     ),
                   ),
                 ],
               ),
             ),
             Container(
-              // decoration: BoxDecoration(
-              //   color: Colors.white,
-              //   borderRadius: BorderRadius.all(
-              //     Radius.circular(12),
-              //   ),
-              // ),
               child: Column(
                 children: [
-                  SizedBox(
-                    height: 5,
-                  ),
                   checkKg(),
                   Padding(
-                    padding: const EdgeInsets.only(top: 7.0),
+                    padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
                       "kg/gás",
-                      style: TextStyle(
-                        fontSize: 25,
-                        color: Colors.white,
-                      ),
+                      style: textStyleValue,
                     ),
                   ),
                 ],
@@ -78,10 +74,7 @@ class PageViewResult extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
                       "R\$",
-                      style: TextStyle(
-                        fontSize: 25,
-                        color: Colors.white,
-                      ),
+                      style: textStyleValue,
                     ),
                   ),
                 ],
