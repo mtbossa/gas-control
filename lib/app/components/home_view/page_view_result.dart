@@ -10,17 +10,6 @@ class PageViewResult extends StatelessWidget {
   final _fCubicMeterKg = NumberFormat("####0.000", Platform.localeName);
   final _fMoney = NumberFormat("####0.00", Platform.localeName);
 
-  final textStyleTitle = TextStyle(
-    fontSize: 15,
-    color: Colors.grey[700],
-  );
-
-  final textStyleValue = TextStyle(
-    color: Colors.grey[700],
-    fontSize: 25,
-    fontWeight: FontWeight.w600,
-  );
-
   PageViewResult({
     Key key,
     @required this.onChanged,
@@ -33,20 +22,21 @@ class PageViewResult extends StatelessWidget {
       padding: const EdgeInsets.only(top: 10.0),
       child: Container(
         width: MediaQuery.of(context).size.width,
-        height: 80,
+        height: 98,
         child: PageView(
           onPageChanged: onChanged,
           physics: BouncingScrollPhysics(),
           children: [
             Container(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  checkCubicMeters(),
+                  checkCubicMeters(context),
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
                       "m³",
-                      style: textStyleValue,
+                      style: Theme.of(context).textTheme.bodyText2,
                     ),
                   ),
                 ],
@@ -55,12 +45,12 @@ class PageViewResult extends StatelessWidget {
             Container(
               child: Column(
                 children: [
-                  checkKg(),
+                  checkKg(context),
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
                       "kg/gás",
-                      style: textStyleValue,
+                      style: Theme.of(context).textTheme.bodyText2,
                     ),
                   ),
                 ],
@@ -69,12 +59,12 @@ class PageViewResult extends StatelessWidget {
             Container(
               child: Column(
                 children: [
-                  checkMoney(),
+                  checkMoney(context),
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
                       "R\$",
-                      style: textStyleValue,
+                      style: Theme.of(context).textTheme.bodyText2,
                     ),
                   ),
                 ],
@@ -86,75 +76,51 @@ class PageViewResult extends StatelessWidget {
     );
   }
 
-  Text checkCubicMeters() {
+  Text checkCubicMeters(BuildContext context) {
     if (listLeituras.isEmpty ||
         listLeituras.last.cubicMeterValue == 0.0 ||
         listLeituras.last.cubicMeterValue == null ||
         listLeituras.last.cubicMeterDifference == 0.0) {
       return Text(
         "${_fCubicMeterKg.format(0.000)}",
-        style: TextStyle(
-          fontSize: 25,
-          color: Colors.green,
-          fontWeight: FontWeight.bold,
-        ),
+        style: Theme.of(context).textTheme.headline1,
       );
     } else {
       return Text(
         "${_fCubicMeterKg.format(listLeituras.last.cubicMeterDifference)}",
-        style: TextStyle(
-          fontSize: 25,
-          color: Colors.green,
-          fontWeight: FontWeight.bold,
-        ),
+        style: Theme.of(context).textTheme.headline1,
       );
     }
   }
 
-  Text checkKg() {
+  Text checkKg(BuildContext context) {
     if (listLeituras.isEmpty ||
         listLeituras.last.kgValue == 0.0 ||
         listLeituras.last.kgValue == null) {
       return Text(
         "${_fCubicMeterKg.format(0.00)}",
-        style: TextStyle(
-          fontSize: 25,
-          color: Colors.green,
-          fontWeight: FontWeight.bold,
-        ),
+        style: Theme.of(context).textTheme.headline1,
       );
     } else {
       return Text(
         "${_fCubicMeterKg.format(listLeituras.last.kgValue)}",
-        style: TextStyle(
-          fontSize: 25,
-          color: Colors.green,
-          fontWeight: FontWeight.bold,
-        ),
+        style: Theme.of(context).textTheme.headline1,
       );
     }
   }
 
-  Text checkMoney() {
+  Text checkMoney(BuildContext context) {
     if (listLeituras.isEmpty ||
         listLeituras.last.moneyValue == 0.0 ||
         listLeituras.last.moneyValue == null) {
       return Text(
         "${_fMoney.format(0.00)}",
-        style: TextStyle(
-          fontSize: 25,
-          color: Colors.green,
-          fontWeight: FontWeight.bold,
-        ),
+        style: Theme.of(context).textTheme.headline1,
       );
     } else {
       return Text(
         "${_fMoney.format(listLeituras.last.moneyValue)}",
-        style: TextStyle(
-          fontSize: 25,
-          color: Colors.green,
-          fontWeight: FontWeight.bold,
-        ),
+        style: Theme.of(context).textTheme.headline1,
       );
     }
   }

@@ -9,15 +9,35 @@ class AppWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
-        textTheme: TextTheme(
-          bodyText1: TextStyle(
-            color: Colors.grey[700],
+        appBarTheme: AppBarTheme(
+          titleTextStyle: TextStyle(
+            color: Colors.white,
+            fontSize: 25,
+            fontWeight: FontWeight.w600,
           ),
         ),
-        hintColor: Colors.grey[700].withOpacity(0.2),
-        scaffoldBackgroundColor: Colors.white10.withOpacity(0.95),
-        primaryColor: Colors.white,
-        fontFamily: "Oswald",
+        textTheme: TextTheme(
+          // For titles
+          bodyText1: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+          ),
+          // For display values
+          bodyText2: TextStyle(
+            color: Colors.white,
+            fontSize: 30,
+            fontWeight: FontWeight.w600,
+          ),
+          // Result values numbers
+          headline1: TextStyle(
+            color: Colors.greenAccent[400],
+            fontSize: 30,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        scaffoldBackgroundColor: Colors.grey[800],
+        primaryColor: Colors.grey[600],
+        fontFamily: "Montserrat",
       ),
       debugShowCheckedModeBanner: false,
       title: "Gastos com gás",

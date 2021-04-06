@@ -7,17 +7,6 @@ class InputGas extends StatelessWidget {
   final TextEditingController newDecimalValueTextController;
   final defaultLocale = Platform.localeName;
 
-  final textHintStyle = TextStyle(
-    fontSize: 25,
-    fontWeight: FontWeight.w600,
-  );
-
-  final textStyleValue = TextStyle(
-    color: Colors.grey[700],
-    fontSize: 25,
-    fontWeight: FontWeight.w600,
-  );
-
   InputGas({
     Key key,
     @required this.newIntValueTextController,
@@ -30,7 +19,7 @@ class InputGas extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Container(
-          width: 100,
+          width: 120,
           child: Material(
             shadowColor: Colors.black.withOpacity(0.8),
             borderRadius: BorderRadius.all(
@@ -43,9 +32,17 @@ class InputGas extends StatelessWidget {
               controller: newIntValueTextController,
               keyboardType: TextInputType.number,
               textAlign: TextAlign.center,
-              style: textStyleValue,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 25,
+                fontWeight: FontWeight.w600,
+              ),
               decoration: InputDecoration(
-                hintStyle: textHintStyle,
+                hintStyle: TextStyle(
+                  color: Colors.white54,
+                  fontSize: 25,
+                  fontWeight: FontWeight.w600,
+                ),
                 hintText: "00000",
                 counterText: "",
                 contentPadding: const EdgeInsets.only(
@@ -54,7 +51,7 @@ class InputGas extends StatelessWidget {
                   bottom: -10,
                   left: -8,
                 ),
-                fillColor: Colors.grey[700].withOpacity(0.3),
+                fillColor: Colors.black,
                 filled: true,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),
@@ -69,14 +66,12 @@ class InputGas extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.only(
-            left: 3.0,
-            right: 3.0,
-            top: 20.0,
+            top: 10.0,
           ),
           child: dotOrComma(),
         ),
         Container(
-          width: 65,
+          width: 75,
           child: Material(
             shadowColor: Colors.black.withOpacity(0.8),
             borderRadius: BorderRadius.all(
@@ -89,9 +84,17 @@ class InputGas extends StatelessWidget {
               controller: newDecimalValueTextController,
               keyboardType: TextInputType.number,
               textAlign: TextAlign.center,
-              style: textStyleValue,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 25,
+                fontWeight: FontWeight.w600,
+              ),
               decoration: InputDecoration(
-                hintStyle: textHintStyle,
+                hintStyle: TextStyle(
+                  color: Colors.white54,
+                  fontSize: 25,
+                  fontWeight: FontWeight.w600,
+                ),
                 hintText: "000",
                 counterText: "",
                 contentPadding: const EdgeInsets.only(
@@ -100,7 +103,7 @@ class InputGas extends StatelessWidget {
                   bottom: -10,
                   left: -8,
                 ),
-                fillColor: Colors.grey[700].withOpacity(0.3),
+                fillColor: Colors.redAccent,
                 filled: true,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),
@@ -121,12 +124,20 @@ class InputGas extends StatelessWidget {
     if (defaultLocale == "pt_BR") {
       return Text(
         ",",
-        style: textStyleValue,
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 35,
+          fontWeight: FontWeight.w600,
+        ),
       );
     } else {
       return Text(
         ".",
-        style: textStyleValue,
+        style: TextStyle(
+          color: Colors.white,
+          fontSize: 25,
+          fontWeight: FontWeight.w600,
+        ),
       );
     }
   }

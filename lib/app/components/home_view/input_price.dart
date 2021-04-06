@@ -10,7 +10,7 @@ class InputPrice extends StatelessWidget {
   );
 
   final textStyleValue = TextStyle(
-    color: Colors.grey[700],
+    color: Colors.white,
     fontSize: 25,
     fontWeight: FontWeight.w600,
   );
@@ -23,7 +23,7 @@ class InputPrice extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 150,
+      width: 140,
       child: Material(
         shadowColor: Colors.black.withOpacity(0.8),
         borderRadius: BorderRadius.all(
@@ -39,7 +39,7 @@ class InputPrice extends StatelessWidget {
           decoration: InputDecoration(
             counterText: "",
             contentPadding: const EdgeInsets.all(-10),
-            fillColor: Colors.grey[700].withOpacity(0.3),
+            fillColor: Colors.grey[500],
             filled: true,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(20),

@@ -22,6 +22,7 @@ class DatabaseHelper {
   String colKgValue = "kgValue";
   String colGasPrice = "gasPrice";
   String colMoneyValue = "moneyValue";
+   String colDate = "date";
 
   // Constructor
   factory DatabaseHelper() {
@@ -58,7 +59,7 @@ class DatabaseHelper {
 
   void _createDb(Database db, int newVersion) async {
     await db.execute(
-        "CREATE TABLE $leituraTable ($colId INTEGER PRIMARY KEY, $colCubicMeterDifference REAL, $colCubicMeterValue REAL, $colKgValue REAL, $colGasPrice REAL, $colMoneyValue REAL)");
+        "CREATE TABLE $leituraTable ($colId INTEGER PRIMARY KEY, $colCubicMeterDifference REAL, $colCubicMeterValue REAL, $colKgValue REAL, $colGasPrice REAL, $colMoneyValue REAL, $colDate STRING)");
   }
 
   // Adds Leitura object into the database
@@ -79,7 +80,8 @@ class DatabaseHelper {
           colCubicMeterValue,
           colGasPrice,
           colKgValue,
-          colMoneyValue
+          colMoneyValue,
+          colDate,
         ],
         where: "$colId = ?",
         whereArgs: [id]);

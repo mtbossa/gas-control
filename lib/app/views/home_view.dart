@@ -6,6 +6,7 @@ import 'package:gas_mvc/app/components/home_view/input_gas_value(unused).dart';
 import 'package:gas_mvc/app/constants/constants.dart';
 import 'package:gas_mvc/app/helpers/database_helper.dart';
 import 'package:gas_mvc/app/models/gas_model.dart';
+import 'package:intl/intl.dart';
 
 class HomeView extends StatefulWidget {
   @override
@@ -31,12 +32,14 @@ class _HomeViewState extends State<HomeView> {
       TextEditingController();
   MoneyMaskedTextController _gasPriceTextController =
       MoneyMaskedTextController();
-      
+
+  String date;
+
   final textStyleTitle = TextStyle(
-    fontSize: 15,   
+    fontSize: 17,
   );
 
-  final textStyleValue = TextStyle(    
+  final textStyleValue = TextStyle(
     fontSize: 25,
     fontWeight: FontWeight.w600,
   );
@@ -82,12 +85,10 @@ class _HomeViewState extends State<HomeView> {
         ],
         backgroundColor: Theme.of(context).primaryColor,
         title: Text(
-          "CONTROLE",
-          style: TextStyle(
-            color: Colors.grey[700],
-          ),
+          "Controle",
+          style: Theme.of(context).appBarTheme.titleTextStyle,
         ),
-        centerTitle: true,
+        centerTitle: false,
       ),
       body: ListView(
         children: [
@@ -107,6 +108,13 @@ class _HomeViewState extends State<HomeView> {
                         currentIndex: _currentIndex,
                       ),
                       SizedBox(
+                        height: 35,
+                      ),
+                      Text(
+                        "Adicionar nova leitura",
+                        style: Theme.of(context).textTheme.bodyText2,
+                      ),
+                      SizedBox(
                         height: 15,
                       ),
                       ContainerInput(
@@ -115,9 +123,10 @@ class _HomeViewState extends State<HomeView> {
                         newIntValueTextController: _newIntValueTextController,
                         gasPriceTextController: _gasPriceTextController,
                         listLeituras: listLeituras,
+                        dateSelection: dateSelection,
                       ),
                       SizedBox(
-                        height: 20,
+                        height: 25,
                       ),
                       FloatingActionButton(
                         backgroundColor: Theme.of(context).primaryColor,
@@ -131,7 +140,7 @@ class _HomeViewState extends State<HomeView> {
                         child: Icon(
                           Icons.add,
                           size: 20,
-                          color: Colors.grey[700],
+                          color: Colors.white,
                         ),
                       ),
                     ],
@@ -155,7 +164,7 @@ class _HomeViewState extends State<HomeView> {
             "Valor atual no medidor",
           ),
           content: Container(
-            height: 38,
+            height: 58,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -387,6 +396,11 @@ class _HomeViewState extends State<HomeView> {
       moneyValue = 0.0;
     }
 
+    if (date == null) {
+      DateTime now = DateTime.now();
+      date = DateFormat("dd - MM - yyyy").format(now);
+    }
+
     if (cubicMeterValue > 0 && cubicMeterDifference > 0) {
       Leitura leitura = Leitura(
         cubicMeterValue: cubicMeterValue,
@@ -394,6 +408,7 @@ class _HomeViewState extends State<HomeView> {
         kgValue: kgValue,
         gasPrice: gasPrice,
         moneyValue: moneyValue,
+        date: date,
       );
       db.insertLeitura(leitura);
       print("listLeituras.length: ${listLeituras.length}");
@@ -424,5 +439,23 @@ class _HomeViewState extends State<HomeView> {
         print("Inside _exibeAllContatos: $value");
       });
     });
+  }
+
+  dateSelection(String dateSelection) {
+    if (dateSelection == "Hoje") {
+      DateTime now = DateTime.now();
+      date = DateFormat("dd - MM - yyyy").format(now);
+      print("date: $date");
+    } else if (dateSelection == "Ontem") {
+      DateTime now = DateTime.now().subtract(
+        Duration(
+          days: 1,
+        ),
+      );
+      date = DateFormat("dd - MM - yyyy").format(now);
+      print("date ontem: $date");
+    } else {
+      print("Outros");
+    }
   }
 }

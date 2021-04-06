@@ -12,17 +12,6 @@ class ContainerValues extends StatelessWidget {
   final List<Leitura> listLeituras;
   final _fCubicMeter = NumberFormat("####0.000", Platform.localeName);
 
-  final textStyleTitle = TextStyle(
-    fontSize: 15,
-    color: Colors.grey[700],
-  );
-
-  final textStyleValue = TextStyle(
-    color: Colors.grey[700],
-    fontSize: 25,
-    fontWeight: FontWeight.w600,
-  );
-
   ContainerValues({
     Key key,
     @required this.listLeituras,
@@ -62,9 +51,9 @@ class ContainerValues extends StatelessWidget {
                     children: [
                       Text(
                         "Leitura Anterior",
-                        style: textStyleTitle,
+                        style: Theme.of(context).textTheme.bodyText1,
                       ),
-                      checkEmptyAnterior(),
+                      checkEmptyAnterior(context),
                     ],
                   ),
                   // Leitura anterior
@@ -73,9 +62,9 @@ class ContainerValues extends StatelessWidget {
                     children: [
                       Text(
                         "Leitura Atual",
-                        style: textStyleTitle,
+                        style: Theme.of(context).textTheme.bodyText1,
                       ),
-                      checkEmptyAtual(),
+                      checkEmptyAtual(context),
                     ],
                   ),
                 ],
@@ -86,12 +75,15 @@ class ContainerValues extends StatelessWidget {
               Column(
                 children: [
                   Text(
-                    "RESULTADOS",
-                    style: textStyleTitle,
+                    "Resultados",
+                    style: Theme.of(context).textTheme.bodyText1,
                   ),
                   PageViewResult(
                     listLeituras: listLeituras,
                     onChanged: onChanged,
+                  ),
+                  SizedBox(
+                    height: 10,
                   ),
                   DotsResult(
                     currentIndex: currentIndex,
@@ -105,7 +97,7 @@ class ContainerValues extends StatelessWidget {
     );
   }
 
-  Text checkEmptyAnterior() {
+  Text checkEmptyAnterior(BuildContext context) {
     var secondToLastElement;
 
     if (listLeituras.length >= 2) {
@@ -116,24 +108,24 @@ class ContainerValues extends StatelessWidget {
           secondToLastElement.cubicMeterValue == null) {
         return Text(
           "${_fCubicMeter.format(0.000)} m³",
-          style: textStyleValue,
+          style: Theme.of(context).textTheme.bodyText2,
         );
       } else {
         return Text(
           // Displays the most recent added gas value
           "${_fCubicMeter.format(secondToLastElement.cubicMeterValue)} m³",
-          style: textStyleValue,
+          style: Theme.of(context).textTheme.bodyText2,
         );
       }
     } else {
       return Text(
         "${_fCubicMeter.format(0.000)} m³",
-        style: textStyleValue,
+        style: Theme.of(context).textTheme.bodyText2,
       );
     }
   }
 
-  Text checkEmptyAtual() {
+  Text checkEmptyAtual(BuildContext context) {
     var lastElement;
 
     if (listLeituras.isNotEmpty) {
@@ -142,19 +134,19 @@ class ContainerValues extends StatelessWidget {
           lastElement.cubicMeterValue == null) {
         return Text(
           "${_fCubicMeter.format(0.000)} m³",
-          style: textStyleValue,
+          style: Theme.of(context).textTheme.bodyText2,
         );
       } else {
         return Text(
           // Displays the most recent added gas value
           "${_fCubicMeter.format(lastElement.cubicMeterValue)} m³",
-          style: textStyleValue,
+          style: Theme.of(context).textTheme.bodyText2,
         );
       }
     } else {
       return Text(
         "${_fCubicMeter.format(0.000)} m³",
-        style: textStyleValue,
+        style: Theme.of(context).textTheme.bodyText2,
       );
     }
   }
