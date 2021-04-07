@@ -32,19 +32,30 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   void initState() {
-    super.initState();
     _homeController = HomeController(
       newIntValueTextController: _newIntValueTextController,
       newDecimalValueTextController: _newDecimalValueTextController,
       gasPriceTextController: _gasPriceTextController,
     );
-    _homeController.firstShow().then((value) {
+
+    _homeController.exhibitAllContatos().then((_) {
       setState(() {
-        _homeController.listLeituras = value;
+        print("Done");
       });
     });
+
+    // _homeController.db.getAllLeituras().then((value) {
+    //   setState(() {
+    //     _homeController.listLeituras = value;
+    //   });
+    //   print("Inside initState: value --> $value");
+    //   print(
+    //       "Inside initState: listLeituras --> ${_homeController.listLeituras}");
+    // });
+
     _homeController.initDateFormatting();
     _currentIndex = 0;
+    super.initState();
   }
 
   @override
@@ -125,9 +136,6 @@ class _HomeViewState extends State<HomeView> {
                         onPressed: () {
                           setState(() {
                             _homeController.calculate();
-                            clearTextFields();
-                            print(
-                                "Inside calculate: ${_homeController.listLeituras}");
                           });
                         },
                         child: Icon(
@@ -178,8 +186,6 @@ class _HomeViewState extends State<HomeView> {
                 Navigator.of(context).pop();
                 setState(() {
                   _homeController.zeroValues();
-                  clearTextFields();
-                  clearPriceField();
                 });
               },
               child: Text(

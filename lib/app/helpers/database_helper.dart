@@ -22,7 +22,7 @@ class DatabaseHelper {
   String colKgValue = "kgValue";
   String colGasPrice = "gasPrice";
   String colMoneyValue = "moneyValue";
-   String colDate = "date";
+  String colDate = "date";
 
   // Constructor
   factory DatabaseHelper() {
@@ -66,6 +66,7 @@ class DatabaseHelper {
   Future<int> insertLeitura(Leitura leitura) async {
     Database db = await this.database;
     var result = await db.insert(leituraTable, leitura.toMap());
+    print("Inside insertLeiura: $leitura");
 
     return result;
   }
@@ -150,7 +151,6 @@ class DatabaseHelper {
 
     return result;
   }
- 
 
   // Gets the number of leitura objects  in the database
   Future<int> getCount() async {
@@ -166,5 +166,5 @@ class DatabaseHelper {
   Future close() async {
     Database db = await this.database;
     db.close();
-  }  
+  }
 }

@@ -30,20 +30,19 @@ class HomeController {
   /* value is just a name for the variable that will hold
    * the returned value, could be any other name.
    */
-  void exhibitAllContatos() {
-    db.getAllLeituras().then((value) {
-      listLeituras = value;
-      print("Inside exibeAllContatos: value --> $value");
-      print("Inside exibeAllContatos: listLeituras --> $listLeituras");
-    });
-  }
+  // void exhibitAllContatos() {
+  //   db.getAllLeituras().then((value) {
+  //     listLeituras = value;
+      
+  //   });
+  // }
 
-  Future<List<Leitura>> firstShow() async {
-    List<Leitura> list;
+  Future<void> exhibitAllContatos() async {
     await db.getAllLeituras().then((value) {
-      list = value;
+      listLeituras = value;
+      print("Inside exhibitAllContatos(): value --> $value");
+      print("Inside exhibitAllContatos(): listLeituras --> $listLeituras");
     });
-    return list;
   }
 
   // Function that zero's all content inside Gas object
@@ -82,6 +81,7 @@ class HomeController {
      * Transform the text in double
      */
     double _newIntDoubleValue = double.tryParse(_newIntValueText) ?? 0.0;
+    
     /* 
      * Divided by 1000 so it becomes 0,###, to be the
      * total value decimals
@@ -90,6 +90,7 @@ class HomeController {
         ((double.tryParse(_newDecimalValueText) ?? 0.0) / 1000);
 
     double _cubicMeterValue = _newIntDoubleValue + _newDecimalDoubleValue;
+
     double _cubicMeterDifference;
     double _kgValue;
     double _gasPrice;
@@ -128,17 +129,22 @@ class HomeController {
         moneyValue: _moneyValue,
         date: date,
       );
+
       db.insertLeitura(leitura);
+
       print(
           "Inside calculate() before exhibitAllContatos(): leitura --> $leitura");
       print(
           "Inside calculate() before exhibitAllContatos(): listLeituras --> $listLeituras");
+          
       exhibitAllContatos();
+
       print(
           "Inside calculate() after exhibitAllContatos(): leitura --> $leitura");
       print(
           "Inside calculate() after exhibitAllContatos(): listLeituras --> $listLeituras");
     }
+    
     resetDateFields();
   }
 }
