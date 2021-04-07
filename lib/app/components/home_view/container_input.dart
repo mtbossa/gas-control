@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:gas_mvc/app/components/home_view/input_price.dart';
-import 'package:gas_mvc/app/models/gas_model.dart';
+import 'package:gas_mvc/app/models/leitura_model.dart';
 
 import 'input_date.dart';
 import 'input_gas.dart';
@@ -27,7 +27,7 @@ class ContainerInput extends StatelessWidget {
     @required this.listLeituras,
     @required this.newIntValueTextController,
     @required this.newDecimalValueTextController,
-    @required this.dateSelection,
+    this.dateSelection,
     @required this.date,
     @required this.dateText,
     @required this.datePressed,

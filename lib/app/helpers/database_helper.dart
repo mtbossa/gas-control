@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:gas_mvc/app/models/gas_model.dart';
+import 'package:gas_mvc/app/models/leitura_model.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 

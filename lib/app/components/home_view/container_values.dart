@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gas_mvc/app/components/home_view/page_view_result.dart';
-import 'package:gas_mvc/app/models/gas_model.dart';
+import 'package:gas_mvc/app/models/leitura_model.dart';
 import 'package:intl/intl.dart';
 import 'dart:io';
 

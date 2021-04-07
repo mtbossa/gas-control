@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:gas_mvc/app/controllers(unused)/home_controller.dart';
-import 'package:gas_mvc/app/models/gas_model.dart';
+import 'package:gas_mvc/app/controllers/home_controller.dart';
 
 main() {
   final TextEditingController newIntValueTextController =
@@ -11,10 +10,8 @@ main() {
       TextEditingController();
   final MoneyMaskedTextController gasPriceTextController =
       MoneyMaskedTextController();
-  List<Leitura> listLeituras = [];
 
   final homeController = HomeController(
-    listLeituras: listLeituras,
     newIntValueTextController: newIntValueTextController,
     newDecimalValueTextController: newDecimalValueTextController,
     gasPriceTextController: gasPriceTextController,

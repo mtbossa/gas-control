@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:gas_mvc/app/models/gas_model.dart';
+import 'package:gas_mvc/app/models/leitura_model.dart';
 import 'package:intl/intl.dart';
 
 class PageViewResult extends StatelessWidget {
