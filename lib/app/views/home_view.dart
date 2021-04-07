@@ -6,6 +6,7 @@ import 'package:gas_mvc/app/components/home_view/input_gas_value(unused).dart';
 import 'package:gas_mvc/app/constants/constants.dart';
 import 'package:gas_mvc/app/helpers/database_helper.dart';
 import 'package:gas_mvc/app/models/gas_model.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
 class HomeView extends StatefulWidget {
@@ -47,7 +48,8 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   void initState() {
-    super.initState();    
+    super.initState();
+    initializeDateFormatting("pt_BR");
     _currentIndex = 0;
     _exhibitAllContatos();
   }
@@ -503,7 +505,7 @@ class _HomeViewState extends State<HomeView> {
     setState(() {
       if (_pickedDate != null) {
         date = DateFormat("dd - MM - yyyy").format(_pickedDate);
-        dateText = DateFormat("dd/MMM").format(_pickedDate);
+        dateText = DateFormat.MMMd("pt_BR").format(_pickedDate);
       }
     });
 
