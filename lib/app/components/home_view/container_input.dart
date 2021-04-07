@@ -42,7 +42,7 @@ class ContainerInput extends StatelessWidget {
       ),
       elevation: 2,
       child: Container(
-        width: 300,
+        width: 340,
         decoration: BoxDecoration(
           color: Theme.of(context).primaryColor,
           borderRadius: BorderRadius.all(
