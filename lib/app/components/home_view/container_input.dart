@@ -12,6 +12,9 @@ class ContainerInput extends StatelessWidget {
   final MoneyMaskedTextController gasPriceTextController;
   final List<Leitura> listLeituras;
   final Function dateSelection;
+  final String date;
+  final String dateText;
+  final String datePressed;
 
   final textStyleValue = TextStyle(
     fontSize: 25,
@@ -25,6 +28,9 @@ class ContainerInput extends StatelessWidget {
     @required this.newIntValueTextController,
     @required this.newDecimalValueTextController,
     @required this.dateSelection,
+    @required this.date,
+    @required this.dateText,
+    @required this.datePressed,
   }) : super(key: key);
 
   @override
@@ -73,7 +79,10 @@ class ContainerInput extends StatelessWidget {
                     ),
                   ),
                   InputDate(
+                    date: date,
+                    dateText: dateText,
                     dateSelection: dateSelection,
+                    datePressed: datePressed,
                   ),
                   Padding(
                     padding: const EdgeInsets.all(10.0),

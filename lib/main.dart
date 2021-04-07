@@ -7,8 +7,9 @@ void main() => runApp(AppWidget());
 class AppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp(     
       theme: ThemeData(
+        accentColor: Colors.grey[800],
         appBarTheme: AppBarTheme(
           titleTextStyle: TextStyle(
             color: Colors.white,

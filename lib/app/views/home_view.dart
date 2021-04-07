@@ -26,7 +26,6 @@ class _HomeViewState extends State<HomeView> {
       TextEditingController();
   TextEditingController _newFirstDecimalValueTextController =
       TextEditingController();
-
   TextEditingController _newIntValueTextController = TextEditingController();
   TextEditingController _newDecimalValueTextController =
       TextEditingController();
@@ -34,6 +33,8 @@ class _HomeViewState extends State<HomeView> {
       MoneyMaskedTextController();
 
   String date;
+  String dateText = "Outros...";
+  String datePressed = "";
 
   final textStyleTitle = TextStyle(
     fontSize: 17,
@@ -46,7 +47,7 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   void initState() {
-    super.initState();
+    super.initState();    
     _currentIndex = 0;
     _exhibitAllContatos();
   }
@@ -123,7 +124,10 @@ class _HomeViewState extends State<HomeView> {
                         newIntValueTextController: _newIntValueTextController,
                         gasPriceTextController: _gasPriceTextController,
                         listLeituras: listLeituras,
-                        dateSelection: dateSelection,
+                        dateSelection: _dateSelection,
+                        date: date,
+                        dateText: dateText,
+                        datePressed: datePressed,
                       ),
                       SizedBox(
                         height: 25,
@@ -416,6 +420,7 @@ class _HomeViewState extends State<HomeView> {
     }
     // TODO create snackbar saying that the value must be greater than previous.
     _clearTextFields();
+    resetDateFields();
   }
 
   void _clearTextFields() {
@@ -441,21 +446,72 @@ class _HomeViewState extends State<HomeView> {
     });
   }
 
-  dateSelection(String dateSelection) {
+  void _dateSelection(String dateSelection) {
     if (dateSelection == "Hoje") {
-      DateTime now = DateTime.now();
-      date = DateFormat("dd - MM - yyyy").format(now);
+      setState(() {
+        datePressed = "Hoje";
+      });
+
+      DateTime _now = DateTime.now();
+      date = DateFormat("dd - MM - yyyy").format(_now);
       print("date: $date");
     } else if (dateSelection == "Ontem") {
-      DateTime now = DateTime.now().subtract(
+      setState(() {
+        datePressed = "Ontem";
+      });
+
+      DateTime _now = DateTime.now().subtract(
         Duration(
           days: 1,
         ),
       );
-      date = DateFormat("dd - MM - yyyy").format(now);
+
+      date = DateFormat("dd - MM - yyyy").format(_now);
       print("date ontem: $date");
     } else {
-      print("Outros");
+      datePressed = "Outros";
+      print("date before show calendar: $date");
+
+      _showCalendar(context);
+
+      print("date after show calendar: $date");
+      print("dateText: $dateText");
     }
+  }
+
+  Future<Null> _showCalendar(BuildContext context) async {
+    DateTime _pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+      builder: (BuildContext context, Widget child) {
+        return Theme(
+          data: ThemeData.dark().copyWith(
+            colorScheme: ColorScheme.dark(
+              primary: Colors.grey[800],
+              onPrimary: Colors.white,
+              surface: Colors.grey[800],
+              onSurface: Colors.white,
+            ),
+            dialogBackgroundColor: Colors.grey[600],
+          ),
+          child: child,
+        );
+      },
+    );
+    setState(() {
+      if (_pickedDate != null) {
+        date = DateFormat("dd - MM - yyyy").format(_pickedDate);
+        dateText = DateFormat("dd/MMM").format(_pickedDate);
+      }
+    });
+
+    print("date: $date");
+  }
+
+  void resetDateFields() {
+    datePressed = "";
+    dateText = "Outros ...";
   }
 }

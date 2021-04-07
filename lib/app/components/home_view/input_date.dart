@@ -1,21 +1,18 @@
 import 'package:flutter/material.dart';
 
-class InputDate extends StatefulWidget {
+class InputDate extends StatelessWidget {
   final Function dateSelection;
+  final String date;
+  final String dateText;
+  final String datePressed;
 
   InputDate({
     Key key,
     @required this.dateSelection,
+    @required this.date,
+    @required this.dateText,
+    @required this.datePressed,
   }) : super(key: key);
-
-  @override
-  _InputDateState createState() => _InputDateState();
-}
-
-class _InputDateState extends State<InputDate> {
-  bool _pressedHoje = false;
-  bool _pressedOntem = false;
-  bool _pressedOutro = false;
 
   final textNotPressed = TextStyle(
     color: Colors.grey[700],
@@ -36,8 +33,9 @@ class _InputDateState extends State<InputDate> {
       children: [
         ElevatedButton(
           style: ElevatedButton.styleFrom(
-            primary:
-                _pressedHoje ? Colors.white.withOpacity(0.2) : Colors.white,
+            primary: (datePressed == "Hoje")
+                ? Colors.white.withOpacity(0.2)
+                : Colors.white,
             shadowColor: Colors.black.withOpacity(1),
             elevation: 2,
             shape: RoundedRectangleBorder(
@@ -45,22 +43,18 @@ class _InputDateState extends State<InputDate> {
             ),
           ),
           onPressed: () {
-            setState(() {
-              _pressedHoje = !_pressedHoje;
-              _pressedOntem = false;
-              _pressedOutro = false;
-            });
-            if (_pressedHoje) widget.dateSelection("Hoje");
+            dateSelection("Hoje");
           },
           child: Text(
             "Hoje",
-            style: _pressedHoje ? textPressed : textNotPressed,
+            style:  (datePressed == "Hoje") ? textPressed : textNotPressed,
           ),
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
-            primary:
-                _pressedOntem ? Colors.white.withOpacity(0.2) : Colors.white,
+            primary: (datePressed == "Ontem")
+                ? Colors.white.withOpacity(0.2)
+                : Colors.white,
             shadowColor: Colors.black.withOpacity(1),
             elevation: 2,
             shape: RoundedRectangleBorder(
@@ -68,22 +62,18 @@ class _InputDateState extends State<InputDate> {
             ),
           ),
           onPressed: () {
-            setState(() {
-              _pressedHoje = false;
-              _pressedOntem = !_pressedOntem;
-              _pressedOutro = false;
-            });
-            if (_pressedOntem) widget.dateSelection("Ontem");
+            dateSelection("Ontem");
           },
           child: Text(
             "Ontem",
-            style: _pressedOntem ? textPressed : textNotPressed,
+            style:(datePressed == "Ontem") ? textPressed : textNotPressed,
           ),
         ),
         ElevatedButton(
           style: ElevatedButton.styleFrom(
-            primary:
-                _pressedOutro ? Colors.white.withOpacity(0.2) : Colors.white,
+            primary: (datePressed == "Outros")
+                ? Colors.white.withOpacity(0.2)
+                : Colors.white,
             shadowColor: Colors.black.withOpacity(1),
             elevation: 2,
             shape: RoundedRectangleBorder(
@@ -91,16 +81,11 @@ class _InputDateState extends State<InputDate> {
             ),
           ),
           onPressed: () {
-            setState(() {
-              _pressedHoje = false;
-              _pressedOntem = false;
-              _pressedOutro = !_pressedOutro;
-            });
-            if (_pressedOutro) widget.dateSelection("Outros");
+            dateSelection("Outros");
           },
           child: Text(
-            "Outros...",
-            style: _pressedOutro ? textPressed : textNotPressed,
+            "$dateText",
+            style: (datePressed == "Outros") ? textPressed : textNotPressed,
           ),
         ),
       ],

@@ -66,7 +66,9 @@ class InputGas extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.only(
-            top: 10.0,
+            top: 15.0,
+            right: 2.0,
+            left: 2.0,
           ),
           child: dotOrComma(),
         ),
