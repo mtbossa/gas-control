@@ -75,7 +75,8 @@ class PageViewResult extends StatelessWidget {
       ),
     );
   }
-
+ 
+  // TODO "Adicine nova leitura para calcular" instead of 0
   Text checkCubicMeters(BuildContext context) {
     if (listLeituras.isEmpty ||
         listLeituras.last.cubicMeterValue == 0.0 ||
