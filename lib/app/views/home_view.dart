@@ -4,7 +4,6 @@ import 'package:gas_mvc/app/components/home_view/container_input.dart';
 import 'package:gas_mvc/app/components/home_view/container_values.dart';
 import 'package:gas_mvc/app/constants/constants.dart';
 import 'package:gas_mvc/app/controllers/home_controller.dart';
-import 'package:gas_mvc/app/models/leitura_model.dart';
 
 class HomeView extends StatefulWidget {
   @override
@@ -15,6 +14,9 @@ class _HomeViewState extends State<HomeView> {
   HomeController _homeController;
 
   int _currentIndex; // Current index of result view
+
+  String _dateText = "Outros...";
+  String _datePressed = "";
 
   TextEditingController _newIntValueTextController = TextEditingController();
   TextEditingController _newDecimalValueTextController =
@@ -44,15 +46,6 @@ class _HomeViewState extends State<HomeView> {
         print("Done");
       });
     });
-
-    // _homeController.db.getAllLeituras().then((value) {
-    //   setState(() {
-    //     _homeController.listLeituras = value;
-    //   });
-    //   print("Inside initState: value --> $value");
-    //   print(
-    //       "Inside initState: listLeituras --> ${_homeController.listLeituras}");
-    // });
 
     _homeController.initDateFormatting();
     _currentIndex = 0;
@@ -123,11 +116,9 @@ class _HomeViewState extends State<HomeView> {
                         newIntValueTextController: _newIntValueTextController,
                         gasPriceTextController: _gasPriceTextController,
                         listLeituras: _homeController.listLeituras,
-                        //TODO
-                        // dateSelection: _homeController.dateSelection,
-                        date: _homeController.date,
-                        dateText: _homeController.dateText,
-                        datePressed: _homeController.datePressed,
+                        dateSelection: _dateSelection,
+                        dateText: _dateText,
+                        datePressed: _datePressed,
                       ),
                       SizedBox(
                         height: 20,
@@ -137,6 +128,7 @@ class _HomeViewState extends State<HomeView> {
                         onPressed: () {
                           setState(() {
                             _homeController.calculate();
+                            resetDateFields();
                           });
                         },
                         child: Icon(
@@ -251,5 +243,77 @@ class _HomeViewState extends State<HomeView> {
     } else if (choice == Constants.zerarValores) {
       _zeroAllValuesDialog(context);
     }
+  }
+
+  void _dateSelection(String dateSelection) {
+    if (dateSelection == "Hoje") {
+      setState(() {
+        _datePressed = "Hoje";
+      });
+
+      DateTime _now = DateTime.now();
+      _homeController.date = _homeController.dateFormatDataBase.format(_now);
+      print("_homeController.date: ${_homeController.date}");
+    } else if (dateSelection == "Ontem") {
+      setState(() {
+        _datePressed = "Ontem";
+      });
+
+      DateTime _now = DateTime.now().subtract(
+        Duration(
+          days: 1,
+        ),
+      );
+
+      _homeController.date = _homeController.dateFormatDataBase.format(_now);
+      print("_homeController.date ontem: ${_homeController.date}");
+    } else {
+      _datePressed = "Outros";
+      print(
+          "_homeController.date before show calendar: ${_homeController.date}");
+
+      _showCalendar(context);
+
+      print(
+          "_homeController.date after show calendar: ${_homeController.date}");
+      print("dateText: $_dateText");
+    }
+  }
+
+  Future<Null> _showCalendar(BuildContext context) async {
+    DateTime _pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+      builder: (BuildContext context, Widget child) {
+        return Theme(
+          data: ThemeData.dark().copyWith(
+            colorScheme: ColorScheme.dark(
+              primary: Colors.grey[800],
+              onPrimary: Colors.white,
+              surface: Colors.grey[800],
+              onSurface: Colors.white,
+            ),
+            dialogBackgroundColor: Colors.grey[600],
+          ),
+          child: child,
+        );
+      },
+    );
+    setState(() {
+      if (_pickedDate != null) {
+        _homeController.date =
+            _homeController.dateFormatDataBase.format(_pickedDate);
+        _dateText = _homeController.dateFormatCalendar.format(_pickedDate);
+      }
+    });
+
+    print("_homeController.date: ${_homeController.date}");
+  }
+
+  void resetDateFields() {
+    _datePressed = "";
+    _dateText = "Outros ...";
   }
 }

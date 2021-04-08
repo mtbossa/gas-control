@@ -2,14 +2,12 @@ import 'package:flutter/material.dart';
 
 class InputDate extends StatelessWidget {
   final Function dateSelection;
-  final String date;
   final String dateText;
   final String datePressed;
 
   InputDate({
     Key key,
     @required this.dateSelection,
-    @required this.date,
     @required this.dateText,
     @required this.datePressed,
   }) : super(key: key);

@@ -19,8 +19,7 @@ class HomeController {
   int indexId;
 
   String date;
-  String dateText = "Outros...";
-  String datePressed = "";
+
   DateFormat dateFormatDataBase = DateFormat("dd - MM - yyyy");
   DateFormat dateFormatCalendar;
 
@@ -66,12 +65,6 @@ class HomeController {
     initializeDateFormatting("pt_BR", null)
         .then((_) => dateFormatCalendar = DateFormat.MMMd("pt_BR"));
   }
-
-  void resetDateFields() {
-    datePressed = "";
-    dateText = "Outros ...";
-  }
-
   void calculate() {
     String _newIntValueText = newIntValueTextController.text;
     String _newDecimalValueText = newDecimalValueTextController.text;
@@ -120,14 +113,13 @@ class HomeController {
 
     if (date == null) {
       DateTime now = DateTime.now();
-      date = DateFormat("dd - MM - yyyy").format(now);
+      date = dateFormatDataBase.format(now);
     }
 
     if ((listLeituras.length == 0 && _cubicMeterValue > 0) ||
         (listLeituras.length > 0 &&
             _cubicMeterValue > 0 &&
             _cubicMeterDifference > 0)) {
-
       indexId = listLeituras.length;
 
       Leitura leitura = Leitura(
@@ -139,7 +131,7 @@ class HomeController {
         moneyValue: _moneyValue,
         date: date,
       );
-      
+
       print(
           "Inside calcultate() before listleituras.add(leitura): leitura criada: $leitura");
       listLeituras.add(leitura);
@@ -154,7 +146,6 @@ class HomeController {
           "Inside calcultate() after db.insertLeitura(leitura): listLeituras: $listLeituras");
     }
     clearTextFields();
-    resetDateFields();
   }
 
   void clearTextFields() {
