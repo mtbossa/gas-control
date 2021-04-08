@@ -48,13 +48,13 @@ class HomeController {
   // Function that zero's all content inside Gas object
   void zeroValues() {
     listLeituras.clear();
-    print(listLeituras);
     db.deleteAll();
     exhibitAllContatos();
   }
 
   // Function that returns the last value
   void revertLastValue() {
+    listLeituras.removeLast();
     db.deleteLastLeitura();
     exhibitAllContatos();
   }
