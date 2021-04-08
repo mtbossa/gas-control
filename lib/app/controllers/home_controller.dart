@@ -8,9 +8,9 @@ import 'package:intl/intl.dart';
 class HomeController {
   List<Leitura> listLeituras = [];
 
-  final TextEditingController newIntValueTextController;
-  final TextEditingController newDecimalValueTextController;
-  final MoneyMaskedTextController gasPriceTextController;
+  TextEditingController newIntValueTextController;
+  TextEditingController newDecimalValueTextController;
+  MoneyMaskedTextController gasPriceTextController;
 
   // Variable to work with database
   final DatabaseHelper db = DatabaseHelper();
@@ -33,7 +33,7 @@ class HomeController {
   // void exhibitAllContatos() {
   //   db.getAllLeituras().then((value) {
   //     listLeituras = value;
-      
+
   //   });
   // }
 
@@ -81,7 +81,7 @@ class HomeController {
      * Transform the text in double
      */
     double _newIntDoubleValue = double.tryParse(_newIntValueText) ?? 0.0;
-    
+
     /* 
      * Divided by 1000 so it becomes 0,###, to be the
      * total value decimals
@@ -120,7 +120,10 @@ class HomeController {
       date = DateFormat("dd - MM - yyyy").format(now);
     }
 
-    if (_cubicMeterValue > 0) {
+    if ((listLeituras.length == 0 && _cubicMeterValue > 0) ||
+        (listLeituras.length > 0 &&
+            _cubicMeterValue > 0 &&
+            _cubicMeterDifference > 0)) {
       Leitura leitura = Leitura(
         cubicMeterValue: _cubicMeterValue,
         cubicMeterDifference: _cubicMeterDifference,
@@ -129,22 +132,20 @@ class HomeController {
         moneyValue: _moneyValue,
         date: date,
       );
-
       db.insertLeitura(leitura);
-
       print(
-          "Inside calculate() before exhibitAllContatos(): leitura --> $leitura");
-      print(
-          "Inside calculate() before exhibitAllContatos(): listLeituras --> $listLeituras");
-          
-      exhibitAllContatos();
-
-      print(
-          "Inside calculate() after exhibitAllContatos(): leitura --> $leitura");
-      print(
-          "Inside calculate() after exhibitAllContatos(): listLeituras --> $listLeituras");
+          "Inside calculate() after db.insertLeitura: listLeitura --> $listLeituras");
     }
-    
+    clearTextFields();
     resetDateFields();
+  }
+
+  void clearTextFields() {
+    newIntValueTextController.clear();
+    newDecimalValueTextController.clear();
+  }
+
+  void clearPriceField() {
+    gasPriceTextController.clear();
   }
 }

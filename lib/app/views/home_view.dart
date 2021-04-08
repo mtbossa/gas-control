@@ -4,6 +4,7 @@ import 'package:gas_mvc/app/components/home_view/container_input.dart';
 import 'package:gas_mvc/app/components/home_view/container_values.dart';
 import 'package:gas_mvc/app/constants/constants.dart';
 import 'package:gas_mvc/app/controllers/home_controller.dart';
+import 'package:gas_mvc/app/models/leitura_model.dart';
 
 class HomeView extends StatefulWidget {
   @override
@@ -134,8 +135,13 @@ class _HomeViewState extends State<HomeView> {
                       FloatingActionButton(
                         backgroundColor: Theme.of(context).primaryColor,
                         onPressed: () {
-                          setState(() {
-                            _homeController.calculate();
+                          _homeController.calculate();
+                          _homeController.exhibitAllContatos().then((value) {
+                            setState(() {
+                              print(
+                                  "Inside exhibitAllContatos().then after .then(): listLeitura --> ${_homeController.listLeituras}");
+                              print("pronto");
+                            });
                           });
                         },
                         child: Icon(
@@ -241,15 +247,6 @@ class _HomeViewState extends State<HomeView> {
         );
       },
     );
-  }
-
-  void clearTextFields() {
-    _newIntValueTextController = TextEditingController();
-    _newDecimalValueTextController = TextEditingController();
-  }
-
-  void clearPriceField() {
-    _gasPriceTextController = MoneyMaskedTextController();
   }
 
   // Function that does something depeding on choice
