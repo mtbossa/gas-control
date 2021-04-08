@@ -15,6 +15,9 @@ class HomeController {
   // Variable to work with database
   final DatabaseHelper db = DatabaseHelper();
 
+  // Controls the ID
+  int indexId;
+
   String date;
   String dateText = "Outros...";
   String datePressed = "";
@@ -124,7 +127,11 @@ class HomeController {
         (listLeituras.length > 0 &&
             _cubicMeterValue > 0 &&
             _cubicMeterDifference > 0)) {
+
+      indexId = listLeituras.length;
+
       Leitura leitura = Leitura(
+        id: indexId,
         cubicMeterValue: _cubicMeterValue,
         cubicMeterDifference: _cubicMeterDifference,
         kgValue: _kgValue,
@@ -132,9 +139,19 @@ class HomeController {
         moneyValue: _moneyValue,
         date: date,
       );
+      
+      print(
+          "Inside calcultate() before listleituras.add(leitura): leitura criada: $leitura");
+      listLeituras.add(leitura);
+      print(
+          "Inside calcultate() after listleituras.add(leitura): leitura criada: $leitura");
+      print(
+          "Inside calcultate() after listleituras.add(leitura): listLeituras: $listLeituras");
       db.insertLeitura(leitura);
       print(
-          "Inside calculate() after db.insertLeitura: listLeitura --> $listLeituras");
+          "Inside calcultate() after db.insertLeitura(leitura): leitura: $leitura");
+      print(
+          "Inside calcultate() after db.insertLeitura(leitura): listLeituras: $listLeituras");
     }
     clearTextFields();
     resetDateFields();

@@ -135,13 +135,8 @@ class _HomeViewState extends State<HomeView> {
                       FloatingActionButton(
                         backgroundColor: Theme.of(context).primaryColor,
                         onPressed: () {
-                          _homeController.calculate();
-                          _homeController.exhibitAllContatos().then((value) {
-                            setState(() {
-                              print(
-                                  "Inside exhibitAllContatos().then after .then(): listLeitura --> ${_homeController.listLeituras}");
-                              print("pronto");
-                            });
+                          setState(() {
+                            _homeController.calculate();
                           });
                         },
                         child: Icon(
