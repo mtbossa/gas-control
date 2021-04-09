@@ -22,35 +22,57 @@ class InputPrice extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 140,
-      child: Material(
-        shadowColor: Colors.black.withOpacity(0.8),
-        borderRadius: BorderRadius.all(
-          Radius.circular(20),
-        ),
-        elevation: 2,
-        child: TextFormField(
-          maxLength: 6,
-          controller: gasPriceController,
-          keyboardType: TextInputType.number,
-          textAlign: TextAlign.center,
-          style: textStyleValue,
-          decoration: InputDecoration(
-            counterText: "",
-            contentPadding: const EdgeInsets.all(-10),
-            fillColor: Colors.grey[500],
-            filled: true,
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(20),
-              borderSide: BorderSide(
-                width: 0,
-                style: BorderStyle.none,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Container(
+          width: 140,
+          child: Material(
+            shadowColor: Colors.black.withOpacity(0.8),
+            borderRadius: BorderRadius.all(
+              Radius.circular(20),
+            ),
+            elevation: 2,
+            child: TextFormField(
+              maxLength: 6,
+              controller: gasPriceController,
+              keyboardType: TextInputType.number,
+              textAlign: TextAlign.center,
+              style: textStyleValue,
+              decoration: InputDecoration(
+                counterText: "",
+                contentPadding: const EdgeInsets.all(-10),
+                fillColor: Colors.grey[500],
+                filled: true,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  borderSide: BorderSide(
+                    width: 0,
+                    style: BorderStyle.none,
+                  ),
+                ),
               ),
             ),
           ),
         ),
-      ),
+        SizedBox(
+          width: 10,
+        ),
+        Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            shape: BoxShape.circle,
+          ),
+          child: Center(
+            child: Text(
+              "R\$",
+              style: Theme.of(context).textTheme.headline4,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

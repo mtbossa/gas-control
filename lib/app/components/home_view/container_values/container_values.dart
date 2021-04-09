@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:gas_mvc/app/components/home_view/page_view_result.dart';
+import 'package:gas_mvc/app/components/home_view/container_values/page_view_result.dart';
 import 'package:gas_mvc/app/models/leitura_model.dart';
 import 'package:intl/intl.dart';
 import 'dart:io';
 
+import 'display_leitura_value.dart';
 import 'dots_result.dart';
 
 class ContainerValues extends StatelessWidget {
@@ -27,7 +28,7 @@ class ContainerValues extends StatelessWidget {
         bottomLeft: Radius.circular(30),
         bottomRight: Radius.circular(30),
       ),
-      elevation: 2,
+      elevation: 5,
       child: Container(
         decoration: BoxDecoration(
           color: Theme.of(context).primaryColor,
@@ -46,26 +47,14 @@ class ContainerValues extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   // Leitura atual
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Leitura Anterior",
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                      checkEmptyAnterior(context),
-                    ],
+                  DisplayLeituraValue(
+                    handler: checkEmptyAnterior,
+                    title: "Leitura anterior",
                   ),
                   // Leitura anterior
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Leitura Atual",
-                        style: Theme.of(context).textTheme.bodyText1,
-                      ),
-                      checkEmptyAtual(context),
-                    ],
+                  DisplayLeituraValue(
+                    handler: checkEmptyAtual,
+                    title: "Leitura atual",
                   ),
                 ],
               ),
@@ -76,7 +65,7 @@ class ContainerValues extends StatelessWidget {
                 children: [
                   Text(
                     "Resultados",
-                    style: Theme.of(context).textTheme.bodyText1,
+                    style: Theme.of(context).textTheme.headline2,
                   ),
                   PageViewResult(
                     listLeituras: listLeituras,
@@ -107,20 +96,20 @@ class ContainerValues extends StatelessWidget {
           secondToLastElement.cubicMeterValue == 0.0 ||
           secondToLastElement.cubicMeterValue == null) {
         return Text(
-          "${_fCubicMeter.format(0.000)} m³",
-          style: Theme.of(context).textTheme.bodyText2,
+          "${_fCubicMeter.format(0.000)}",
+          style: Theme.of(context).textTheme.headline2,
         );
       } else {
         return Text(
           // Displays the most recent added gas value
-          "${_fCubicMeter.format(secondToLastElement.cubicMeterValue)} m³",
-          style: Theme.of(context).textTheme.bodyText2,
+          "${_fCubicMeter.format(secondToLastElement.cubicMeterValue)}",
+          style: Theme.of(context).textTheme.headline2,
         );
       }
     } else {
       return Text(
-        "${_fCubicMeter.format(0.000)} m³",
-        style: Theme.of(context).textTheme.bodyText2,
+        "${_fCubicMeter.format(0.000)}",
+        style: Theme.of(context).textTheme.headline2,
       );
     }
   }
@@ -133,20 +122,20 @@ class ContainerValues extends StatelessWidget {
       if (lastElement.cubicMeterValue == 0.0 ||
           lastElement.cubicMeterValue == null) {
         return Text(
-          "${_fCubicMeter.format(0.000)} m³",
-          style: Theme.of(context).textTheme.bodyText2,
+          "${_fCubicMeter.format(0.000)}",
+          style: Theme.of(context).textTheme.headline2,
         );
       } else {
         return Text(
           // Displays the most recent added gas value
-          "${_fCubicMeter.format(lastElement.cubicMeterValue)} m³",
-          style: Theme.of(context).textTheme.bodyText2,
+          "${_fCubicMeter.format(lastElement.cubicMeterValue)}",
+          style: Theme.of(context).textTheme.headline2,
         );
       }
     } else {
       return Text(
-        "${_fCubicMeter.format(0.000)} m³",
-        style: Theme.of(context).textTheme.bodyText2,
+        "${_fCubicMeter.format(0.000)}",
+        style: Theme.of(context).textTheme.headline2,
       );
     }
   }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:gas_mvc/app/components/home_view/container_input.dart';
-import 'package:gas_mvc/app/components/home_view/container_values.dart';
+import 'package:gas_mvc/app/components/home_view/container_values/container_values.dart';
 import 'package:gas_mvc/app/constants/constants.dart';
 import 'package:gas_mvc/app/controllers/home_controller.dart';
 
@@ -101,11 +101,11 @@ class _HomeViewState extends State<HomeView> {
                         currentIndex: _currentIndex,
                       ),
                       SizedBox(
-                        height: 35,
+                        height: 25,
                       ),
                       Text(
                         "Adicionar nova leitura",
-                        style: Theme.of(context).textTheme.bodyText2,
+                        style: Theme.of(context).textTheme.headline2,
                       ),
                       SizedBox(
                         height: 15,
@@ -121,7 +121,7 @@ class _HomeViewState extends State<HomeView> {
                         datePressed: _datePressed,
                       ),
                       SizedBox(
-                        height: 20,
+                        height: 15,
                       ),
                       FloatingActionButton(
                         backgroundColor: Theme.of(context).primaryColor,
@@ -245,6 +245,9 @@ class _HomeViewState extends State<HomeView> {
     }
   }
 
+  // TODO if trying to add leitura with date less than the last one, dont let add to array and database
+  // and show snackbar saying that it's not possible to added a leitura with less date than the last one
+  // added
   void _dateSelection(String dateSelection) {
     if (dateSelection == "Hoje") {
       setState(() {

@@ -118,6 +118,23 @@ class InputGas extends StatelessWidget {
             ),
           ),
         ),
+        SizedBox(
+          width: 10,
+        ),
+        Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            shape: BoxShape.circle,
+          ),
+          child: Center(
+            child: Text(
+              "m³",
+              style: Theme.of(context).textTheme.headline4,
+            ),
+          ),
+        ),
       ],
     );
   }

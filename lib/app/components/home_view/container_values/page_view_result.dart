@@ -36,7 +36,7 @@ class PageViewResult extends StatelessWidget {
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
                       "m³",
-                      style: Theme.of(context).textTheme.bodyText2,
+                      style: Theme.of(context).textTheme.headline3,
                     ),
                   ),
                 ],
@@ -44,13 +44,14 @@ class PageViewResult extends StatelessWidget {
             ),
             Container(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   checkKg(context),
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
                       "kg/gás",
-                      style: Theme.of(context).textTheme.bodyText2,
+                      style: Theme.of(context).textTheme.headline3,
                     ),
                   ),
                 ],
@@ -58,14 +59,13 @@ class PageViewResult extends StatelessWidget {
             ),
             Container(
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   checkMoney(context),
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
-                    child: Text(
-                      "R\$",
-                      style: Theme.of(context).textTheme.bodyText2,
-                    ),
+                    child: Text("R\$",
+                        style: Theme.of(context).textTheme.headline3),
                   ),
                 ],
               ),
@@ -75,16 +75,15 @@ class PageViewResult extends StatelessWidget {
       ),
     );
   }
- 
-  // TODO "Adicine nova leitura para calcular" instead of 0
+
   Text checkCubicMeters(BuildContext context) {
     if (listLeituras.isEmpty ||
         listLeituras.last.cubicMeterValue == 0.0 ||
         listLeituras.last.cubicMeterValue == null ||
         listLeituras.last.cubicMeterDifference == 0.0) {
       return Text(
-        "${_fCubicMeterKg.format(0.000)}",
-        style: Theme.of(context).textTheme.headline1,
+        "Adicione duas leituras para mostrar resultados",
+        style: Theme.of(context).textTheme.bodyText2,
       );
     } else {
       return Text(
@@ -97,10 +96,11 @@ class PageViewResult extends StatelessWidget {
   Text checkKg(BuildContext context) {
     if (listLeituras.isEmpty ||
         listLeituras.last.kgValue == 0.0 ||
-        listLeituras.last.kgValue == null) {
+        listLeituras.last.kgValue == null ||
+        listLeituras.last.cubicMeterDifference == 0.0) {
       return Text(
-        "${_fCubicMeterKg.format(0.00)}",
-        style: Theme.of(context).textTheme.headline1,
+        "Adicione duas leituras para mostrar resultados",
+        style: Theme.of(context).textTheme.bodyText2,
       );
     } else {
       return Text(
@@ -111,8 +111,12 @@ class PageViewResult extends StatelessWidget {
   }
 
   Text checkMoney(BuildContext context) {
-    if (listLeituras.isEmpty ||
-        listLeituras.last.moneyValue == 0.0 ||
+    if (listLeituras.isEmpty || listLeituras.last.cubicMeterDifference == 0.0) {
+      return Text(
+        "Adicione duas leituras para mostrar resultados",
+        style: Theme.of(context).textTheme.bodyText2,
+      );
+    } else if (listLeituras.last.moneyValue == 0.0 ||
         listLeituras.last.moneyValue == null) {
       return Text(
         "${_fMoney.format(0.00)}",

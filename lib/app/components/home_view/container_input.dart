@@ -69,17 +69,8 @@ class ContainerInput extends StatelessWidget {
                     newDecimalValueTextController:
                         newDecimalValueTextController,
                   ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: Text(
-                      "Data",
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                  ),
-                  InputDate(
-                    dateText: dateText,
-                    dateSelection: dateSelection,
-                    datePressed: datePressed,
+                  SizedBox(
+                    height: 5,
                   ),
                   Padding(
                     padding: const EdgeInsets.all(10.0),
@@ -92,7 +83,22 @@ class ContainerInput extends StatelessWidget {
                     gasPriceController: gasPriceTextController,
                   ),
                   SizedBox(
-                    height: 20,
+                    height: 5,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: Text(
+                      "Data",
+                      style: Theme.of(context).textTheme.bodyText1,
+                    ),
+                  ),
+                  InputDate(
+                    dateText: dateText,
+                    dateSelection: dateSelection,
+                    datePressed: datePressed,
+                  ),
+                  SizedBox(
+                    height: 15,
                   ),
                 ],
               ),
