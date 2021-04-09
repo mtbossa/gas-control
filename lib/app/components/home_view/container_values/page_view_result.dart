@@ -9,11 +9,15 @@ class PageViewResult extends StatelessWidget {
   final List<Leitura> listLeituras;
   final _fCubicMeterKg = NumberFormat("####0.000", Platform.localeName);
   final _fMoney = NumberFormat("####0.00", Platform.localeName);
+  final String remainingAmount;
+  final String remainingText;
 
   PageViewResult({
     Key key,
     @required this.onChanged,
     @required this.listLeituras,
+    @required this.remainingAmount,
+    @required this.remainingText,
   }) : super(key: key);
 
   @override
@@ -82,7 +86,7 @@ class PageViewResult extends StatelessWidget {
         listLeituras.last.cubicMeterValue == null ||
         listLeituras.last.cubicMeterDifference == 0.0) {
       return Text(
-        "Adicione duas leituras para mostrar resultados",
+        "Adicione $remainingAmount $remainingText para mostrar resultados",
         style: Theme.of(context).textTheme.bodyText2,
       );
     } else {
@@ -99,7 +103,7 @@ class PageViewResult extends StatelessWidget {
         listLeituras.last.kgValue == null ||
         listLeituras.last.cubicMeterDifference == 0.0) {
       return Text(
-        "Adicione duas leituras para mostrar resultados",
+        "Adicione $remainingAmount $remainingText para mostrar resultados",
         style: Theme.of(context).textTheme.bodyText2,
       );
     } else {
@@ -113,7 +117,7 @@ class PageViewResult extends StatelessWidget {
   Text checkMoney(BuildContext context) {
     if (listLeituras.isEmpty || listLeituras.last.cubicMeterDifference == 0.0) {
       return Text(
-        "Adicione duas leituras para mostrar resultados",
+        "Adicione $remainingAmount $remainingText para mostrar resultados",
         style: Theme.of(context).textTheme.bodyText2,
       );
     } else if (listLeituras.last.moneyValue == 0.0 ||

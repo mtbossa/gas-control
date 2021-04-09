@@ -12,12 +12,16 @@ class ContainerValues extends StatelessWidget {
   final int currentIndex;
   final List<Leitura> listLeituras;
   final _fCubicMeter = NumberFormat("####0.000", Platform.localeName);
+  final String remainingAmount;
+  final String remainingText;
 
   ContainerValues({
     Key key,
     @required this.listLeituras,
     @required this.onChanged,
     @required this.currentIndex,
+    @required this.remainingAmount,
+    @required this.remainingText,
   }) : super(key: key);
 
   @override
@@ -68,6 +72,8 @@ class ContainerValues extends StatelessWidget {
                     style: Theme.of(context).textTheme.headline2,
                   ),
                   PageViewResult(
+                    remainingAmount: remainingAmount,
+                    remainingText: remainingText,
                     listLeituras: listLeituras,
                     onChanged: onChanged,
                   ),

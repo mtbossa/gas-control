@@ -18,7 +18,7 @@ class HomeController {
   // Controls the ID
   int indexId;
 
-  String date;
+  DateTime atualDate;
 
   DateFormat dateFormatDataBase = DateFormat("dd - MM - yyyy");
   DateFormat dateFormatCalendar;
@@ -65,6 +65,7 @@ class HomeController {
     initializeDateFormatting("pt_BR", null)
         .then((_) => dateFormatCalendar = DateFormat.MMMd("pt_BR"));
   }
+
   void calculate() {
     String _newIntValueText = newIntValueTextController.text;
     String _newDecimalValueText = newDecimalValueTextController.text;
@@ -111,16 +112,16 @@ class HomeController {
       _moneyValue = 0.0;
     }
 
-    if (date == null) {
-      DateTime now = DateTime.now();
-      date = dateFormatDataBase.format(now);
-    }
+    if (atualDate == null) atualDate = DateTime.now();
 
-    if ((listLeituras.length == 0 && _cubicMeterValue > 0) ||
-        (listLeituras.length > 0 &&
-            _cubicMeterValue > 0 &&
-            _cubicMeterDifference > 0)) {
+    if (((listLeituras.length == 0 && _cubicMeterValue > 0) ||
+            (listLeituras.length > 0 &&
+                _cubicMeterValue > 0 &&
+                _cubicMeterDifference > 0)) &&
+        lastDateisBeforeAtualDate()) {
       indexId = listLeituras.length;
+
+      String date = dateFormatDataBase.format(atualDate);
 
       Leitura leitura = Leitura(
         id: indexId,
@@ -132,20 +133,14 @@ class HomeController {
         date: date,
       );
 
-      print(
-          "Inside calcultate() before listleituras.add(leitura): leitura criada: $leitura");
       listLeituras.add(leitura);
-      print(
-          "Inside calcultate() after listleituras.add(leitura): leitura criada: $leitura");
-      print(
-          "Inside calcultate() after listleituras.add(leitura): listLeituras: $listLeituras");
+
       db.insertLeitura(leitura);
-      print(
-          "Inside calcultate() after db.insertLeitura(leitura): leitura: $leitura");
-      print(
-          "Inside calcultate() after db.insertLeitura(leitura): listLeituras: $listLeituras");
+
     }
+
     clearTextFields();
+    
   }
 
   void clearTextFields() {
@@ -155,5 +150,14 @@ class HomeController {
 
   void clearPriceField() {
     gasPriceTextController.clear();
+  }
+
+  bool lastDateisBeforeAtualDate() {
+    if (listLeituras.length > 0) {
+      DateTime lastDate = dateFormatDataBase.parse(listLeituras.last.date);
+
+      if (atualDate.isBefore(lastDate)) return false;
+    }
+    return true;
   }
 }

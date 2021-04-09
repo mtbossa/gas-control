@@ -18,6 +18,9 @@ class _HomeViewState extends State<HomeView> {
   String _dateText = "Outros...";
   String _datePressed = "";
 
+  String remainingAmount = "duas";
+  String remainingText = "leituras";
+
   TextEditingController _newIntValueTextController = TextEditingController();
   TextEditingController _newDecimalValueTextController =
       TextEditingController();
@@ -99,6 +102,8 @@ class _HomeViewState extends State<HomeView> {
                           });
                         },
                         currentIndex: _currentIndex,
+                        remainingAmount: remainingAmount,
+                        remainingText: remainingText,
                       ),
                       SizedBox(
                         height: 25,
@@ -128,6 +133,7 @@ class _HomeViewState extends State<HomeView> {
                         onPressed: () {
                           setState(() {
                             _homeController.calculate();
+                            checkIndex();
                             resetDateFields();
                           });
                         },
@@ -179,6 +185,8 @@ class _HomeViewState extends State<HomeView> {
                 Navigator.of(context).pop();
                 setState(() {
                   _homeController.zeroValues();
+                  checkIndex();
+                  print("mateus: ${_homeController.listLeituras}");
                 });
               },
               child: Text(
@@ -254,32 +262,20 @@ class _HomeViewState extends State<HomeView> {
         _datePressed = "Hoje";
       });
 
-      DateTime _now = DateTime.now();
-      _homeController.date = _homeController.dateFormatDataBase.format(_now);
-      print("_homeController.date: ${_homeController.date}");
+      _homeController.atualDate = DateTime.now();
     } else if (dateSelection == "Ontem") {
       setState(() {
         _datePressed = "Ontem";
       });
 
-      DateTime _now = DateTime.now().subtract(
+      _homeController.atualDate = DateTime.now().subtract(
         Duration(
           days: 1,
         ),
       );
-
-      _homeController.date = _homeController.dateFormatDataBase.format(_now);
-      print("_homeController.date ontem: ${_homeController.date}");
     } else {
       _datePressed = "Outros";
-      print(
-          "_homeController.date before show calendar: ${_homeController.date}");
-
       _showCalendar(context);
-
-      print(
-          "_homeController.date after show calendar: ${_homeController.date}");
-      print("dateText: $_dateText");
     }
   }
 
@@ -306,17 +302,25 @@ class _HomeViewState extends State<HomeView> {
     );
     setState(() {
       if (_pickedDate != null) {
-        _homeController.date =
-            _homeController.dateFormatDataBase.format(_pickedDate);
+        _homeController.atualDate = _pickedDate;
         _dateText = _homeController.dateFormatCalendar.format(_pickedDate);
       }
     });
-
-    print("_homeController.date: ${_homeController.date}");
   }
 
   void resetDateFields() {
     _datePressed = "";
     _dateText = "Outros ...";
+  }
+
+  void checkIndex() {
+    if (_homeController.listLeituras.length == 0) {
+      remainingAmount = "duas";
+      remainingText = "leituras";
+    }
+    if (_homeController.listLeituras.length == 1) {
+      remainingAmount = "uma";
+      remainingText = "leitura";
+    }
   }
 }
