@@ -126,21 +126,34 @@ class _HomeViewState extends State<HomeView> {
                         datePressed: _datePressed,
                       ),
                       SizedBox(
-                        height: 15,
+                        height: 10,
                       ),
-                      FloatingActionButton(
-                        backgroundColor: Theme.of(context).primaryColor,
-                        onPressed: () {
-                          setState(() {
-                            _homeController.calculate();
-                            checkIndex();
+                      Padding(
+                        padding: const EdgeInsets.only(bottom: 10.0),
+                        child: FloatingActionButton(
+                          backgroundColor: Theme.of(context).primaryColor,
+                          onPressed: () {
+                            int result = _homeController.getValues();
+                            if (result == 0) {
+                              setState(() {
+                                _homeController.addToDatabase();
+                                if (_homeController.listLeituras.length <= 2)
+                                  checkIndex();
+                              });
+                            } else if (result == 1) {
+                              _showErroZero(context);
+                            } else if (result == 2) {
+                              _showErrorDifference(context);
+                            } else if (result == 3) {
+                              _showErrorDate(context);
+                            }
                             resetDateFields();
-                          });
-                        },
-                        child: Icon(
-                          Icons.add,
-                          size: 20,
-                          color: Colors.white,
+                          },
+                          child: Icon(
+                            Icons.add,
+                            size: 20,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ],
@@ -186,7 +199,6 @@ class _HomeViewState extends State<HomeView> {
                 setState(() {
                   _homeController.zeroValues();
                   checkIndex();
-                  print("mateus: ${_homeController.listLeituras}");
                 });
               },
               child: Text(
@@ -244,18 +256,81 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
+  _changeConversionValue(BuildContext context) {
+    final List<double> items = Constants.conversionChoices;
+    var selectedValue;
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            "Alterar o valor de conversão de m³ para kg",
+          ),
+          content: StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+            return Container(
+              height: 50,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  DropdownButton(
+                    hint: Text("Selecione um número"),
+                    value: selectedValue,
+                    onChanged: (newValue) {
+                      print(newValue);
+                      setState(() {
+                        selectedValue = newValue;
+                      });
+                      print(selectedValue);
+                    },
+                    items: items.map((valueItem) {
+                      return DropdownMenuItem(
+                        child: Text("$valueItem"),
+                        value: valueItem,
+                      );
+                    }).toList(),
+                  ),
+                ],
+              ),
+            );
+          }),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("CANCELAR"),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                if (selectedValue != null)
+                  _homeController.conversionValue = selectedValue;
+                Navigator.of(context).pop();
+                print("selectedValue: $selectedValue");
+                print(
+                    "_homeController.conversionValue: ${_homeController.conversionValue}");
+              },
+              child: Text(
+                "OK",
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   // Function that does something depeding on choice
   void choiceAction(String choice) {
     if (choice == Constants.voltarLeitura) {
       _revertLastValueDialog(context);
     } else if (choice == Constants.zerarValores) {
       _zeroAllValuesDialog(context);
+    } else if (choice == Constants.alterarValor) {
+      _changeConversionValue(context);
     }
   }
 
-  // TODO if trying to add leitura with date less than the last one, dont let add to array and database
-  // and show snackbar saying that it's not possible to added a leitura with less date than the last one
-  // added
   void _dateSelection(String dateSelection) {
     if (dateSelection == "Hoje") {
       setState(() {
@@ -322,5 +397,99 @@ class _HomeViewState extends State<HomeView> {
       remainingAmount = "uma";
       remainingText = "leitura";
     }
+  }
+
+  // AlertDialog for Date Error
+  _showErrorDate(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            "Erro",
+          ),
+          content: Container(
+            height: 40,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text("Nova leitura deve possuir data maior do que a anterior."),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // AlertDialog for Difference Error
+  _showErrorDifference(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            "Erro",
+          ),
+          content: Container(
+            height: 70,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                    "Valor da nova leitura deve ser maior do que o valor da leitura anterior."),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  // AlertDialog for Date Error
+  _showErroZero(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            "Erro",
+          ),
+          content: Container(
+            height: 40,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text("Novo valor dever ser maior do que zero."),
+              ],
+            ),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
   }
 }

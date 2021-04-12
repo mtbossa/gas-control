@@ -15,12 +15,13 @@ class HomeController {
   // Variable to work with database
   final DatabaseHelper db = DatabaseHelper();
 
+  // Conversion values
+  double conversionValue = 2.5;
+
   // Controls the ID
   int indexId;
 
-  DateTime atualDate;
-
-  DateFormat dateFormatDataBase = DateFormat("dd - MM - yyyy");
+  DateFormat dateFormatDataBase = DateFormat("dd / MM / yyyy");
   DateFormat dateFormatCalendar;
 
   HomeController({
@@ -52,6 +53,7 @@ class HomeController {
     listLeituras.clear();
     db.deleteAll();
     exhibitAllContatos();
+    gasPriceTextController.updateValue(0.0);
   }
 
   // Function that returns the last value
@@ -66,19 +68,21 @@ class HomeController {
         .then((_) => dateFormatCalendar = DateFormat.MMMd("pt_BR"));
   }
 
-  void calculate() {
+  // Variables for calculate()
+  double cubicMeterValue;
+  double cubicMeterDifference;
+  double kgValue;
+  double gasPrice;
+  double moneyValue;
+  DateTime atualDate;
+
+  int getValues() {
     String _newIntValueText = newIntValueTextController.text;
     String _newDecimalValueText = newDecimalValueTextController.text;
-    String _gasPriceText = gasPriceTextController.text;
-
-    double _gasPriceDoubleValue =
-        double.parse(_gasPriceText.replaceAll(new RegExp(r'[,.]'), '')) / 100;
-
     /*
      * Transform the text in double
      */
     double _newIntDoubleValue = double.tryParse(_newIntValueText) ?? 0.0;
-
     /* 
      * Divided by 1000 so it becomes 0,###, to be the
      * total value decimals
@@ -86,61 +90,78 @@ class HomeController {
     double _newDecimalDoubleValue =
         ((double.tryParse(_newDecimalValueText) ?? 0.0) / 1000);
 
-    double _cubicMeterValue = _newIntDoubleValue + _newDecimalDoubleValue;
+    cubicMeterValue = _newIntDoubleValue + _newDecimalDoubleValue;
 
-    double _cubicMeterDifference;
-    double _kgValue;
-    double _gasPrice;
-    double _moneyValue;
-
-    if (listLeituras.length > 0) {
-      _cubicMeterDifference =
-          _cubicMeterValue - listLeituras.last.cubicMeterValue;
-      _kgValue = _cubicMeterDifference * 2.5;
-
-      _gasPrice = _gasPriceDoubleValue;
-
-      if (_gasPrice > 0.0) {
-        _moneyValue = _kgValue * _gasPrice;
+    if (cubicMeterValue > 0) {
+      String _gasPriceText = gasPriceTextController.text;
+      double _gasPriceDoubleValue;
+      if (_gasPriceText != "") {
+        _gasPriceDoubleValue =
+            double.tryParse(_gasPriceText.replaceAll(new RegExp(r'[,.]'), '')) /
+                    100 ??
+                0.0;
+        gasPrice = _gasPriceDoubleValue;
       } else {
-        _moneyValue = 0.0;
+        gasPrice = 0.0;
       }
+
+      if (atualDate == null) atualDate = DateTime.now();
+
+      if (listLeituras.length == 0) {
+        cubicMeterDifference = 0.0;
+        kgValue = 0.0;
+        moneyValue = 0.0;
+        return 0;
+      }
+
+      if (listLeituras.length >= 1) {
+        cubicMeterDifference =
+            cubicMeterValue - listLeituras.last.cubicMeterValue;
+        if (cubicMeterDifference > 0) {
+          if (lastDateisBeforeAtualDate()) {
+            kgValue = cubicMeterDifference * conversionValue;
+            if (gasPrice > 0.0) {
+              moneyValue = kgValue * gasPrice;
+            } else {
+              moneyValue = 0.0;
+            }
+            return 0;
+          } else {
+            clearTextFields();
+            return 3;
+          }
+        } else {
+          clearTextFields();
+          return 2;
+        }
+      }
+      return 0;
     } else {
-      _cubicMeterDifference = 0.0;
-      _kgValue = 0.0;
-      _gasPrice = 0.0;
-      _moneyValue = 0.0;
+      clearTextFields();
+      return 1;
     }
+  }
 
-    if (atualDate == null) atualDate = DateTime.now();
+  void addToDatabase() {
+    indexId = listLeituras.length;
 
-    if (((listLeituras.length == 0 && _cubicMeterValue > 0) ||
-            (listLeituras.length > 0 &&
-                _cubicMeterValue > 0 &&
-                _cubicMeterDifference > 0)) &&
-        lastDateisBeforeAtualDate()) {
-      indexId = listLeituras.length;
+    String date = dateFormatDataBase.format(atualDate);
 
-      String date = dateFormatDataBase.format(atualDate);
+    Leitura leitura = Leitura(
+      id: indexId,
+      cubicMeterValue: cubicMeterValue,
+      cubicMeterDifference: cubicMeterDifference,
+      kgValue: kgValue,
+      gasPrice: gasPrice,
+      moneyValue: moneyValue,
+      date: date,
+    );
 
-      Leitura leitura = Leitura(
-        id: indexId,
-        cubicMeterValue: _cubicMeterValue,
-        cubicMeterDifference: _cubicMeterDifference,
-        kgValue: _kgValue,
-        gasPrice: _gasPrice,
-        moneyValue: _moneyValue,
-        date: date,
-      );
+    listLeituras.add(leitura);
 
-      listLeituras.add(leitura);
-
-      db.insertLeitura(leitura);
-
-    }
+    db.insertLeitura(leitura);
 
     clearTextFields();
-    
   }
 
   void clearTextFields() {
@@ -149,7 +170,7 @@ class HomeController {
   }
 
   void clearPriceField() {
-    gasPriceTextController.clear();
+    gasPriceTextController.afterChange("0,00", 0.00);
   }
 
   bool lastDateisBeforeAtualDate() {

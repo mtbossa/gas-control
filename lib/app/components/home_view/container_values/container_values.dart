@@ -52,12 +52,14 @@ class ContainerValues extends StatelessWidget {
                 children: [
                   // Leitura atual
                   DisplayLeituraValue(
-                    handler: checkEmptyAnterior,
+                    dateHandler: dateHandler,
+                    valueHandler: valueHandler,
                     title: "Leitura anterior",
                   ),
                   // Leitura anterior
                   DisplayLeituraValue(
-                    handler: checkEmptyAtual,
+                    dateHandler: dateHandler,
+                    valueHandler: valueHandler,
                     title: "Leitura atual",
                   ),
                 ],
@@ -68,7 +70,7 @@ class ContainerValues extends StatelessWidget {
               Column(
                 children: [
                   Text(
-                    "Resultados",
+                    "Gastos",
                     style: Theme.of(context).textTheme.headline2,
                   ),
                   PageViewResult(
@@ -92,57 +94,111 @@ class ContainerValues extends StatelessWidget {
     );
   }
 
-  Text checkEmptyAnterior(BuildContext context) {
-    var secondToLastElement;
+  Text valueHandler(BuildContext context, String title) {
+    if (title == "Leitura anterior") {
+      var secondToLastElement;
 
-    if (listLeituras.length >= 2) {
-      secondToLastElement = listLeituras[listLeituras.length - 2];
+      if (listLeituras.length >= 2) {
+        secondToLastElement = listLeituras[listLeituras.length - 2];
 
-      if (listLeituras.isEmpty ||
-          secondToLastElement.cubicMeterValue == 0.0 ||
-          secondToLastElement.cubicMeterValue == null) {
+        if (listLeituras.isEmpty ||
+            secondToLastElement.cubicMeterValue == 0.0 ||
+            secondToLastElement.cubicMeterValue == null) {
+          return Text(
+            "${_fCubicMeter.format(0.000)}",
+            style: Theme.of(context).textTheme.headline2,
+          );
+        } else {
+          return Text(
+            // Displays the most recent added gas value
+            "${_fCubicMeter.format(secondToLastElement.cubicMeterValue)}",
+            style: Theme.of(context).textTheme.headline2,
+          );
+        }
+      } else {
         return Text(
           "${_fCubicMeter.format(0.000)}",
           style: Theme.of(context).textTheme.headline2,
         );
+      }
+    } else {
+      var lastElement;
+
+      if (listLeituras.isNotEmpty) {
+        lastElement = listLeituras.last;
+        if (lastElement.cubicMeterValue == 0.0 ||
+            lastElement.cubicMeterValue == null) {
+          return Text(
+            "${_fCubicMeter.format(0.000)}",
+            style: Theme.of(context).textTheme.headline2,
+          );
+        } else {
+          return Text(
+            // Displays the most recent added gas value
+            "${_fCubicMeter.format(lastElement.cubicMeterValue)}",
+            style: Theme.of(context).textTheme.headline2,
+          );
+        }
       } else {
         return Text(
-          // Displays the most recent added gas value
-          "${_fCubicMeter.format(secondToLastElement.cubicMeterValue)}",
+          "${_fCubicMeter.format(0.000)}",
           style: Theme.of(context).textTheme.headline2,
         );
       }
-    } else {
-      return Text(
-        "${_fCubicMeter.format(0.000)}",
-        style: Theme.of(context).textTheme.headline2,
-      );
     }
   }
 
-  Text checkEmptyAtual(BuildContext context) {
-    var lastElement;
+  Text dateHandler(BuildContext context, String title) {
+    if (title == "Leitura anterior") {
+      var secondToLastElement;
 
-    if (listLeituras.isNotEmpty) {
-      lastElement = listLeituras.last;
-      if (lastElement.cubicMeterValue == 0.0 ||
-          lastElement.cubicMeterValue == null) {
-        return Text(
-          "${_fCubicMeter.format(0.000)}",
-          style: Theme.of(context).textTheme.headline2,
-        );
+      if (listLeituras.length >= 2) {
+        secondToLastElement = listLeituras[listLeituras.length - 2];
+
+        if (listLeituras.isEmpty ||
+            secondToLastElement.cubicMeterValue == 0.0 ||
+            secondToLastElement.cubicMeterValue == null) {
+          return Text(
+            "-- / -- / --",
+            style: Theme.of(context).textTheme.bodyText2,
+          );
+        } else {
+          return Text(
+            // Displays the anterior date
+            "${secondToLastElement.date}",
+            style: Theme.of(context).textTheme.bodyText2,
+          );
+        }
       } else {
         return Text(
-          // Displays the most recent added gas value
-          "${_fCubicMeter.format(lastElement.cubicMeterValue)}",
-          style: Theme.of(context).textTheme.headline2,
+          "-- / -- / --",
+          style: Theme.of(context).textTheme.bodyText2,
         );
       }
     } else {
-      return Text(
-        "${_fCubicMeter.format(0.000)}",
-        style: Theme.of(context).textTheme.headline2,
-      );
+      var lastElement;
+
+      if (listLeituras.isNotEmpty) {
+        lastElement = listLeituras.last;
+        if (lastElement.cubicMeterValue == 0.0 ||
+            lastElement.cubicMeterValue == null) {
+          return Text(
+            "-- / -- / --",
+            style: Theme.of(context).textTheme.bodyText2,
+          );
+        } else {
+          return Text(
+            // Displays the most recent added gas value
+            "${lastElement.date}",
+            style: Theme.of(context).textTheme.bodyText2,
+          );
+        }
+      } else {
+        return Text(
+          "-- / -- / --",
+          style: Theme.of(context).textTheme.bodyText2,
+        );
+      }
     }
   }
 }
