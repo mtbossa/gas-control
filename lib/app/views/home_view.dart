@@ -189,7 +189,7 @@ class _HomeViewState extends State<HomeView> {
             "Zerar valores",
           ),
           content: Container(
-            height: 40,
+            height: 50,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -233,7 +233,7 @@ class _HomeViewState extends State<HomeView> {
             "Voltar leitura",
           ),
           content: Container(
-            height: 40,
+            height: 50,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -422,7 +422,7 @@ class _HomeViewState extends State<HomeView> {
             "Erro",
           ),
           content: Container(
-            height: 40,
+            height: 50,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -485,7 +485,7 @@ class _HomeViewState extends State<HomeView> {
             "Erro",
           ),
           content: Container(
-            height: 40,
+            height: 50,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
