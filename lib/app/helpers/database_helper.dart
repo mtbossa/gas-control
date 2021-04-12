@@ -66,7 +66,7 @@ class DatabaseHelper {
   Future<int> insertLeitura(Leitura leitura) async {
     Database db = await this.database;
     var result = await db.insert(leituraTable, leitura.toMap());
-    print("Inside insertLeiura: $leitura");
+    print("Inside insertLeitura: $leitura");
 
     return result;
   }

@@ -3,10 +3,14 @@ class Constants {
   static const String voltarLeitura = "Voltar leitura";
   static const String alterarValor = "Alterar valor de conversão";
 
-  static const List<String> Choices = [
-    voltarLeitura,
-    zerarValores,
+  static const List<String> ChoicesOne = [  
     alterarValor
+  ];
+
+  static const List<String> ChoicesTwo = [  
+    zerarValores,
+    voltarLeitura,
+    alterarValor,
   ];
 
   static const List<double> conversionChoices = [

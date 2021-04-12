@@ -66,12 +66,21 @@ class _HomeViewState extends State<HomeView> {
             child: PopupMenuButton(
               onSelected: choiceAction,
               itemBuilder: (context) {
-                return Constants.Choices.map((String choice) {
-                  return PopupMenuItem(
-                    value: choice,
-                    child: Text(choice),
-                  );
-                }).toList();
+                if (_homeController.listLeituras.length <= 0) {
+                  return Constants.ChoicesOne.map((String choice) {
+                    return PopupMenuItem(
+                      value: choice,
+                      child: Text(choice),
+                    );
+                  }).toList();
+                } else {
+                  return Constants.ChoicesTwo.map((String choice) {
+                    return PopupMenuItem(
+                      value: choice,
+                      child: Text(choice),
+                    );
+                  }).toList();
+                }
               },
               child: Icon(
                 Icons.more_vert,
@@ -145,7 +154,10 @@ class _HomeViewState extends State<HomeView> {
                             } else if (result == 2) {
                               _showErrorDifference(context);
                             } else if (result == 3) {
-                              _showErrorDate(context);
+                              setState(() {
+                                resetDateFields();
+                                _showErrorDate(context);
+                              });
                             }
                             resetDateFields();
                           },
@@ -384,6 +396,7 @@ class _HomeViewState extends State<HomeView> {
   }
 
   void resetDateFields() {
+    _homeController.atualDate = null;
     _datePressed = "";
     _dateText = "Outros ...";
   }
