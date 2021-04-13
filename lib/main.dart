@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 
+import 'app/helpers/shared_preferecences_helper.dart';
 import 'app/views/home_view.dart';
 
-void main() => runApp(AppWidget());
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await UserSimplePreferences.init();
+  runApp(AppWidget());
+}
 
 class AppWidget extends StatelessWidget {
   @override

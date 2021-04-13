@@ -47,7 +47,7 @@ class DatabaseHelper {
 
   Future<Database> initializeDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
-    String path = directory.path + "leituras.db";
+    String path = directory.path + "newleituras.db";
 
     var contatosDatabase = await openDatabase(
       path,

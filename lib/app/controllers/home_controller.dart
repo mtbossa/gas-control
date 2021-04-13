@@ -15,7 +15,6 @@ class HomeController {
   // Variable to work with database
   final DatabaseHelper db = DatabaseHelper();
 
-  // Conversion values
   double conversionValue = 2.5;
 
   // Controls the ID

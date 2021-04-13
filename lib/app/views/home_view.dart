@@ -4,6 +4,7 @@ import 'package:gas_mvc/app/components/home_view/container_input.dart';
 import 'package:gas_mvc/app/components/home_view/container_values/container_values.dart';
 import 'package:gas_mvc/app/constants/constants.dart';
 import 'package:gas_mvc/app/controllers/home_controller.dart';
+import 'package:gas_mvc/app/helpers/shared_preferecences_helper.dart';
 
 class HomeView extends StatefulWidget {
   @override
@@ -43,6 +44,9 @@ class _HomeViewState extends State<HomeView> {
       newDecimalValueTextController: _newDecimalValueTextController,
       gasPriceTextController: _gasPriceTextController,
     );
+
+    _homeController.conversionValue =
+        UserSimplePreferences.getConversionValue() ?? 2.5;
 
     _homeController.exhibitAllContatos().then((_) {
       setState(() {
@@ -314,13 +318,16 @@ class _HomeViewState extends State<HomeView> {
               child: Text("CANCELAR"),
             ),
             ElevatedButton(
-              onPressed: () {
-                if (selectedValue != null)
+              onPressed: () async {
+                if (selectedValue != null) {
+                  await UserSimplePreferences.setConversionValue(selectedValue);
                   _homeController.conversionValue = selectedValue;
+                  print("selectedValue: $selectedValue");
+                  print("_homeController.conversionValue: ${_homeController.conversionValue}");
+                  print("UserSimplePreferences.getConversionValue(): ${UserSimplePreferences.getConversionValue()}");
+                }
                 Navigator.of(context).pop();
                 print("selectedValue: $selectedValue");
-                print(
-                    "_homeController.conversionValue: ${_homeController.conversionValue}");
               },
               child: Text(
                 "OK",

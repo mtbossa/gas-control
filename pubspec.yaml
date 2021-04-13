@@ -25,6 +25,8 @@ dependencies:
     sdk: flutter
   # Money controller
   flutter_masked_text: ^0.8.0
+
+  shared_preferences: ^2.0.5
   # Intl
   intl: ^0.17.0
   # Provides the classes and functions that allows
@@ -32,8 +34,9 @@ dependencies:
   sqflite: ^2.0.0+3
   # Provides functions that allow to define the path
   # for storing the database 
-  path_provider: ^1.4.5
+  path_provider: 
   
+
 
 
   # The following adds the Cupertino Icons font to your application.
