@@ -3,7 +3,7 @@ import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:gas_mvc/app/components/home_view/input_price.dart';
 import 'package:gas_mvc/app/models/leitura_model.dart';
 
-import 'input_date.dart';
+import 'input_date(unused).dart';
 import 'input_gas.dart';
 
 class ContainerInput extends StatelessWidget {
@@ -57,7 +57,7 @@ class ContainerInput extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Text(
-                      "Novo valor",
+                      "Valor",
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                   ),

@@ -43,7 +43,7 @@ class ContainerValues extends StatelessWidget {
         ),
         width: MediaQuery.of(context).size.width,
         child: Padding(
-          padding: const EdgeInsets.all(10.0),
+          padding: const EdgeInsets.only(top: 10.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -84,6 +84,9 @@ class ContainerValues extends StatelessWidget {
                   ),
                   DotsResult(
                     currentIndex: currentIndex,
+                  ),
+                  SizedBox(
+                    height: 20,
                   ),
                 ],
               ),

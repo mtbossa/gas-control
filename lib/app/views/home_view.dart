@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
 import 'package:gas_mvc/app/components/home_view/container_input.dart';
@@ -5,6 +7,7 @@ import 'package:gas_mvc/app/components/home_view/container_values/container_valu
 import 'package:gas_mvc/app/constants/constants.dart';
 import 'package:gas_mvc/app/controllers/home_controller.dart';
 import 'package:gas_mvc/app/helpers/shared_preferecences_helper.dart';
+import 'package:intl/intl.dart';
 
 import '../components/home_view/input_price.dart';
 
@@ -49,9 +52,8 @@ class _HomeViewState extends State<HomeView> {
 
     _homeController.conversionValue =
         UserSimplePreferences.getConversionValue() ?? 2.5;
-    
-    _homeController.gasPrice =
-        UserSimplePreferences.getGasPrice() ?? 0.0;
+
+    _homeController.gasPrice = UserSimplePreferences.getGasPrice() ?? 0.0;
 
     _homeController.exhibitAllContatos().then((_) {
       setState(() {
@@ -108,7 +110,7 @@ class _HomeViewState extends State<HomeView> {
         ],
         backgroundColor: Theme.of(context).primaryColor,
         title: Text(
-          "Controle",
+          "CONTROLE",
           style: Theme.of(context).appBarTheme.titleTextStyle,
         ),
         centerTitle: false,
@@ -153,7 +155,7 @@ class _HomeViewState extends State<HomeView> {
                         datePressed: _datePressed,
                       ),
                       SizedBox(
-                        height: 10,
+                        height: 20,
                       ),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 10.0),
@@ -294,17 +296,21 @@ class _HomeViewState extends State<HomeView> {
       builder: (context) {
         return AlertDialog(
           title: Text(
-            "Alterar o valor de conversão de m³ para kg",
+            "Alterar coeficiente de conversão de m³ para kg",
           ),
           content: StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
             return Container(
-              height: 50,
+              height: 80,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   DropdownButton(
                     hint: Text("Selecione um número"),
+                    style: TextStyle(
+                      color: Colors.white,
+                    ),
+                    dropdownColor: Colors.grey[800],
                     value: selectedValue,
                     onChanged: (newValue) {
                       print(newValue);
@@ -319,6 +325,13 @@ class _HomeViewState extends State<HomeView> {
                         value: valueItem,
                       );
                     }).toList(),
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "Valor atual: ${_homeController.conversionValue}",
+                    style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ],
               ),
@@ -336,14 +349,8 @@ class _HomeViewState extends State<HomeView> {
                 if (selectedValue != null) {
                   await UserSimplePreferences.setConversionValue(selectedValue);
                   _homeController.conversionValue = selectedValue;
-                  print("selectedValue: $selectedValue");
-                  print(
-                      "_homeController.conversionValue: ${_homeController.conversionValue}");
-                  print(
-                      "UserSimplePreferences.getConversionValue(): ${UserSimplePreferences.getConversionValue()}");
                 }
                 Navigator.of(context).pop();
-                print("selectedValue: $selectedValue");
               },
               child: Text(
                 "OK",
@@ -356,6 +363,7 @@ class _HomeViewState extends State<HomeView> {
   }
 
   _changeGasPrice(BuildContext context) {
+    final _fMoney = NumberFormat("####0.00", Platform.localeName);
     return showDialog(
       context: context,
       builder: (context) {
@@ -366,12 +374,19 @@ class _HomeViewState extends State<HomeView> {
           content: StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
             return Container(
-              height: 50,
+              height: 80,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   InputPrice(
                     gasPriceController: _gasPriceTextController,
+                  ),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Text(
+                    "Valor atual: R\$ ${_fMoney.format(_homeController.gasPrice)}",
+                    style: Theme.of(context).textTheme.bodyText1,
                   ),
                 ],
               ),
@@ -395,12 +410,16 @@ class _HomeViewState extends State<HomeView> {
                       0.0;
                   _homeController.gasPrice = _gasPriceDoubleValue;
                   await UserSimplePreferences.setGasPrice(_gasPriceDoubleValue);
-
-                  print("_gasPriceDoubleValue: $_gasPriceDoubleValue");
-                  print(
-                      "_homeController.gasPrice: ${_homeController.gasPrice}");
-                  print(
-                      "UserSimplePreferences.getGasPrice(): ${UserSimplePreferences.getGasPrice()}");
+                  _homeController.updateLast().then((_) {
+                    setState(() {
+                      print("Done");
+                    });
+                  });
+                  _homeController.exhibitAllContatos().then((_) {
+                    setState(() {
+                      print("Done");
+                    });
+                  });
                 }
                 Navigator.of(context).pop();
               },

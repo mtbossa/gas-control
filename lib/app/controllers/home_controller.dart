@@ -5,6 +5,8 @@ import 'package:gas_mvc/app/models/leitura_model.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
+import '../models/leitura_model.dart';
+
 class HomeController {
   List<Leitura> listLeituras = [];
 
@@ -77,6 +79,12 @@ class HomeController {
   double kgValue;
   double moneyValue;
   DateTime atualDate;
+  String date;
+
+  void getDate() {
+    if (atualDate == null) atualDate = DateTime.now();
+    date = dateFormatDataBase.format(atualDate);
+  }
 
   int getValues() {
     String _newIntValueText = newIntValueTextController.text;
@@ -94,10 +102,8 @@ class HomeController {
 
     cubicMeterValue = _newIntDoubleValue + _newDecimalDoubleValue;
 
-    if (cubicMeterValue > 0) {     
-
-      if (atualDate == null) atualDate = DateTime.now();
-
+    if (cubicMeterValue > 0) {
+      getDate();
       if (listLeituras.length == 0) {
         cubicMeterDifference = 0.0;
         kgValue = 0.0;
@@ -133,10 +139,37 @@ class HomeController {
     }
   }
 
+  Future<void> updateLast() async {
+    calculateMoney();
+    if (listLeituras.length > 0) {
+      Leitura _editedLeitura = Leitura(
+        cubicMeterDifference: listLeituras.last.cubicMeterDifference,
+        cubicMeterValue: listLeituras.last.cubicMeterValue,
+        date: listLeituras.last.date,
+        id: listLeituras.last.id,
+        kgValue: listLeituras.last.kgValue,
+        moneyValue: moneyValue,
+      );
+      db.updateLeitura(_editedLeitura);
+    }
+  }
+
+  void calculateMoney() {
+    if (kgValue == null && listLeituras.length > 0) {
+      kgValue = listLeituras.last.kgValue;
+    }
+    if (gasPrice == null) {
+      gasPrice = 0.0;
+    }
+    if (gasPrice > 0.0 && listLeituras.length > 0) {
+      moneyValue = kgValue * gasPrice;
+    } else {
+      moneyValue = 0.0;
+    }
+  }
+
   void addToDatabase() {
     indexId = listLeituras.length;
-
-    String date = dateFormatDataBase.format(atualDate);
 
     Leitura leitura = Leitura(
       id: indexId,

@@ -14,6 +14,17 @@ class AppWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
+        dialogTheme: DialogTheme(
+          contentTextStyle: TextStyle(
+            color: Colors.white,
+          ),
+          titleTextStyle: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontFamily: "Montserrat",
+          ),
+          backgroundColor: Colors.grey[800],
+        ),
         accentColor: Colors.grey[800],
         appBarTheme: AppBarTheme(
           titleTextStyle: TextStyle(
