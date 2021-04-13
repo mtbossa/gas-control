@@ -20,7 +20,6 @@ class DatabaseHelper {
   String colCubicMeterDifference = "cubicMeterDifference";
   String colCubicMeterValue = "cubicMeterValue";
   String colKgValue = "kgValue";
-  String colGasPrice = "gasPrice";
   String colMoneyValue = "moneyValue";
   String colDate = "date";
 
@@ -47,7 +46,7 @@ class DatabaseHelper {
 
   Future<Database> initializeDatabase() async {
     Directory directory = await getApplicationDocumentsDirectory();
-    String path = directory.path + "newleituras.db";
+    String path = directory.path + "newleituras1.db";
 
     var contatosDatabase = await openDatabase(
       path,
@@ -59,7 +58,7 @@ class DatabaseHelper {
 
   void _createDb(Database db, int newVersion) async {
     await db.execute(
-        "CREATE TABLE $leituraTable ($colId INTEGER PRIMARY KEY, $colCubicMeterDifference REAL, $colCubicMeterValue REAL, $colKgValue REAL, $colGasPrice REAL, $colMoneyValue REAL, $colDate STRING)");
+        "CREATE TABLE $leituraTable ($colId INTEGER PRIMARY KEY, $colCubicMeterDifference REAL, $colCubicMeterValue REAL, $colKgValue REAL, $colMoneyValue REAL, $colDate STRING)");
   }
 
   // Adds Leitura object into the database
@@ -79,7 +78,6 @@ class DatabaseHelper {
           colId,
           colCubicMeterDifference,
           colCubicMeterValue,
-          colGasPrice,
           colKgValue,
           colMoneyValue,
           colDate,

@@ -54,9 +54,6 @@ class ContainerInput extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    height: 5,
-                  ),
                   Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Text(
@@ -69,34 +66,34 @@ class ContainerInput extends StatelessWidget {
                     newDecimalValueTextController:
                         newDecimalValueTextController,
                   ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text(
-                      "Preço kg/gás",
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                  ),
-                  InputPrice(
-                    gasPriceController: gasPriceTextController,
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: Text(
-                      "Data",
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                  ),
-                  InputDate(
-                    dateText: dateText,
-                    dateSelection: dateSelection,
-                    datePressed: datePressed,
-                  ),
+                  // SizedBox(
+                  //   height: 5,
+                  // ),
+                  // Padding(
+                  //   padding: const EdgeInsets.all(10.0),
+                  //   child: Text(
+                  //     "Preço kg/gás",
+                  //     style: Theme.of(context).textTheme.bodyText1,
+                  //   ),
+                  // ),
+                  // InputPrice(
+                  //   gasPriceController: gasPriceTextController,
+                  // ),
+                  // SizedBox(
+                  //   height: 5,
+                  // ),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(top: 10.0),
+                  //   child: Text(
+                  //     "Data",
+                  //     style: Theme.of(context).textTheme.bodyText1,
+                  //   ),
+                  // ),
+                  // InputDate(
+                  //   dateText: dateText,
+                  //   dateSelection: dateSelection,
+                  //   datePressed: datePressed,
+                  // ),
                   SizedBox(
                     height: 15,
                   ),

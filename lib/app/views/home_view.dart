@@ -6,6 +6,8 @@ import 'package:gas_mvc/app/constants/constants.dart';
 import 'package:gas_mvc/app/controllers/home_controller.dart';
 import 'package:gas_mvc/app/helpers/shared_preferecences_helper.dart';
 
+import '../components/home_view/input_price.dart';
+
 class HomeView extends StatefulWidget {
   @override
   _HomeViewState createState() => _HomeViewState();
@@ -47,6 +49,9 @@ class _HomeViewState extends State<HomeView> {
 
     _homeController.conversionValue =
         UserSimplePreferences.getConversionValue() ?? 2.5;
+    
+    _homeController.gasPrice =
+        UserSimplePreferences.getGasPrice() ?? 0.0;
 
     _homeController.exhibitAllContatos().then((_) {
       setState(() {
@@ -65,6 +70,15 @@ class _HomeViewState extends State<HomeView> {
       appBar: AppBar(
         elevation: 0,
         actions: [
+          Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: IconButton(
+              icon: Icon(Icons.attach_money),
+              onPressed: () {
+                _changeGasPrice(context);
+              },
+            ),
+          ),
           Padding(
             padding: const EdgeInsets.only(right: 10.0),
             child: PopupMenuButton(
@@ -323,11 +337,72 @@ class _HomeViewState extends State<HomeView> {
                   await UserSimplePreferences.setConversionValue(selectedValue);
                   _homeController.conversionValue = selectedValue;
                   print("selectedValue: $selectedValue");
-                  print("_homeController.conversionValue: ${_homeController.conversionValue}");
-                  print("UserSimplePreferences.getConversionValue(): ${UserSimplePreferences.getConversionValue()}");
+                  print(
+                      "_homeController.conversionValue: ${_homeController.conversionValue}");
+                  print(
+                      "UserSimplePreferences.getConversionValue(): ${UserSimplePreferences.getConversionValue()}");
                 }
                 Navigator.of(context).pop();
                 print("selectedValue: $selectedValue");
+              },
+              child: Text(
+                "OK",
+              ),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  _changeGasPrice(BuildContext context) {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text(
+            "Alterar o preço do kg/gás",
+          ),
+          content: StatefulBuilder(
+              builder: (BuildContext context, StateSetter setState) {
+            return Container(
+              height: 50,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  InputPrice(
+                    gasPriceController: _gasPriceTextController,
+                  ),
+                ],
+              ),
+            );
+          }),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text("CANCELAR"),
+            ),
+            ElevatedButton(
+              onPressed: () async {
+                String _gasPriceText = _gasPriceTextController.text;
+                double _gasPriceDoubleValue;
+                if (_gasPriceText != "") {
+                  _gasPriceDoubleValue = double.tryParse(_gasPriceText
+                              .replaceAll(new RegExp(r'[,.]'), '')) /
+                          100 ??
+                      0.0;
+                  _homeController.gasPrice = _gasPriceDoubleValue;
+                  await UserSimplePreferences.setGasPrice(_gasPriceDoubleValue);
+
+                  print("_gasPriceDoubleValue: $_gasPriceDoubleValue");
+                  print(
+                      "_homeController.gasPrice: ${_homeController.gasPrice}");
+                  print(
+                      "UserSimplePreferences.getGasPrice(): ${UserSimplePreferences.getGasPrice()}");
+                }
+                Navigator.of(context).pop();
               },
               child: Text(
                 "OK",

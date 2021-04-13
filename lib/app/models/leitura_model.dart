@@ -14,12 +14,6 @@ class Leitura {
    */
   double kgValue;
   /*
-   * The price that the person pays for each
-   * kg of gas.
-   * Ex.: R$ 6,92
-   */
-  double gasPrice;
-  /*
    * The amount of money spent on gas.
    * gasPrice * kgValue;
    */
@@ -34,7 +28,6 @@ class Leitura {
     this.cubicMeterDifference,
     this.cubicMeterValue,
     this.kgValue,
-    this.gasPrice,
     this.moneyValue,
     this.date,
   });
@@ -45,7 +38,6 @@ class Leitura {
       'cubicMeterDifference': cubicMeterDifference,
       'cubicMeterValue': cubicMeterValue,
       'kgValue': kgValue,
-      'gasPrice': gasPrice,
       'moneyValue': moneyValue,
       'date': date,
     };
@@ -57,13 +49,12 @@ class Leitura {
     cubicMeterDifference = map['cubicMeterDifference'];
     cubicMeterValue = map['cubicMeterValue'];
     kgValue = map['kgValue'];
-    gasPrice = map['gasPrice'];
     moneyValue = map['moneyValue'];
     date = map['date'];
   }
 
   @override
   String toString() {
-    return "Leitura => (id: $id, cubicMeterDifference: $cubicMeterDifference, cubicMeterValue: $cubicMeterValue, kgValue: $kgValue, gasPrice: $gasPrice, moneyValue: $moneyValue, date: $date)";
+    return "Leitura => (id: $id, cubicMeterDifference: $cubicMeterDifference, cubicMeterValue: $cubicMeterValue, kgValue: $kgValue, moneyValue: $moneyValue, date: $date)";
   }
 }

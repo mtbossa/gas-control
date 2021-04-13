@@ -6,6 +6,7 @@ class UserSimplePreferences {
   static SharedPreferences _preferences;
 
   static const _keyConversionValue = 'conversionValue';
+  static const _keyGasPrice = 'gasPrice';
 
   static Future init() async =>
       _preferences = await SharedPreferences.getInstance();
@@ -14,4 +15,9 @@ class UserSimplePreferences {
       await _preferences.setDouble(_keyConversionValue, conversionValue);
 
   static double getConversionValue() => _preferences.getDouble(_keyConversionValue);
+
+  static Future setGasPrice(double gasPrice) async =>
+      await _preferences.setDouble(_keyGasPrice, gasPrice);
+
+  static double getGasPrice() => _preferences.getDouble(_keyGasPrice);
 }

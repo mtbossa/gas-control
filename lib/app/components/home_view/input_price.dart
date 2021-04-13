@@ -17,7 +17,7 @@ class InputPrice extends StatelessWidget {
 
   InputPrice({
     Key key,
-    this.gasPriceController,
+    @required this.gasPriceController,
   }) : super(key: key);
 
   @override

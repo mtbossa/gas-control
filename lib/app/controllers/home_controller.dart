@@ -15,7 +15,11 @@ class HomeController {
   // Variable to work with database
   final DatabaseHelper db = DatabaseHelper();
 
+  // Initial value 2.5. Can be changed. Saved in SharedPreferences
   double conversionValue = 2.5;
+
+  // Can be changed. Saved in SharedPreferences
+  double gasPrice;
 
   // Controls the ID
   int indexId;
@@ -71,7 +75,6 @@ class HomeController {
   double cubicMeterValue;
   double cubicMeterDifference;
   double kgValue;
-  double gasPrice;
   double moneyValue;
   DateTime atualDate;
 
@@ -91,18 +94,7 @@ class HomeController {
 
     cubicMeterValue = _newIntDoubleValue + _newDecimalDoubleValue;
 
-    if (cubicMeterValue > 0) {
-      String _gasPriceText = gasPriceTextController.text;
-      double _gasPriceDoubleValue;
-      if (_gasPriceText != "") {
-        _gasPriceDoubleValue =
-            double.tryParse(_gasPriceText.replaceAll(new RegExp(r'[,.]'), '')) /
-                    100 ??
-                0.0;
-        gasPrice = _gasPriceDoubleValue;
-      } else {
-        gasPrice = 0.0;
-      }
+    if (cubicMeterValue > 0) {     
 
       if (atualDate == null) atualDate = DateTime.now();
 
@@ -151,7 +143,6 @@ class HomeController {
       cubicMeterValue: cubicMeterValue,
       cubicMeterDifference: cubicMeterDifference,
       kgValue: kgValue,
-      gasPrice: gasPrice,
       moneyValue: moneyValue,
       date: date,
     );

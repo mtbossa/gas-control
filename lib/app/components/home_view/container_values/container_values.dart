@@ -43,7 +43,7 @@ class ContainerValues extends StatelessWidget {
         ),
         width: MediaQuery.of(context).size.width,
         child: Padding(
-          padding: const EdgeInsets.all(20.0),
+          padding: const EdgeInsets.all(10.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
