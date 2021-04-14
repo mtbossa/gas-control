@@ -110,7 +110,7 @@ class _HomeViewState extends State<HomeView> {
         ],
         backgroundColor: Theme.of(context).primaryColor,
         title: Text(
-          "CONTROLE",
+          "CONTROLE DE GÁS",
           style: Theme.of(context).appBarTheme.titleTextStyle,
         ),
         centerTitle: false,
@@ -301,7 +301,7 @@ class _HomeViewState extends State<HomeView> {
           content: StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
             return Container(
-              height: 80,
+              height: 85,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -374,7 +374,7 @@ class _HomeViewState extends State<HomeView> {
           content: StatefulBuilder(
               builder: (BuildContext context, StateSetter setState) {
             return Container(
-              height: 80,
+              height: 85,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
