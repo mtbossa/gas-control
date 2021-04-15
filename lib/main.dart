@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 import 'app/helpers/shared_preferecences_helper.dart';
 import 'app/views/home_view.dart';
 
-Future main() async {
+Future main() async {  
   WidgetsFlutterBinding.ensureInitialized();
   await UserSimplePreferences.init();
+  MobileAds.instance.initialize();
+  
   runApp(AppWidget());
 }
 

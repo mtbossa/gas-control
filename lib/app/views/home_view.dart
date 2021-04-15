@@ -6,7 +6,9 @@ import 'package:gas_mvc/app/components/home_view/container_input.dart';
 import 'package:gas_mvc/app/components/home_view/container_values/container_values.dart';
 import 'package:gas_mvc/app/constants/constants.dart';
 import 'package:gas_mvc/app/controllers/home_controller.dart';
+import 'package:gas_mvc/app/helpers/ads_helper.dart';
 import 'package:gas_mvc/app/helpers/shared_preferecences_helper.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/intl.dart';
 
 import '../components/home_view/input_price.dart';
@@ -17,6 +19,34 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  BannerAd _banner;
+  bool _isBannerLoaded = false;
+
+  InterstitialAd _interstitialAd;
+  int _interstitialAdCounter = 0;
+  void createNewInterstitialAd() {
+    _interstitialAd = InterstitialAd(
+      adUnitId: AdsHelper.testInterstitialAdUnitId,
+      request: AdRequest(),
+      listener: AdListener(
+        onAdLoaded: (_) {
+          print("Ad loaded");
+        },
+        onAdFailedToLoad: (Ad ad, LoadAdError error) {
+          ad.dispose();
+          print('Ad failed to load: $error');
+        },
+        onAdOpened: (Ad ad) => print('Ad opened.'),
+        onAdClosed: (Ad ad) {
+          ad.dispose();
+          print('Ad closed.');
+        },
+        onApplicationExit: (Ad ad) => print('Left application.'),
+      ),
+    );
+    _interstitialAd.load();
+  }
+
   HomeController _homeController;
 
   int _currentIndex; // Current index of result view
@@ -33,17 +63,30 @@ class _HomeViewState extends State<HomeView> {
   MoneyMaskedTextController _gasPriceTextController =
       MoneyMaskedTextController();
 
-  final textStyleTitle = TextStyle(
-    fontSize: 17,
-  );
-
-  final textStyleValue = TextStyle(
-    fontSize: 25,
-    fontWeight: FontWeight.w600,
-  );
-
   @override
   void initState() {
+    _banner = BannerAd(
+      size: AdSize.banner,
+      adUnitId: AdsHelper.testBannerAdUnitId,
+      listener: AdListener(
+        onAdLoaded: (_) {
+          setState(() {
+            _isBannerLoaded = true;
+          });
+        },
+        onAdFailedToLoad: (_, error) {
+          print("Ad failed to load with error: $error");
+        },
+      ),
+      request: AdRequest(),
+    );
+    _banner.load();
+
+    createNewInterstitialAd();
+
+    _interstitialAdCounter =
+        UserSimplePreferences.getInterstitialAdCounter() ?? 0;
+
     _homeController = HomeController(
       newIntValueTextController: _newIntValueTextController,
       newDecimalValueTextController: _newDecimalValueTextController,
@@ -115,12 +158,12 @@ class _HomeViewState extends State<HomeView> {
         ),
         centerTitle: false,
       ),
-      body: ListView(
+      body: Column(
         children: [
-          SafeArea(
-            child: Column(
+          Expanded(
+            child: ListView(
               children: [
-                Container(
+                SafeArea(
                   child: Column(
                     children: [
                       ContainerValues(
@@ -135,7 +178,7 @@ class _HomeViewState extends State<HomeView> {
                         remainingText: remainingText,
                       ),
                       SizedBox(
-                        height: 25,
+                        height: 15,
                       ),
                       Text(
                         "Adicionar nova leitura",
@@ -155,13 +198,14 @@ class _HomeViewState extends State<HomeView> {
                         datePressed: _datePressed,
                       ),
                       SizedBox(
-                        height: 20,
+                        height: 10,
                       ),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 10.0),
                         child: FloatingActionButton(
                           backgroundColor: Theme.of(context).primaryColor,
-                          onPressed: () {
+                          onPressed: () async {
+                            // Gets all the values and returns an result
                             int result = _homeController.getValues();
                             if (result == 0) {
                               setState(() {
@@ -180,6 +224,20 @@ class _HomeViewState extends State<HomeView> {
                               });
                             }
                             resetDateFields();
+
+                            // For showing the intestitial ad or not
+                            _interstitialAdCounter++;
+                            await UserSimplePreferences
+                                .setInterstitialAdCounter(
+                                    _interstitialAdCounter);
+                            if (_interstitialAdCounter > 1) {
+                              _interstitialAd.show();
+                              createNewInterstitialAd();
+                              _interstitialAdCounter = 0;
+                              await UserSimplePreferences
+                                  .setInterstitialAdCounter(
+                                      _interstitialAdCounter);
+                            }
                           },
                           child: Icon(
                             Icons.add,
@@ -194,9 +252,33 @@ class _HomeViewState extends State<HomeView> {
               ],
             ),
           ),
+          checkForAd(),
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _banner?.dispose();
+    _interstitialAd?.dispose();
+    super.dispose();
+  }
+
+  Widget checkForAd() {
+    if (_isBannerLoaded) {
+      return Container(
+        color: Colors.white,
+        alignment: Alignment.center,
+        width: _banner.size.width.toDouble(),
+        height: _banner.size.height.toDouble(),
+        child: AdWidget(
+          ad: _banner,
+        ),
+      );
+    } else {
+      return CircularProgressIndicator();
+    }
   }
 
   // AlertDialog for adding newAtualGasValue

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "57774781993",
+    "project_id": "controle-gas",
+    "storage_bucket": "controle-gas.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:57774781993:android:b42704037b0af03ca0ce38",
+        "android_client_info": {
+          "package_name": "com.bossa.gas_mvc"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "57774781993-mrj4nsdb8negqbfbj7qrga8im3306ref.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBGnmbrGDAD3kI-PCXmwdtFa0XVX-Fgpjg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "57774781993-mrj4nsdb8negqbfbj7qrga8im3306ref.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
