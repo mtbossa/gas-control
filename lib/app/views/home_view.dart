@@ -136,7 +136,7 @@ class _HomeViewState extends State<HomeView> {
     // Gets the gasPrice from shared preferences
     _homeController.gasPrice = UserSimplePreferences.getGasPrice() ?? 0.0;
 
-    _homeController.exhibitAllContatos().then((_) {
+    _homeController.exhibitAllLeituras().then((_) {
       setState(() {
         print("Done");
       });
@@ -483,10 +483,23 @@ class _HomeViewState extends State<HomeView> {
               child: Text("CANCELAR"),
             ),
             ElevatedButton(
+              // TODO update last kgValue on changed
               onPressed: () async {
                 if (selectedValue != null) {
                   await UserSimplePreferences.setConversionValue(selectedValue);
                   _homeController.conversionValue = selectedValue;
+                  if (_homeController.listLeituras.length > 1) {
+                    _homeController.updateKgValue().then((_) {
+                      setState(() {
+                        print("Done");
+                      });
+                    });
+                    _homeController.exhibitAllLeituras().then((_) {
+                      setState(() {
+                        print("Done");
+                      });
+                    });
+                  }
                 }
                 Navigator.of(context).pop();
               },
@@ -548,12 +561,12 @@ class _HomeViewState extends State<HomeView> {
                       0.0;
                   _homeController.gasPrice = _gasPriceDoubleValue;
                   await UserSimplePreferences.setGasPrice(_gasPriceDoubleValue);
-                  _homeController.updateLast().then((_) {
+                  _homeController.updateMoney().then((_) {
                     setState(() {
                       print("Done");
                     });
                   });
-                  _homeController.exhibitAllContatos().then((_) {
+                  _homeController.exhibitAllLeituras().then((_) {
                     setState(() {
                       print("Done");
                     });

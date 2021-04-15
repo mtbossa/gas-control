@@ -38,18 +38,18 @@ class HomeController {
   /* value is just a name for the variable that will hold
    * the returned value, could be any other name.
    */
-  // void exhibitAllContatos() {
+  // void exhibitAllLeituras() {
   //   db.getAllLeituras().then((value) {
   //     listLeituras = value;
 
   //   });
   // }
 
-  Future<void> exhibitAllContatos() async {
+  Future<void> exhibitAllLeituras() async {
     await db.getAllLeituras().then((value) {
       listLeituras = value;
-      print("Inside exhibitAllContatos(): value --> $value");
-      print("Inside exhibitAllContatos(): listLeituras --> $listLeituras");
+      print("Inside exhibitAllLeituras(): value --> $value");
+      print("Inside exhibitAllLeituras(): listLeituras --> $listLeituras");
     });
   }
 
@@ -57,7 +57,7 @@ class HomeController {
   void zeroValues() {
     listLeituras.clear();
     db.deleteAll();
-    exhibitAllContatos();
+    exhibitAllLeituras();
     gasPriceTextController.updateValue(0.0);
   }
 
@@ -65,7 +65,7 @@ class HomeController {
   void revertLastValue() {
     listLeituras.removeLast();
     db.deleteLastLeitura();
-    exhibitAllContatos();
+    exhibitAllLeituras();
   }
 
   initDateFormatting() {
@@ -139,7 +139,26 @@ class HomeController {
     }
   }
 
-  Future<void> updateLast() async {
+  Future<void> updateKgValue() async {
+    calculateKgValue();
+    if (listLeituras.length > 0) {
+      Leitura _editedLeitura = Leitura(
+        cubicMeterDifference: listLeituras.last.cubicMeterDifference,
+        cubicMeterValue: listLeituras.last.cubicMeterValue,
+        date: listLeituras.last.date,
+        id: listLeituras.last.id,
+        kgValue: kgValue,
+        moneyValue: listLeituras.last.moneyValue,
+      );
+      db.updateLeitura(_editedLeitura);
+    }
+  }
+
+  void calculateKgValue() {
+    kgValue = listLeituras.last.cubicMeterDifference * conversionValue;
+  }
+
+  Future<void> updateMoney() async {
     calculateMoney();
     if (listLeituras.length > 0) {
       Leitura _editedLeitura = Leitura(
