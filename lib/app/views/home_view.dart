@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
+import 'package:gas_mvc/app/components/custom_showcase_widget.dart';
 import 'package:gas_mvc/app/components/home_view/container_input.dart';
 import 'package:gas_mvc/app/components/home_view/container_values/container_values.dart';
 import 'package:gas_mvc/app/constants/constants.dart';
@@ -10,6 +11,7 @@ import 'package:gas_mvc/app/helpers/ads_helper.dart';
 import 'package:gas_mvc/app/helpers/shared_preferecences_helper.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/intl.dart';
+import 'package:showcaseview/showcase_widget.dart';
 
 import '../components/home_view/input_price.dart';
 
@@ -19,6 +21,20 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
+  // Instance of HomeController which controls the logic
+  HomeController _homeController;
+
+  // First Time bool
+  bool _firstTime;
+
+  // Global keys for widgets which will be used on show case
+  final _showCaseKeyOne = GlobalKey();
+  final _showCaseKeyTwo = GlobalKey();
+  final _showCaseKeyThree = GlobalKey();
+  final _showCaseKeyFour = GlobalKey();
+  final _showCaseKeyFive = GlobalKey();
+  final _showCaseKeySix = GlobalKey();
+
   BannerAd _banner;
   bool _isBannerLoaded = false;
 
@@ -47,9 +63,8 @@ class _HomeViewState extends State<HomeView> {
     _interstitialAd.load();
   }
 
-  HomeController _homeController;
-
-  int _currentIndex; // Current index of result view
+  // Current index of result view
+  int _currentIndex;
 
   String _dateText = "Outros...";
   String _datePressed = "";
@@ -65,6 +80,26 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   void initState() {
+    // Checks whether is first time or not
+    _firstTime = UserSimplePreferences.getFirstTime() ?? true;
+
+    // Initiates the show case if first time
+    if (_firstTime) {
+      WidgetsBinding.instance.addPostFrameCallback(
+        (_) => ShowCaseWidget.of(context).startShowCase([
+          _showCaseKeyOne,
+          _showCaseKeyTwo,
+          _showCaseKeyThree,
+          _showCaseKeyFour,
+          _showCaseKeyFive,
+          _showCaseKeySix,
+        ]),
+      );
+      _firstTime = false;
+      UserSimplePreferences.setFirstTime(_firstTime);
+    }
+
+    // Initiates the banner ad
     _banner = BannerAd(
       size: AdSize.banner,
       adUnitId: AdsHelper.testBannerAdUnitId,
@@ -82,20 +117,23 @@ class _HomeViewState extends State<HomeView> {
     );
     _banner.load();
 
+    // Initiates the interstitial ad
     createNewInterstitialAd();
 
+    // Gets the counter from shared preferences
     _interstitialAdCounter =
         UserSimplePreferences.getInterstitialAdCounter() ?? 0;
 
+    // Intanciates the homeController
     _homeController = HomeController(
       newIntValueTextController: _newIntValueTextController,
       newDecimalValueTextController: _newDecimalValueTextController,
       gasPriceTextController: _gasPriceTextController,
     );
-
+    // Gets the conversionValue from shared preferences
     _homeController.conversionValue =
         UserSimplePreferences.getConversionValue() ?? 2.5;
-
+    // Gets the gasPrice from shared preferences
     _homeController.gasPrice = UserSimplePreferences.getGasPrice() ?? 0.0;
 
     _homeController.exhibitAllContatos().then((_) {
@@ -117,36 +155,44 @@ class _HomeViewState extends State<HomeView> {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 8.0),
-            child: IconButton(
-              icon: Icon(Icons.attach_money),
-              onPressed: () {
-                _changeGasPrice(context);
-              },
+            child: CustomShowcaseWidget(
+              description: 'Mude o preço pago pelo gás',
+              globalKey: _showCaseKeyFive,
+              child: IconButton(
+                icon: Icon(Icons.attach_money),
+                onPressed: () {
+                  _changeGasPrice(context);
+                },
+              ),
             ),
           ),
           Padding(
             padding: const EdgeInsets.only(right: 10.0),
-            child: PopupMenuButton(
-              onSelected: choiceAction,
-              itemBuilder: (context) {
-                if (_homeController.listLeituras.length <= 0) {
-                  return Constants.ChoicesOne.map((String choice) {
-                    return PopupMenuItem(
-                      value: choice,
-                      child: Text(choice),
-                    );
-                  }).toList();
-                } else {
-                  return Constants.ChoicesTwo.map((String choice) {
-                    return PopupMenuItem(
-                      value: choice,
-                      child: Text(choice),
-                    );
-                  }).toList();
-                }
-              },
-              child: Icon(
-                Icons.more_vert,
+            child: CustomShowcaseWidget(
+              description: 'Configurações gerais',
+              globalKey: _showCaseKeySix,
+              child: PopupMenuButton(
+                onSelected: choiceAction,
+                itemBuilder: (context) {
+                  if (_homeController.listLeituras.length <= 0) {
+                    return Constants.ChoicesOne.map((String choice) {
+                      return PopupMenuItem(
+                        value: choice,
+                        child: Text(choice),
+                      );
+                    }).toList();
+                  } else {
+                    return Constants.ChoicesTwo.map((String choice) {
+                      return PopupMenuItem(
+                        value: choice,
+                        child: Text(choice),
+                      );
+                    }).toList();
+                  }
+                },
+                child: Icon(
+                  Icons.more_vert,
+                ),
               ),
             ),
           ),
@@ -176,6 +222,8 @@ class _HomeViewState extends State<HomeView> {
                         currentIndex: _currentIndex,
                         remainingAmount: remainingAmount,
                         remainingText: remainingText,
+                        showcaseKeyThree: _showCaseKeyThree,
+                        showcaseKeyFour: _showCaseKeyFour,
                       ),
                       SizedBox(
                         height: 15,
@@ -187,62 +235,71 @@ class _HomeViewState extends State<HomeView> {
                       SizedBox(
                         height: 15,
                       ),
-                      ContainerInput(
-                        newDecimalValueTextController:
-                            _newDecimalValueTextController,
-                        newIntValueTextController: _newIntValueTextController,
-                        gasPriceTextController: _gasPriceTextController,
-                        listLeituras: _homeController.listLeituras,
-                        dateSelection: _dateSelection,
-                        dateText: _dateText,
-                        datePressed: _datePressed,
+                      CustomShowcaseWidget(
+                        description:
+                            'Adicione aqui o valor marcado em seu medidor',
+                        globalKey: _showCaseKeyOne,
+                        child: ContainerInput(
+                          newDecimalValueTextController:
+                              _newDecimalValueTextController,
+                          newIntValueTextController: _newIntValueTextController,
+                          gasPriceTextController: _gasPriceTextController,
+                          listLeituras: _homeController.listLeituras,
+                          dateSelection: _dateSelection,
+                          dateText: _dateText,
+                          datePressed: _datePressed,
+                        ),
                       ),
                       SizedBox(
-                        height: 10,
+                        height: 15,
                       ),
                       Padding(
                         padding: const EdgeInsets.only(bottom: 10.0),
-                        child: FloatingActionButton(
-                          backgroundColor: Theme.of(context).primaryColor,
-                          onPressed: () async {
-                            // Gets all the values and returns an result
-                            int result = _homeController.getValues();
-                            if (result == 0) {
-                              setState(() {
-                                _homeController.addToDatabase();
-                                if (_homeController.listLeituras.length <= 2)
-                                  checkIndex();
-                              });
-                            } else if (result == 1) {
-                              _showErroZero(context);
-                            } else if (result == 2) {
-                              _showErrorDifference(context);
-                            } else if (result == 3) {
-                              setState(() {
-                                resetDateFields();
-                                _showErrorDate(context);
-                              });
-                            }
-                            resetDateFields();
+                        child: CustomShowcaseWidget(
+                          description: 'Clique aqui para adicionar a leitura',
+                          globalKey: _showCaseKeyTwo,
+                          child: FloatingActionButton(
+                            backgroundColor: Theme.of(context).primaryColor,
+                            onPressed: () async {
+                              // Gets all the values and returns an result
+                              int result = _homeController.getValues();
+                              if (result == 0) {
+                                setState(() {
+                                  _homeController.addToDatabase();
+                                  if (_homeController.listLeituras.length <= 2)
+                                    checkIndex();
+                                });
+                              } else if (result == 1) {
+                                _showErroZero(context);
+                              } else if (result == 2) {
+                                _showErrorDifference(context);
+                              } else if (result == 3) {
+                                setState(() {
+                                  resetDateFields();
+                                  _showErrorDate(context);
+                                });
+                              }
+                              resetDateFields();
 
-                            // For showing the intestitial ad or not
-                            _interstitialAdCounter++;
-                            await UserSimplePreferences
-                                .setInterstitialAdCounter(
-                                    _interstitialAdCounter);
-                            if (_interstitialAdCounter > 1) {
-                              _interstitialAd.show();
-                              createNewInterstitialAd();
-                              _interstitialAdCounter = 0;
+                              // For showing the intestitial ad or not
+                              _interstitialAdCounter++;
                               await UserSimplePreferences
                                   .setInterstitialAdCounter(
                                       _interstitialAdCounter);
-                            }
-                          },
-                          child: Icon(
-                            Icons.add,
-                            size: 20,
-                            color: Colors.white,
+                              if (_interstitialAdCounter > 2) {
+                                _interstitialAd.show();
+                                createNewInterstitialAd();
+                                _interstitialAdCounter = 0;
+                                await UserSimplePreferences
+                                    .setInterstitialAdCounter(
+                                        _interstitialAdCounter);
+                              }
+                            },
+                            child: Icon(
+                              Icons.add,
+                              size: 20,
+                              color: Colors.white,
+                            ),
                           ),
                         ),
                       ),
@@ -268,7 +325,6 @@ class _HomeViewState extends State<HomeView> {
   Widget checkForAd() {
     if (_isBannerLoaded) {
       return Container(
-        color: Colors.white,
         alignment: Alignment.center,
         width: _banner.size.width.toDouble(),
         height: _banner.size.height.toDouble(),

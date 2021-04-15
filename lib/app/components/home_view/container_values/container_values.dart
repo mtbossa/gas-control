@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gas_mvc/app/components/custom_showcase_widget.dart';
 import 'package:gas_mvc/app/components/home_view/container_values/page_view_result.dart';
 import 'package:gas_mvc/app/models/leitura_model.dart';
 import 'package:intl/intl.dart';
@@ -14,6 +15,8 @@ class ContainerValues extends StatelessWidget {
   final _fCubicMeter = NumberFormat("####0.000", Platform.localeName);
   final String remainingAmount;
   final String remainingText;
+  final GlobalKey showcaseKeyThree;
+  final GlobalKey showcaseKeyFour;
 
   ContainerValues({
     Key key,
@@ -22,6 +25,8 @@ class ContainerValues extends StatelessWidget {
     @required this.currentIndex,
     @required this.remainingAmount,
     @required this.remainingText,
+    @required this.showcaseKeyThree,
+    @required this.showcaseKeyFour, 
   }) : super(key: key);
 
   @override
@@ -47,22 +52,27 @@ class ContainerValues extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  // Leitura atual
-                  DisplayLeituraValue(
-                    dateHandler: dateHandler,
-                    valueHandler: valueHandler,
-                    title: "Leitura anterior",
-                  ),
-                  // Leitura anterior
-                  DisplayLeituraValue(
-                    dateHandler: dateHandler,
-                    valueHandler: valueHandler,
-                    title: "Leitura atual",
-                  ),
-                ],
+
+              CustomShowcaseWidget(
+                description: 'Valores das leituras adicionadas',
+                globalKey: showcaseKeyThree,
+                child: Row(
+                       mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    // Leitura atual
+                    DisplayLeituraValue(
+                      dateHandler: dateHandler,
+                      valueHandler: valueHandler,
+                      title: "Leitura anterior",
+                    ),
+                    // Leitura anterior
+                    DisplayLeituraValue(
+                      dateHandler: dateHandler,
+                      valueHandler: valueHandler,
+                      title: "Leitura atual",
+                    ),
+                  ],
+                ),
               ),
               SizedBox(
                 height: 20,
@@ -73,12 +83,13 @@ class ContainerValues extends StatelessWidget {
                     "Gastos",
                     style: Theme.of(context).textTheme.headline2,
                   ),
-                  PageViewResult(
-                    remainingAmount: remainingAmount,
-                    remainingText: remainingText,
-                    listLeituras: listLeituras,
-                    onChanged: onChanged,
-                  ),
+                 PageViewResult(
+                      remainingAmount: remainingAmount,
+                      remainingText: remainingText,
+                      listLeituras: listLeituras,
+                      onChanged: onChanged,
+                      showcaseKeyFour: showcaseKeyFour,
+                    ),
                   SizedBox(
                     height: 10,
                   ),

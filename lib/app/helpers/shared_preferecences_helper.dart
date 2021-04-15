@@ -8,6 +8,7 @@ class UserSimplePreferences {
   static const _keyConversionValue = 'conversionValue';
   static const _keyGasPrice = 'gasPrice';
   static const _keyInterstitialAdCounter = '_keyInterstitialAdCounter';
+  static const _keyFirstTime = '_keyFirstTime';
 
   static Future init() async =>
       _preferences = await SharedPreferences.getInstance();
@@ -28,4 +29,10 @@ class UserSimplePreferences {
           _keyInterstitialAdCounter, interstitialAdCounter);
 
   static int getInterstitialAdCounter() => _preferences.getInt(_keyInterstitialAdCounter);
+
+  static Future setFirstTime(bool firstTime) async =>
+      await _preferences.setBool(_keyFirstTime, firstTime);
+
+  static bool getFirstTime() =>
+      _preferences.getBool(_keyFirstTime);
 }

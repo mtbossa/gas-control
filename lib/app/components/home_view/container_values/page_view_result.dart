@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:gas_mvc/app/models/leitura_model.dart';
 import 'package:intl/intl.dart';
 
+import '../../custom_showcase_widget.dart';
+
 class PageViewResult extends StatelessWidget {
   final ValueChanged<int> onChanged;
   final List<Leitura> listLeituras;
@@ -11,6 +13,7 @@ class PageViewResult extends StatelessWidget {
   final _fMoney = NumberFormat("####0.00", Platform.localeName);
   final String remainingAmount;
   final String remainingText;
+  final GlobalKey showcaseKeyFour;
 
   PageViewResult({
     Key key,
@@ -18,6 +21,7 @@ class PageViewResult extends StatelessWidget {
     @required this.listLeituras,
     @required this.remainingAmount,
     @required this.remainingText,
+    @required this.showcaseKeyFour,
   }) : super(key: key);
 
   @override
@@ -32,18 +36,23 @@ class PageViewResult extends StatelessWidget {
           physics: BouncingScrollPhysics(),
           children: [
             Container(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  checkCubicMeters(context),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: Text(
-                      "m³",
-                      style: Theme.of(context).textTheme.headline3,
+              child: CustomShowcaseWidget(
+                description:
+                    'Resultados das diferenças entre as duas leituras.',
+                globalKey: showcaseKeyFour,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    checkCubicMeters(context),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: Text(
+                        "m³",
+                        style: Theme.of(context).textTheme.headline3,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
             Container(
