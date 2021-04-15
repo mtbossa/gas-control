@@ -27,6 +27,7 @@ class _HomeViewState extends State<HomeView> {
   // First Time bool
   bool _firstTime;
 
+  // Show casae
   // Global keys for widgets which will be used on show case
   final _showCaseKeyOne = GlobalKey();
   final _showCaseKeyTwo = GlobalKey();
@@ -34,7 +35,23 @@ class _HomeViewState extends State<HomeView> {
   final _showCaseKeyFour = GlobalKey();
   final _showCaseKeyFive = GlobalKey();
   final _showCaseKeySix = GlobalKey();
+  final _showCaseKeySeven = GlobalKey();
 
+  void iniateShowCase() {
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) => ShowCaseWidget.of(context).startShowCase([
+        _showCaseKeyOne,
+        _showCaseKeyTwo,
+        _showCaseKeyThree,
+        _showCaseKeyFour,
+        _showCaseKeyFive,
+        _showCaseKeySix,
+        _showCaseKeySeven,
+      ]),
+    );
+  }
+
+  // Ads
   BannerAd _banner;
   bool _isBannerLoaded = false;
 
@@ -85,16 +102,7 @@ class _HomeViewState extends State<HomeView> {
 
     // Initiates the show case if first time
     if (_firstTime) {
-      WidgetsBinding.instance.addPostFrameCallback(
-        (_) => ShowCaseWidget.of(context).startShowCase([
-          _showCaseKeyOne,
-          _showCaseKeyTwo,
-          _showCaseKeyThree,
-          _showCaseKeyFour,
-          _showCaseKeyFive,
-          _showCaseKeySix,
-        ]),
-      );
+      iniateShowCase();
       _firstTime = false;
       UserSimplePreferences.setFirstTime(_firstTime);
     }
@@ -153,24 +161,32 @@ class _HomeViewState extends State<HomeView> {
       appBar: AppBar(
         elevation: 0,
         actions: [
-          Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: CustomShowcaseWidget(
-              description: 'Mude o preço pago pelo gás',
-              globalKey: _showCaseKeyFive,
-              child: IconButton(
-                icon: Icon(Icons.attach_money),
-                onPressed: () {
-                  _changeGasPrice(context);
-                },
-              ),
+          CustomShowcaseWidget(
+            description: 'Para rever esse tutorial, clique aqui',
+            globalKey: _showCaseKeySeven,
+            child: IconButton(
+              icon: Icon(Icons.help_outline),
+              onPressed: () {
+                iniateShowCase();
+              },
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 10.0),
-            child: CustomShowcaseWidget(
-              description: 'Configurações gerais',
-              globalKey: _showCaseKeySix,
+          CustomShowcaseWidget(
+            description:
+                'Clique aqui para alterar preço que você paga pelo gás',
+            globalKey: _showCaseKeyFive,
+            child: IconButton(
+              icon: Icon(Icons.attach_money),
+              onPressed: () {
+                _changeGasPrice(context);
+              },
+            ),
+          ),
+          CustomShowcaseWidget(
+            description: 'Configurações gerais',
+            globalKey: _showCaseKeySix,
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
               child: PopupMenuButton(
                 onSelected: choiceAction,
                 itemBuilder: (context) {
@@ -191,7 +207,7 @@ class _HomeViewState extends State<HomeView> {
                   }
                 },
                 child: Icon(
-                  Icons.more_vert,
+                  Icons.settings,
                 ),
               ),
             ),
@@ -237,7 +253,7 @@ class _HomeViewState extends State<HomeView> {
                       ),
                       CustomShowcaseWidget(
                         description:
-                            'Adicione aqui o valor marcado em seu medidor',
+                            'Adicione aqui o valor marcado em seu medidor de gás',
                         globalKey: _showCaseKeyOne,
                         child: ContainerInput(
                           newDecimalValueTextController:
@@ -483,7 +499,6 @@ class _HomeViewState extends State<HomeView> {
               child: Text("CANCELAR"),
             ),
             ElevatedButton(
-              // TODO update last kgValue on changed
               onPressed: () async {
                 if (selectedValue != null) {
                   await UserSimplePreferences.setConversionValue(selectedValue);
