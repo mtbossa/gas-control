@@ -433,6 +433,7 @@ class _HomeViewState extends State<HomeView> {
                 Navigator.of(context).pop();
                 setState(() {
                   _homeController.revertLastValue();
+                  checkIndex();
                 });
               },
             ),
