@@ -17,7 +17,7 @@ class AdsHelper {
       // When deploying, use the right one: https://apps.admob.com/v2/apps/2537348407/adunits/list?pli=1
       return "ca-app-pub-1583793484936118/6285021720";
     } else if (Platform.isIOS) {
-      return "<YOUR_IOS_BANNER_AD_UNIT_ID>";
+      return "ca-app-pub-1583793484936118/3355606054";
     } else {
       throw new UnsupportedError("Unsupported platform");
     }
@@ -39,7 +39,7 @@ class AdsHelper {
     // When deploying, use the right one: https://apps.admob.com/v2/apps/2537348407/adunits/list?pli=1
       return "ca-app-pub-1583793484936118/2252856498";
     } else if (Platform.isIOS) {
-      return "<YOUR_IOS_INTERSTITIAL_AD_UNIT_ID>";
+      return "ca-app-pub-1583793484936118/3794412140";
     } else {
       throw new UnsupportedError("Unsupported platform");
     }
