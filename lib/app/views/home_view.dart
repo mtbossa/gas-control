@@ -59,7 +59,7 @@ class _HomeViewState extends State<HomeView> {
   int _interstitialAdCounter = 0;
   void createNewInterstitialAd() {
     _interstitialAd = InterstitialAd(
-      adUnitId: AdsHelper.testInterstitialAdUnitId,
+      adUnitId: AdsHelper.interstitialAdUnitId,
       request: AdRequest(),
       listener: AdListener(
         onAdLoaded: (_) {
@@ -110,7 +110,7 @@ class _HomeViewState extends State<HomeView> {
     // Initiates the banner ad
     _banner = BannerAd(
       size: AdSize.banner,
-      adUnitId: AdsHelper.testBannerAdUnitId,
+      adUnitId: AdsHelper.bannerAdUnitId,
       listener: AdListener(
         onAdLoaded: (_) {
           setState(() {
