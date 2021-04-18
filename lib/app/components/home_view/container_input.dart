@@ -9,7 +9,7 @@ class ContainerInput extends StatelessWidget {
   final TextEditingController newDecimalValueTextController;
   final MoneyMaskedTextController gasPriceTextController;
   final List<Leitura> listLeituras;
-  final Function dateSelection;
+  // final Function dateSelection;
   final String dateText;
   final String datePressed;
 
@@ -24,7 +24,7 @@ class ContainerInput extends StatelessWidget {
     @required this.listLeituras,
     @required this.newIntValueTextController,
     @required this.newDecimalValueTextController,
-    @required this.dateSelection,
+    // @required this.dateSelection,
     @required this.dateText,
     @required this.datePressed,
   }) : super(key: key);

@@ -37,7 +37,7 @@ class _HomeViewState extends State<HomeView> {
   final _showCaseKeySix = GlobalKey();
   final _showCaseKeySeven = GlobalKey();
 
-  void iniateShowCase() {
+  void _iniateShowCase() {
     WidgetsBinding.instance.addPostFrameCallback(
       (_) => ShowCaseWidget.of(context).startShowCase([
         _showCaseKeyOne,
@@ -57,6 +57,7 @@ class _HomeViewState extends State<HomeView> {
 
   InterstitialAd _interstitialAd;
   int _interstitialAdCounter = 0;
+  bool _isInterstitialLoaded = false;
   void createNewInterstitialAd() {
     _interstitialAd = InterstitialAd(
       adUnitId: AdsHelper.interstitialAdUnitId,
@@ -64,6 +65,7 @@ class _HomeViewState extends State<HomeView> {
       listener: AdListener(
         onAdLoaded: (_) {
           print("Ad loaded");
+          _isInterstitialLoaded = true;
         },
         onAdFailedToLoad: (Ad ad, LoadAdError error) {
           ad.dispose();
@@ -102,7 +104,7 @@ class _HomeViewState extends State<HomeView> {
 
     // Initiates the show case if first time
     if (_firstTime) {
-      iniateShowCase();
+      _iniateShowCase();
       _firstTime = false;
       UserSimplePreferences.setFirstTime(_firstTime);
     }
@@ -166,9 +168,7 @@ class _HomeViewState extends State<HomeView> {
             globalKey: _showCaseKeySeven,
             child: IconButton(
               icon: Icon(Icons.help_outline),
-              onPressed: () {
-                iniateShowCase();
-              },
+              onPressed: _iniateShowCase,
             ),
           ),
           CustomShowcaseWidget(
@@ -261,7 +261,7 @@ class _HomeViewState extends State<HomeView> {
                           newIntValueTextController: _newIntValueTextController,
                           gasPriceTextController: _gasPriceTextController,
                           listLeituras: _homeController.listLeituras,
-                          dateSelection: _dateSelection,
+                          // dateSelection: _dateSelection,
                           dateText: _dateText,
                           datePressed: _datePressed,
                         ),
@@ -276,41 +276,7 @@ class _HomeViewState extends State<HomeView> {
                           globalKey: _showCaseKeyTwo,
                           child: FloatingActionButton(
                             backgroundColor: Theme.of(context).primaryColor,
-                            onPressed: () async {
-                              // Gets all the values and returns an result
-                              int result = _homeController.getValues();
-                              if (result == 0) {
-                                setState(() {
-                                  _homeController.addToDatabase();
-                                  if (_homeController.listLeituras.length <= 2)
-                                    checkIndex();
-                                });
-                              } else if (result == 1) {
-                                _showErroZero(context);
-                              } else if (result == 2) {
-                                _showErrorDifference(context);
-                              } else if (result == 3) {
-                                setState(() {
-                                  resetDateFields();
-                                  _showErrorDate(context);
-                                });
-                              }
-                              resetDateFields();
-
-                              // For showing the intestitial ad or not
-                              _interstitialAdCounter++;
-                              await UserSimplePreferences
-                                  .setInterstitialAdCounter(
-                                      _interstitialAdCounter);
-                              if (_interstitialAdCounter > 2) {
-                                _interstitialAd.show();
-                                createNewInterstitialAd();
-                                _interstitialAdCounter = 0;
-                                await UserSimplePreferences
-                                    .setInterstitialAdCounter(
-                                        _interstitialAdCounter);
-                              }
-                            },
+                            onPressed: _calculate,
                             child: Icon(
                               Icons.add,
                               size: 20,
@@ -329,6 +295,41 @@ class _HomeViewState extends State<HomeView> {
         ],
       ),
     );
+  }
+
+  void _calculate() async {
+    // Gets all the values and returns an result
+    int result = _homeController.getValues();
+    if (result == 0) {
+      setState(() {
+        _homeController.addToDatabase();
+        if (_homeController.listLeituras.length <= 2) checkIndex();
+      });
+    } else if (result == 1) {
+      _showErroZero(context);
+    } else if (result == 2) {
+      _showErrorDifference(context);
+      // } else if (result == 3) {
+      //   setState(() {
+      //     resetDateFields();
+      //     _showErrorDate(context);
+      //   });
+    }
+    resetDateFields();
+
+    // For showing the intestitial ad or not
+    if (_isInterstitialLoaded) {
+      _interstitialAdCounter++;
+      await UserSimplePreferences.setInterstitialAdCounter(
+          _interstitialAdCounter);
+      if (_interstitialAdCounter > 2) {
+        _interstitialAd.show();
+        createNewInterstitialAd();
+        _interstitialAdCounter = 0;
+        await UserSimplePreferences.setInterstitialAdCounter(
+            _interstitialAdCounter);
+      }
+    }
   }
 
   @override
@@ -506,9 +507,7 @@ class _HomeViewState extends State<HomeView> {
                   _homeController.conversionValue = selectedValue;
                   if (_homeController.listLeituras.length > 1) {
                     _homeController.updateKgValue().then((_) {
-                      setState(() {
-                        print("Done");
-                      });
+                      print("Done");
                     });
                     _homeController.exhibitAllLeituras().then((_) {
                       setState(() {
@@ -578,9 +577,7 @@ class _HomeViewState extends State<HomeView> {
                   _homeController.gasPrice = _gasPriceDoubleValue;
                   await UserSimplePreferences.setGasPrice(_gasPriceDoubleValue);
                   _homeController.updateMoney().then((_) {
-                    setState(() {
-                      print("Done");
-                    });
+                    print("Done");
                   });
                   _homeController.exhibitAllLeituras().then((_) {
                     setState(() {
@@ -611,57 +608,57 @@ class _HomeViewState extends State<HomeView> {
     }
   }
 
-  void _dateSelection(String dateSelection) {
-    if (dateSelection == "Hoje") {
-      setState(() {
-        _datePressed = "Hoje";
-      });
+  // void _dateSelection(String dateSelection) {
+  //   if (dateSelection == "Hoje") {
+  //     setState(() {
+  //       _datePressed = "Hoje";
+  //     });
 
-      _homeController.atualDate = DateTime.now();
-    } else if (dateSelection == "Ontem") {
-      setState(() {
-        _datePressed = "Ontem";
-      });
+  //     _homeController.atualDate = DateTime.now();
+  //   } else if (dateSelection == "Ontem") {
+  //     setState(() {
+  //       _datePressed = "Ontem";
+  //     });
 
-      _homeController.atualDate = DateTime.now().subtract(
-        Duration(
-          days: 1,
-        ),
-      );
-    } else {
-      _datePressed = "Outros";
-      _showCalendar(context);
-    }
-  }
+  //     _homeController.atualDate = DateTime.now().subtract(
+  //       Duration(
+  //         days: 1,
+  //       ),
+  //     );
+  //   } else {
+  //     _datePressed = "Outros";
+  //     _showCalendar(context);
+  //   }
+  // }
 
-  Future<Null> _showCalendar(BuildContext context) async {
-    DateTime _pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2000),
-      lastDate: DateTime(2100),
-      builder: (BuildContext context, Widget child) {
-        return Theme(
-          data: ThemeData.dark().copyWith(
-            colorScheme: ColorScheme.dark(
-              primary: Colors.grey[800],
-              onPrimary: Colors.white,
-              surface: Colors.grey[800],
-              onSurface: Colors.white,
-            ),
-            dialogBackgroundColor: Colors.grey[600],
-          ),
-          child: child,
-        );
-      },
-    );
-    setState(() {
-      if (_pickedDate != null) {
-        _homeController.atualDate = _pickedDate;
-        _dateText = _homeController.dateFormatCalendar.format(_pickedDate);
-      }
-    });
-  }
+  // Future<Null> _showCalendar(BuildContext context) async {
+  //   DateTime _pickedDate = await showDatePicker(
+  //     context: context,
+  //     initialDate: DateTime.now(),
+  //     firstDate: DateTime(2000),
+  //     lastDate: DateTime(2100),
+  //     builder: (BuildContext context, Widget child) {
+  //       return Theme(
+  //         data: ThemeData.dark().copyWith(
+  //           colorScheme: ColorScheme.dark(
+  //             primary: Colors.grey[800],
+  //             onPrimary: Colors.white,
+  //             surface: Colors.grey[800],
+  //             onSurface: Colors.white,
+  //           ),
+  //           dialogBackgroundColor: Colors.grey[600],
+  //         ),
+  //         child: child,
+  //       );
+  //     },
+  //   );
+  //   setState(() {
+  //     if (_pickedDate != null) {
+  //       _homeController.atualDate = _pickedDate;
+  //       _dateText = _homeController.dateFormatCalendar.format(_pickedDate);
+  //     }
+  //   });
+  // }
 
   void resetDateFields() {
     _homeController.atualDate = null;
@@ -680,36 +677,36 @@ class _HomeViewState extends State<HomeView> {
     }
   }
 
-  // AlertDialog for Date Error
-  _showErrorDate(BuildContext context) {
-    return showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: Text(
-            "Erro",
-          ),
-          content: Container(
-            height: 50,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text("Nova leitura deve possuir data maior do que a anterior."),
-              ],
-            ),
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: Text("OK"),
-            ),
-          ],
-        );
-      },
-    );
-  }
+  // // AlertDialog for Date Error
+  // _showErrorDate(BuildContext context) {
+  //   return showDialog(
+  //     context: context,
+  //     builder: (context) {
+  //       return AlertDialog(
+  //         title: Text(
+  //           "Erro",
+  //         ),
+  //         content: Container(
+  //           height: 50,
+  //           child: Column(
+  //             crossAxisAlignment: CrossAxisAlignment.center,
+  //             children: [
+  //               Text("Nova leitura deve possuir data maior do que a anterior."),
+  //             ],
+  //           ),
+  //         ),
+  //         actions: [
+  //           TextButton(
+  //             onPressed: () {
+  //               Navigator.of(context).pop();
+  //             },
+  //             child: Text("OK"),
+  //           ),
+  //         ],
+  //       );
+  //     },
+  //   );
+  // }
 
   // AlertDialog for Difference Error
   _showErrorDifference(BuildContext context) {
