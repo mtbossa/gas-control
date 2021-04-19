@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 import 'app/helpers/shared_preferecences_helper.dart';
 import 'app/views/home_view.dart';
@@ -6,6 +8,8 @@ import 'app/views/home_view.dart';
 Future main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await UserSimplePreferences.init();
+  MobileAds.instance.initialize();
+
   runApp(AppWidget());
 }
 
@@ -14,11 +18,22 @@ class AppWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData(
+        dialogTheme: DialogTheme(
+          contentTextStyle: TextStyle(
+            color: Colors.white,
+          ),
+          titleTextStyle: TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontFamily: "Montserrat",
+          ),
+          backgroundColor: Colors.grey[800],
+        ),
         accentColor: Colors.grey[800],
         appBarTheme: AppBarTheme(
           titleTextStyle: TextStyle(
             color: Colors.white,
-            fontSize: 25,
+            fontSize: 20,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -65,7 +80,11 @@ class AppWidget extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       title: "Gastos com gás",
-      home: HomeView(),
+      home: ShowCaseWidget(
+        builder: Builder(
+          builder: (_) => HomeView(),
+        ),
+      ),
     );
   }
 }

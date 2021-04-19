@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_masked_text/flutter_masked_text.dart';
-import 'package:gas_mvc/app/components/home_view/input_price.dart';
 import 'package:gas_mvc/app/models/leitura_model.dart';
 
-import 'input_date.dart';
 import 'input_gas.dart';
 
 class ContainerInput extends StatelessWidget {
@@ -11,7 +9,7 @@ class ContainerInput extends StatelessWidget {
   final TextEditingController newDecimalValueTextController;
   final MoneyMaskedTextController gasPriceTextController;
   final List<Leitura> listLeituras;
-  final Function dateSelection;
+  // final Function dateSelection;
   final String dateText;
   final String datePressed;
 
@@ -26,7 +24,7 @@ class ContainerInput extends StatelessWidget {
     @required this.listLeituras,
     @required this.newIntValueTextController,
     @required this.newDecimalValueTextController,
-    @required this.dateSelection,
+    // @required this.dateSelection,
     @required this.dateText,
     @required this.datePressed,
   }) : super(key: key);
@@ -54,13 +52,10 @@ class ContainerInput extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(
-                    height: 5,
-                  ),
                   Padding(
                     padding: const EdgeInsets.all(10.0),
                     child: Text(
-                      "Novo valor",
+                      "Valor",
                       style: Theme.of(context).textTheme.bodyText1,
                     ),
                   ),
@@ -69,34 +64,34 @@ class ContainerInput extends StatelessWidget {
                     newDecimalValueTextController:
                         newDecimalValueTextController,
                   ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: Text(
-                      "Preço kg/gás",
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                  ),
-                  InputPrice(
-                    gasPriceController: gasPriceTextController,
-                  ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: Text(
-                      "Data",
-                      style: Theme.of(context).textTheme.bodyText1,
-                    ),
-                  ),
-                  InputDate(
-                    dateText: dateText,
-                    dateSelection: dateSelection,
-                    datePressed: datePressed,
-                  ),
+                  // SizedBox(
+                  //   height: 5,
+                  // ),
+                  // Padding(
+                  //   padding: const EdgeInsets.all(10.0),
+                  //   child: Text(
+                  //     "Preço kg/gás",
+                  //     style: Theme.of(context).textTheme.bodyText1,
+                  //   ),
+                  // ),
+                  // InputPrice(
+                  //   gasPriceController: gasPriceTextController,
+                  // ),
+                  // SizedBox(
+                  //   height: 5,
+                  // ),
+                  // Padding(
+                  //   padding: const EdgeInsets.only(top: 10.0),
+                  //   child: Text(
+                  //     "Data",
+                  //     style: Theme.of(context).textTheme.bodyText1,
+                  //   ),
+                  // ),
+                  // InputDate(
+                  //   dateText: dateText,
+                  //   dateSelection: dateSelection,
+                  //   datePressed: datePressed,
+                  // ),
                   SizedBox(
                     height: 15,
                   ),

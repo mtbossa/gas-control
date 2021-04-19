@@ -5,6 +5,8 @@ import 'package:gas_mvc/app/models/leitura_model.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
 
+import '../models/leitura_model.dart';
+
 class HomeController {
   List<Leitura> listLeituras = [];
 
@@ -15,7 +17,11 @@ class HomeController {
   // Variable to work with database
   final DatabaseHelper db = DatabaseHelper();
 
+  // Initial value 2.5. Can be changed. Saved in SharedPreferences
   double conversionValue = 2.5;
+
+  // Can be changed. Saved in SharedPreferences
+  double gasPrice;
 
   // Controls the ID
   int indexId;
@@ -32,18 +38,18 @@ class HomeController {
   /* value is just a name for the variable that will hold
    * the returned value, could be any other name.
    */
-  // void exhibitAllContatos() {
+  // void exhibitAllLeituras() {
   //   db.getAllLeituras().then((value) {
   //     listLeituras = value;
 
   //   });
   // }
 
-  Future<void> exhibitAllContatos() async {
+  Future<void> exhibitAllLeituras() async {
     await db.getAllLeituras().then((value) {
       listLeituras = value;
-      print("Inside exhibitAllContatos(): value --> $value");
-      print("Inside exhibitAllContatos(): listLeituras --> $listLeituras");
+      print("Inside exhibitAllLeituras(): value --> $value");
+      print("Inside exhibitAllLeituras(): listLeituras --> $listLeituras");
     });
   }
 
@@ -51,7 +57,7 @@ class HomeController {
   void zeroValues() {
     listLeituras.clear();
     db.deleteAll();
-    exhibitAllContatos();
+    exhibitAllLeituras();
     gasPriceTextController.updateValue(0.0);
   }
 
@@ -59,7 +65,7 @@ class HomeController {
   void revertLastValue() {
     listLeituras.removeLast();
     db.deleteLastLeitura();
-    exhibitAllContatos();
+    exhibitAllLeituras();
   }
 
   initDateFormatting() {
@@ -71,9 +77,14 @@ class HomeController {
   double cubicMeterValue;
   double cubicMeterDifference;
   double kgValue;
-  double gasPrice;
   double moneyValue;
   DateTime atualDate;
+  String date;
+
+  void getDate() {
+    if (atualDate == null) atualDate = DateTime.now();
+    date = dateFormatDataBase.format(atualDate);
+  }
 
   int getValues() {
     String _newIntValueText = newIntValueTextController.text;
@@ -92,20 +103,7 @@ class HomeController {
     cubicMeterValue = _newIntDoubleValue + _newDecimalDoubleValue;
 
     if (cubicMeterValue > 0) {
-      String _gasPriceText = gasPriceTextController.text;
-      double _gasPriceDoubleValue;
-      if (_gasPriceText != "") {
-        _gasPriceDoubleValue =
-            double.tryParse(_gasPriceText.replaceAll(new RegExp(r'[,.]'), '')) /
-                    100 ??
-                0.0;
-        gasPrice = _gasPriceDoubleValue;
-      } else {
-        gasPrice = 0.0;
-      }
-
-      if (atualDate == null) atualDate = DateTime.now();
-
+      getDate();
       if (listLeituras.length == 0) {
         cubicMeterDifference = 0.0;
         kgValue = 0.0;
@@ -141,17 +139,62 @@ class HomeController {
     }
   }
 
+  Future<void> updateKgValue() async {
+    calculateKgValue();
+    if (listLeituras.length > 0) {
+      Leitura _editedLeitura = Leitura(
+        cubicMeterDifference: listLeituras.last.cubicMeterDifference,
+        cubicMeterValue: listLeituras.last.cubicMeterValue,
+        date: listLeituras.last.date,
+        id: listLeituras.last.id,
+        kgValue: kgValue,
+        moneyValue: listLeituras.last.moneyValue,
+      );
+      db.updateLeitura(_editedLeitura);
+    }
+  }
+
+  void calculateKgValue() {
+    kgValue = listLeituras.last.cubicMeterDifference * conversionValue;
+  }
+
+  Future<void> updateMoney() async {
+    calculateMoney();
+    if (listLeituras.length > 0) {
+      Leitura _editedLeitura = Leitura(
+        cubicMeterDifference: listLeituras.last.cubicMeterDifference,
+        cubicMeterValue: listLeituras.last.cubicMeterValue,
+        date: listLeituras.last.date,
+        id: listLeituras.last.id,
+        kgValue: listLeituras.last.kgValue,
+        moneyValue: moneyValue,
+      );
+      db.updateLeitura(_editedLeitura);
+    }
+  }
+
+  void calculateMoney() {
+    if (kgValue == null && listLeituras.length > 0) {
+      kgValue = listLeituras.last.kgValue;
+    }
+    if (gasPrice == null) {
+      gasPrice = 0.0;
+    }
+    if (gasPrice > 0.0 && listLeituras.length > 0) {
+      moneyValue = kgValue * gasPrice;
+    } else {
+      moneyValue = 0.0;
+    }
+  }
+
   void addToDatabase() {
     indexId = listLeituras.length;
-
-    String date = dateFormatDataBase.format(atualDate);
 
     Leitura leitura = Leitura(
       id: indexId,
       cubicMeterValue: cubicMeterValue,
       cubicMeterDifference: cubicMeterDifference,
       kgValue: kgValue,
-      gasPrice: gasPrice,
       moneyValue: moneyValue,
       date: date,
     );

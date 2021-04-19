@@ -1,7 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.gas_mvc">
+    <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="gas_mvc"
+        android:label="Mede Gás"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
@@ -37,5 +38,8 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+         <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-1583793484936118~2537348407" />
     </application>
 </manifest>
