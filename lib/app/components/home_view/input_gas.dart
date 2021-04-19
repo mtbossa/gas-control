@@ -105,7 +105,7 @@ class InputGas extends StatelessWidget {
                   bottom: -10,
                   left: -8,
                 ),
-                fillColor: Colors.redAccent,
+                fillColor: Colors.red[800],
                 filled: true,
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20),

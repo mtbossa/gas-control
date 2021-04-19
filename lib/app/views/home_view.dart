@@ -185,8 +185,10 @@ class _HomeViewState extends State<HomeView> {
           CustomShowcaseWidget(
             description: 'Configurações gerais',
             globalKey: _showCaseKeySix,
-            child: Padding(
-              padding: const EdgeInsets.all(10.0),
+            child: Container(
+              padding: EdgeInsets.all(10.0),
+              width: 48,
+              height: 48,
               child: PopupMenuButton(
                 onSelected: choiceAction,
                 itemBuilder: (context) {
